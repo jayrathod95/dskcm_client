@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * Created by Jay Rathod on 15-01-2017.
  */
-public class RegistrationController implements EventHandler<ActionEvent> {
+public class RegistrationController extends Controller implements EventHandler<ActionEvent> {
     private Parent root;
     final private String FXML_FILE = "../fxmls/registration.fxml";
     @FXML
@@ -35,22 +35,20 @@ public class RegistrationController implements EventHandler<ActionEvent> {
         });
     }
 
-    public Parent getDefaultScene() {
-        return root;
-    }
 
-    public Stage getDefaultStage() {
-        Scene scene = new Scene(root, 280, 420);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
-        return stage;
-    }
 
     @Override
     public void handle(ActionEvent event) {
         Control control = (Control) event.getSource();
         System.out.print(control.getId());
+    }
+
+    @Override
+    public void startControlling() {
+        Scene scene = new Scene(root, 280, 420);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
     }
 }
