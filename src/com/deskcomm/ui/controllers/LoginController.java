@@ -15,6 +15,11 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Created by Jay Rathod on 16-01-2017.
@@ -48,15 +53,23 @@ public class LoginController extends Controller implements EventHandler<ActionEv
 
     @Override
     public void handle(ActionEvent event) {
-        String id=((Control)event.getSource()).getId();
-        switch (id){
+        String id = ((Control) event.getSource()).getId();
+        switch (id) {
             case "btnLogin":
-                if(CurrentUser.isLoggedIn()){
+                if (CurrentUser.isLoggedIn()) {
                     CurrentUser.logout();
                 }
-                CurrentUser.login(textFieldEmail.getText(),textFieldPassword.getText());
+                CurrentUser.login(textFieldEmail.getText(), textFieldPassword.getText());
                 break;
-            case "btnSignup":break;
+            case "btnSignup":
+                try {
+                    RegistrationController controller=new RegistrationController();
+                    controller.startControlling();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                break;
         }
 
     }

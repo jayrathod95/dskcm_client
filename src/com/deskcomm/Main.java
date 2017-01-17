@@ -1,23 +1,18 @@
 package com.deskcomm;
 
 import com.deskcomm.core.CurrentUser;
-import com.deskcomm.core.User;
-import com.deskcomm.db.DbConnection;
 import com.deskcomm.support.Logger;
 import com.deskcomm.tests.Tester;
 import com.deskcomm.ui.controllers.LoginController;
-import com.deskcomm.ui.controllers.RegistrationController;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-import java.sql.Connection;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class Main extends Application {
 
@@ -42,14 +37,13 @@ public class Main extends Application {
                 Logger.print("User NOT Logged In");
                 LoginController controller = new LoginController();
                 controller.startControlling();
+
             }
-
-
-            //   RegistrationController controller = new RegistrationController();
-            //  Parent root = controller.getDefaultScene();
-            //  controller.getDefaultStage();
-
         }
+    }
+
+    private <U> String func1() {
+        return "Hey there";
     }
 
 
