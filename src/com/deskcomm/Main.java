@@ -1,18 +1,13 @@
 package com.deskcomm;
 
 import com.deskcomm.core.CurrentUser;
-import com.deskcomm.support.Logger;
-import com.deskcomm.tests.Tester;
+import com.deskcomm.support.L;
+import com.deskcomm.ui.controllers.HomeController;
 import com.deskcomm.ui.controllers.LoginController;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class Main extends Application {
 
@@ -20,34 +15,29 @@ public class Main extends Application {
     @FXML
     private Button btnRegister;
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-     //   Logger.print(User.logout());
-
-        if (TESTING_MODE == 1) {
-            Tester tester = new Tester();
-            tester.test();
-        } else {
-
-            if (CurrentUser.isLoggedIn()) {
-                Logger.print("User Is Logged In");
-
-
-            } else {
-                Logger.print("User NOT Logged In");
-                LoginController controller = new LoginController();
-                controller.startControlling();
-
-            }
-        }
-    }
-
-    private <U> String func1() {
-        return "Hey there";
-    }
-
-
     public static void main(String[] args) {
         launch(args);
+    }
+
+    @Override
+    public void start(final Stage primaryStage) throws Exception {
+        //   Logger.print(User.logout());
+
+        if (TESTING_MODE == 1) {
+            //new Tester(primaryStage).test();
+        } else {
+            if (CurrentUser.getInstance().isLoggedIn()) {
+                L.println("User Is Logged In");
+                HomeController controller = new HomeController();
+                controller.startControlling(primaryStage);
+            } else {
+                L.println("User NOT Logged In");
+                LoginController controller = new LoginController();
+                // ProfilePicUploadController controller = new ProfilePicUploadController();
+                controller.startControlling(primaryStage);
+            }
+        }
+
+
     }
 }

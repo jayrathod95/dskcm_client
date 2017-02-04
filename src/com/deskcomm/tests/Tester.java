@@ -1,25 +1,40 @@
 package com.deskcomm.tests;
 
-import com.deskcomm.db.tables.UserPrefsTable;
-import com.deskcomm.support.Logger;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
-import java.sql.SQLException;
+import java.io.IOException;
 
 /**
  * Created by Jay Rathod on 16-01-2017.
  */
-public class Tester {
-    public void test() {
-        try {
-      //      UserPrefsTable table = new UserPrefsTable("sessionId", "sessionId", true, "asdasdasd", "Jay", "Rathod", "jay_rathod@live.com", null, null);
-      //      Logger.print(table.insert());
-            UserPrefsTable table=new UserPrefsTable();
-            Logger.print(table.updateMobile("98822323343"));
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+public class Tester {
+    @FXML
+    private Button button;
+    @FXML
+    private Text text;
+    private Stage primaryStage;
+
+    public Tester(Stage primaryStage) throws IOException {
+        this.primaryStage = primaryStage;
+
+
+    }
+
+    public void test() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/fxmls/temp.fxml"));
+        loader.setController(this);
+        Parent root = loader.load();
+        Scene scene = new Scene(root, 400, 400);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+
     }
 }

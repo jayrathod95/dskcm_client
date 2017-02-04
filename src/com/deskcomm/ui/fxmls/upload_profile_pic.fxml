@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="510.0" prefWidth="721.0" xmlns="http://javafx.com/javafx/8.0.102">
+    <children>
+        <ImageView fx:id="imageView" fitHeight="270.0" fitWidth="270.0" layoutX="226.0" layoutY="36.0"
+                   pickOnBounds="true" AnchorPane.topAnchor="36.0">
+            <viewport>
+                <Rectangle2D/>
+            </viewport>
+            <image>
+                <Image url="@avatar_f.png"/>
+            </image>
+        </ImageView>
+        <HBox alignment="CENTER" layoutX="100.0" layoutY="339.0" prefHeight="41.0" prefWidth="521.0"
+              AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="339.0">
+            <children>
+                <TextField fx:id="textField" prefHeight="30.0" prefWidth="390.0" promptText="Image path"/>
+                <Button fx:id="buttonChooseImage" defaultButton="true" mnemonicParsing="false" prefHeight="29.0"
+                        prefWidth="99.0" text="Choose Image" textAlignment="CENTER" wrapText="true">
+                    <HBox.margin>
+                        <Insets left="4.0"/>
+                    </HBox.margin>
+                </Button>
+            </children>
+        </HBox>
+        <Button fx:id="buttonUpload" layoutX="275.0" layoutY="404.0" mnemonicParsing="false" prefHeight="33.0"
+                prefWidth="172.0" text="UPLOAD" AnchorPane.leftAnchor="275.0" AnchorPane.rightAnchor="274.0"
+                AnchorPane.topAnchor="404.0"/>
+        <ProgressIndicator fx:id="progressIndicator" layoutX="345.0" layoutY="406.0" prefHeight="29.0" prefWidth="33.0"
+                           visible="false"/>
+        <Label fx:id="labelInfo" alignment="CENTER" layoutX="41.0" layoutY="455.0" prefHeight="17.0" prefWidth="651.0"
+               text="Label" textAlignment="CENTER" visible="false" AnchorPane.leftAnchor="41.0"
+               AnchorPane.rightAnchor="41.0"/>
+    </children>
+</AnchorPane>

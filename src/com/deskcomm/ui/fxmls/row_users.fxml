@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.102"
+      fx:controller="com.deskcomm.ui.controllers.RowUsersController"
+      onMouseEntered="#onMouseEnteredVBox"
+      onMouseExited="#onMouseExitedVBox"
+>
+
+    <children>
+        <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0"
+              prefWidth="401.0">
+            <children>
+                <ImageView fx:id="imageView" fitHeight="46.0" fitWidth="46.0" pickOnBounds="true" HBox.hgrow="ALWAYS">
+                    <image>
+                        <Image fx:id="imageUserAvatar" url="@../../resources/images/avatar_m.png"/>
+                    </image>
+                </ImageView>
+                <Label fx:id="labelUserName" maxHeight="49.0" minHeight="49.0" prefHeight="49.0" text="Jay Rathod">
+                    <font>
+                        <Font name="System Bold" size="16.0"/>
+                    </font>
+                    <HBox.margin>
+                        <Insets left="10.0"/>
+                    </HBox.margin>
+                    <padding>
+                        <Insets bottom="3.0" left="10.0"/>
+                    </padding>
+                </Label>
+            </children>
+            <padding>
+                <Insets bottom="7.0" left="20.0" right="7.0" top="7.0"/>
+            </padding>
+        </HBox>
+    </children>
+</VBox>

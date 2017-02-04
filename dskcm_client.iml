@@ -17,5 +17,10 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Jersey-2.2" level="project" />
+    <orderEntry type="library" name="json-20160810" level="project" />
+    <orderEntry type="library" name="org.glassfish.jersey.media:jersey-media-multipart:2.26-b02" level="project" />
+    <orderEntry type="library" name="org.glassfish.jersey.containers:jersey-container-servlet-core:2.26-b02" level="project" />
+    <orderEntry type="library" name="org.glassfish.tyrus.bundles:tyrus-standalone-client-jdk:1.10" level="project" />
   </component>
 </module>

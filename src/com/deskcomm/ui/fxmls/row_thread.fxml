@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<HBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity" prefHeight="71.0" prefWidth="358.0" xmlns="http://javafx.com/javafx/8.0.102">
+    <children>
+        <ImageView fx:id="imageViewAvatar" fitHeight="74.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true"/>
+        <VBox prefHeight="89.0" prefWidth="507.0">
+            <children>
+                <Label alignment="BOTTOM_LEFT" prefHeight="37.0" prefWidth="276.0" text="John Doe">
+                    <font>
+                        <Font name="System Bold" size="17.0"/>
+                    </font>
+                    <padding>
+                        <Insets left="15.0"/>
+                    </padding>
+                </Label>
+                <Label alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="24.0" prefWidth="194.0"
+                       text="This is a sample message text. This is a sample message text.This is a sample message text.This is a sample message text.">
+                    <VBox.margin>
+                        <Insets left="15.0" top="2.0"/>
+                    </VBox.margin>
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                </Label>
+            </children>
+        </VBox>
+    </children>
+</HBox>

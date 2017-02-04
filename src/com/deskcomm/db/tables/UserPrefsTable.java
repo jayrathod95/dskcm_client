@@ -1,29 +1,33 @@
 package com.deskcomm.db.tables;
 
 import com.deskcomm.db.DbConnection;
-import com.deskcomm.support.Logger;
+import com.deskcomm.support.Keys;
+import com.deskcomm.support.L;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 /**
  * Created by Jay Rathod on 16-01-2017.
  */
 public class UserPrefsTable {
-    final static public String TABLE_NAME = "user_preferences";
-    final static public String COL_SESSION_ID = "session_id";
-    final static public String COL_SESSION_ID1 = "session_id1";
-    final static public String COL_LOGIN_STATUS = "login_status";
-    final static public String COL_UUID = "_uuid";
-    final static public String COL_FNAME = "fname";
-    final static public String COL_LNAME = "lname";
-    final static public String COL_EMAIL = "email";
-    final static public String COL_MOBILE = "mobile";
-    final static public String COL_IMG_URL = "img_url";
-    final static public String COL_CREATED = "created";
+    private final static String TABLE_NAME = "user_preferences";
+    private final static String COL_SESSION_ID = "session_id";
+    private final static String COL_SESSION_ID1 = "session_id1";
+    private final static String COL_LOGIN_STATUS = "login_status";
+    private final static String COL_UUID = "_uuid";
+    private final static String COL_FNAME = "fname";
+    private final static String COL_LNAME = "lname";
+    private final static String COL_EMAIL = "email";
+    private final static String COL_MOBILE = "mobile";
+    private final static String COL_IMG_URL = "img_url";
+    private final static String COL_CREATED = "created";
+    private static final String COL_GENDER = "gender";
     private String sessionId = null;
     private String sessionId1 = null;
     private String loginStatus = null;
@@ -35,8 +39,10 @@ public class UserPrefsTable {
     private String img_url = null;
 
     private String created = null;
+    private String gender = null;
 
-    public UserPrefsTable(String sessionId, String sessionId1, boolean loginStatus, String _uuid, String firstName, String lastName, String email, @Nullable String mobile, @Nullable String img_url) throws SQLException, ClassNotFoundException {
+    public UserPrefsTable(String sessionId, String sessionId1, boolean loginStatus, String _uuid, String firstName,
+                          String lastName, String gender, String email, @Nullable String mobile, @Nullable String img_url) throws SQLException, ClassNotFoundException {
         createTableIfNotExits();
         this.sessionId = sessionId;
         this.sessionId1 = sessionId1;
@@ -47,27 +53,30 @@ public class UserPrefsTable {
         this.email = email;
         this.mobile = mobile;
         this.img_url = img_url;
+        this.gender = gender;
     }
 
-    public boolean insert() throws SQLException, ClassNotFoundException {
-        String sql = "INSERT INTO user_preferences(session_id,session_id1,login_status,_uuid,fname,lname,email,mobile,img_url,created)" +
-                "VALUES(?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP) ";
-        PreparedStatement statement = DbConnection.getConnection().prepareStatement(sql);
-        statement.setString(1, sessionId);
-        statement.setString(2, sessionId1);
-        statement.setString(3, loginStatus);
-        statement.setString(4, _uuid);
-        statement.setString(5, firstName);
-        statement.setString(6, lastName);
-        statement.setString(7, email);
-        statement.setString(8, mobile);
-        statement.setString(9, img_url);
-        int i = statement.executeUpdate();
-        return i > 0;
+    public UserPrefsTable(JSONObject jsonObject) throws SQLException, ClassNotFoundException {
+        createTableIfNotExits();
+        sessionId = jsonObject.getString(Keys.JSON.SESSION_ID);
+        sessionId1 = UUID.randomUUID().toString();
+        loginStatus = "LOGGED_IN";
+        _uuid = jsonObject.getString(Keys.USER_UUID);
+        firstName = jsonObject.getString(Keys.USER_FIRSTNAME);
+        lastName = jsonObject.getString(Keys.USER_LASTNAME);
+        email = jsonObject.getString(Keys.USER_EMAIL);
+        mobile = jsonObject.getString(Keys.USER_MOBILE);
+        img_url = jsonObject.getString(Keys.USER_IMG_URL);
+        gender = jsonObject.getString(Keys.GENDER);
+
+
     }
 
+    public UserPrefsTable() throws SQLException, ClassNotFoundException {
+        createTableIfNotExits();
+    }
 
-    private void createTableIfNotExits() throws SQLException, ClassNotFoundException {
+    public static void createTableIfNotExits() throws SQLException, ClassNotFoundException {
         Connection connection = DbConnection.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS user_preferences(\n" +
                 "  session_id TEXT NOT NULL,\n" +
@@ -78,19 +87,49 @@ public class UserPrefsTable {
                 "  lname TEXT NOT NULL ,\n" +
                 "  email TEXT NOT NULL ,\n" +
                 "  mobile TEXT,\n" +
+                "  gender TEXT,\n" +
                 "  img_url TEXT ,\n" +
                 "  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL \n" +
                 ")");
         preparedStatement.executeUpdate();
+        preparedStatement.close();
+        connection.close();
+
     }
 
+    public boolean update() throws SQLException, ClassNotFoundException {
+        return insert();
+    }
 
-    public UserPrefsTable() throws SQLException, ClassNotFoundException {
-        createTableIfNotExits();
+    private boolean insert() throws SQLException, ClassNotFoundException {
+        String sql = "INSERT INTO user_preferences(session_id,session_id1,login_status,_uuid,fname,lname,email,mobile,img_url,created,gender)" +
+                "VALUES(?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP,?) ";
+        Connection connection = DbConnection.getConnection();
+        connection.setAutoCommit(false);
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, sessionId);
+        L.println(UUID.randomUUID().toString());
+        statement.setString(2, sessionId1);
+        statement.setString(3, loginStatus);
+        statement.setString(4, _uuid);
+        statement.setString(5, firstName);
+        statement.setString(6, lastName);
+        statement.setString(7, email);
+        statement.setString(8, mobile);
+        statement.setString(9, img_url);
+        statement.setString(10, gender);
+
+
+        int i = statement.executeUpdate();
+        connection.commit();
+        statement.close();
+        connection.close();
+        return i > 0;
     }
 
     public boolean fetchData() throws SQLException, ClassNotFoundException {
-        PreparedStatement statement = DbConnection.getConnection().prepareStatement("SELECT session_id,session_id1,login_status,_uuid,fname,lname,email,mobile,img_url,created FROM user_preferences LIMIT 1");
+        Connection connection = DbConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement("SELECT session_id,session_id1,login_status,_uuid,fname,lname,email,mobile,img_url,created FROM user_preferences LIMIT 1");
         ResultSet resultSet = statement.executeQuery();
         if (resultSet.next()) {
             sessionId = resultSet.getString(COL_SESSION_ID);
@@ -103,8 +142,16 @@ public class UserPrefsTable {
             mobile = resultSet.getString(COL_MOBILE);
             img_url = resultSet.getString(COL_IMG_URL);
             created = resultSet.getString(COL_CREATED);
+            gender = resultSet.getString(COL_GENDER);
+            resultSet.close();
+            statement.close();
+            connection.close();
             return true;
         }
+        resultSet.close();
+        statement.close();
+        connection.close();
+
         return false;
     }
 
@@ -238,16 +285,28 @@ public class UserPrefsTable {
         return updateProperty(COL_IMG_URL, img_url);
     }
 
+    public String getGender() {
+        return gender;
+    }
+
     private boolean updateProperty(String columnName, String newData) throws SQLException, ClassNotFoundException {
-        PreparedStatement statement = DbConnection.getConnection().prepareStatement("UPDATE " + TABLE_NAME + " SET " + columnName + "=?");
+        Connection connection = DbConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement("UPDATE " + TABLE_NAME + " SET " + columnName + "=?");
         statement.setString(1, newData);
         int result = statement.executeUpdate();
-        Logger.print(result + "");
+        L.println(result + "");
+        statement.close();
+        // connection.close();
+
         return result > 0;
     }
 
     public boolean clearRecord() throws SQLException, ClassNotFoundException {
-        PreparedStatement statement = DbConnection.getConnection().prepareStatement("DELETE FROM " + TABLE_NAME);
-        return statement.execute();
+        Connection connection = DbConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM " + TABLE_NAME);
+        boolean execute = statement.execute();
+        statement.close();
+        connection.close();
+        return execute;
     }
 }

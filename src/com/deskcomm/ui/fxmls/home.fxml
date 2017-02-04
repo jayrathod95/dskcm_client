@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<TitledPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity"
+            prefHeight="519.0" prefWidth="384.0" text="Deskcomm"
+            xmlns="http://javafx.com/javafx/8.0.102">
+    <content>
+        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab text="Users">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                    </content>
+                </Tab>
+                <Tab text="Chats">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="471.0" prefWidth="382.0">
+                            <children>
+                                <ListView layoutX="-3.0" layoutY="-1.0" prefHeight="468.0" prefWidth="384.0"/>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="Events">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                    </content>
+                </Tab>
+                <Tab text="Account">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <Label fx:id="labelFullName" layoutX="93.0" layoutY="46.0" prefHeight="43.0"
+                                       prefWidth="210.0"/>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="More...">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <HBox layoutX="-1.0" layoutY="32.0" prefHeight="49.0" prefWidth="384.0">
+                                    <children>
+                                        <ImageView fitHeight="49.0" fitWidth="49.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <HBox.margin>
+                                                <Insets left="20.0"/>
+                                            </HBox.margin>
+                                        </ImageView>
+                                        <Label prefHeight="49.0" prefWidth="301.0" text="New Group">
+                                            <HBox.margin>
+                                                <Insets left="20.0"/>
+                                            </HBox.margin>
+                                            <font>
+                                                <Font size="18.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox layoutX="-1.0" layoutY="81.0" prefHeight="49.0" prefWidth="384.0">
+                                    <children>
+                                        <ImageView fitHeight="49.0" fitWidth="49.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <HBox.margin>
+                                                <Insets left="20.0"/>
+                                            </HBox.margin>
+                                        </ImageView>
+                                        <Label prefHeight="49.0" prefWidth="301.0" text="Broadcast">
+                                            <HBox.margin>
+                                                <Insets left="20.0"/>
+                                            </HBox.margin>
+                                            <font>
+                                                <Font size="18.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox layoutX="-1.0" layoutY="130.0" prefHeight="49.0" prefWidth="384.0">
+                                    <children>
+                                        <ImageView fitHeight="49.0" fitWidth="49.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <HBox.margin>
+                                                <Insets left="20.0"/>
+                                            </HBox.margin>
+                                        </ImageView>
+                                        <Label prefHeight="49.0" prefWidth="301.0" text="New Event">
+                                            <HBox.margin>
+                                                <Insets left="20.0"/>
+                                            </HBox.margin>
+                                            <font>
+                                                <Font size="18.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox layoutX="-1.0" layoutY="179.0" prefHeight="49.0" prefWidth="384.0">
+                                    <children>
+                                        <ImageView fitHeight="49.0" fitWidth="49.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <HBox.margin>
+                                                <Insets left="20.0"/>
+                                            </HBox.margin>
+                                        </ImageView>
+                                        <Label prefHeight="49.0" prefWidth="301.0" text="Settings">
+                                            <HBox.margin>
+                                                <Insets left="20.0"/>
+                                            </HBox.margin>
+                                            <font>
+                                                <Font size="18.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </content>
+</TitledPane>

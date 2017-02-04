@@ -1,65 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.*?>
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0"
-      prefWidth="358.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity" prefHeight="616.0" prefWidth="358.0" xmlns="http://javafx.com/javafx/8.0.102">
     <children>
-        <TextField fx:id="textFieldFirstName" layoutX="55.0" layoutY="119.0" prefHeight="32.0" prefWidth="250.0"
-                   promptText="First Name">
-            <font>
-                <Font size="15.0"/>
-            </font>
-        </TextField>
-        <TextField fx:id="textFieldLastName" layoutX="54.0" layoutY="165.0" prefHeight="32.0" prefWidth="250.0"
-                   promptText="Last Name">
-            <font>
-                <Font size="15.0"/>
-            </font>
-        </TextField>
-        <Button id="buttonSignUp" layoutX="117.0" layoutY="456.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="124.0"
-                text="SIGNUP"/>
+        <Button fx:id="buttonBack" layoutX="29.0" layoutY="38.0" mnemonicParsing="false" prefHeight="32.0"
+                prefWidth="52.0" text="BACK"/>
         <Label fx:id="labelMain" alignment="CENTER" layoutX="96.0" layoutY="20.0" prefHeight="68.0" prefWidth="167.0"
                text="DeskComm" textOverrun="CLIP">
             <font>
                 <Font name="System Bold" size="24.0"/>
             </font>
         </Label>
+        <TextField fx:id="textFieldFirstName" layoutX="55.0" layoutY="119.0" prefHeight="32.0" prefWidth="250.0"
+                   promptText="First Name">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </TextField>
+        <TextField fx:id="textFieldLastName" layoutX="54.0" layoutY="165.0" prefHeight="32.0" prefWidth="250.0"
+                   promptText="Last Name">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </TextField>
         <TextField fx:id="textFieldEmail" layoutX="55.0" layoutY="211.0" prefHeight="32.0" prefWidth="250.0"
                    promptText="Email">
             <font>
-                <Font size="15.0"/>
+                <Font size="14.0"/>
             </font>
         </TextField>
         <TextField fx:id="textFieldMobile" layoutX="55.0" layoutY="258.0" prefHeight="32.0" prefWidth="250.0"
                    promptText="Mobile">
             <font>
-                <Font size="15.0"/>
-            </font>
-        </TextField>
-        <TextField fx:id="textFieldPassword" layoutX="55.0" layoutY="350.0" prefHeight="32.0" prefWidth="250.0"
-                   promptText="Password">
-            <font>
-                <Font size="15.0"/>
-            </font>
-        </TextField>
-        <TextField fx:id="textFieldRepeatPassword" layoutX="55.0" layoutY="398.0" prefHeight="32.0" prefWidth="250.0"
-                   promptText="Repeat Password">
-            <font>
-                <Font size="15.0"/>
+                <Font size="14.0"/>
             </font>
         </TextField>
         <TextField fx:id="textFieldEid" layoutX="54.0" layoutY="304.0" prefHeight="32.0" prefWidth="250.0"
                    promptText="EID">
             <font>
-                <Font size="15.0"/>
+                <Font size="14.0"/>
             </font>
         </TextField>
-        <Button fx:id="buttonBack" layoutX="29.0" layoutY="38.0" mnemonicParsing="false" prefHeight="32.0"
-                prefWidth="52.0" text="BACK"/>
+        <PasswordField fx:id="passFieldPassword" layoutX="55.0" layoutY="352.0" prefHeight="34.0" prefWidth="250.0"
+                       promptText="Password">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </PasswordField>
+        <PasswordField fx:id="passFieldPasswordRepeat" layoutX="55.0" layoutY="403.0" prefHeight="34.0"
+                       prefWidth="250.0" promptText="Repeat Password">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </PasswordField>
+        <Button fx:id="buttonSignUp" layoutX="117.0" layoutY="456.0" mnemonicParsing="false" prefHeight="34.0"
+                prefWidth="124.0" text="SIGNUP"/>
+        <Text fx:id="textErrors" fill="#c90e0e" layoutX="65.0" layoutY="522.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="TEXT" textAlignment="CENTER" wrappingWidth="230.0"/>
+
+
     </children>
 </Pane>
