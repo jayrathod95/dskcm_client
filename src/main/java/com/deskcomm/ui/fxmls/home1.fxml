@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.102">
+    <children>
+        <TabPane fx:id="centerTabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                 minWidth="-Infinity" prefHeight="609.0" prefWidth="954.0" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab fx:id="tabChats" closable="false" text="Chats">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="530.0" prefWidth="696.0"/>
+                    </content>
+                </Tab>
+                <Tab fx:id="tabUsers" text="Users">
+                    <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                            <children>
+                                <Button fx:id="buttonLoadUsers" layoutX="246.0" layoutY="14.0" mnemonicParsing="false"
+                                        text="Refresh Users List"/>
+                                <ScrollPane layoutX="-1.0" layoutY="40.0" prefHeight="370.0" prefWidth="600.0">
+                                    <content>
+                                        <VBox fx:id="vBoxUsers" prefHeight="334.0" prefWidth="598.0"/>
+                                    </content>
+                                </ScrollPane>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab fx:id="tabEvents" text="Events">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                    </content>
+                </Tab>
+                <Tab fx:id="tabAccount" text="Account">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"
+                                    style="-fx-background-color: lightblue;">
+                            <children>
+                                <ImageView fx:id="imageViewUserDP" fitHeight="156.0" fitWidth="176.0" layoutX="181.0"
+                                           layoutY="39.0" pickOnBounds="true" AnchorPane.leftAnchor="181.0"
+                                           AnchorPane.topAnchor="39.0">
+                                    <image>
+                                        <Image url="@../../../../../../../Downloads/Photos/download-full-hd-wallpaper.jpg"/>
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="labelUserName" alignment="TOP_LEFT" layoutX="396.0" layoutY="40.0"
+                                       prefHeight="46.0" prefWidth="287.0" text="Jay Rathod" textAlignment="CENTER"
+                                       AnchorPane.leftAnchor="396.0" AnchorPane.rightAnchor="271.0"
+                                       AnchorPane.topAnchor="40.0">
+                                    <padding>
+                                        <Insets top="10.0"/>
+                                    </padding>
+                                    <font>
+                                        <Font name="System Bold" size="19.0"/>
+                                    </font>
+                                </Label>
+                                <Button fx:id="buttonLogout" layoutX="435.0" layoutY="461.0" mnemonicParsing="false"
+                                        prefHeight="27.0" prefWidth="81.0" text="LOGOUT"/>
+                                <Label fx:id="labelEmail" layoutX="400.0" layoutY="90.0" prefHeight="17.0"
+                                       prefWidth="311.0" text="jay_rathod@live.com"/>
+                                <Label fx:id="labelMobile" layoutX="400.0" layoutY="107.0" prefHeight="17.0"
+                                       prefWidth="116.0" text="9881484347"/>
+                                <Button layoutX="411.0" layoutY="232.0" mnemonicParsing="false" text="Change Password"/>
+                                <Button layoutX="410.0" layoutY="261.0" mnemonicParsing="false" text="Change Password"/>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab fx:id="tabMore" text="More">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+        <AnchorPane prefHeight="34.0" prefWidth="954.0" style="-fx-background-color: lightblue;">
+            <children>
+                <Label fx:id="labelFooterUserName" layoutX="14.0" layoutY="5.0" text="labelFooterUserName"/>
+                <Label fx:id="labelFooterStatus" layoutX="827.0" layoutY="4.0" prefHeight="13.0" prefWidth="94.0"
+                       text="Offline"/>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>
