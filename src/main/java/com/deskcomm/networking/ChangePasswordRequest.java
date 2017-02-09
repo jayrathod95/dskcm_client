@@ -14,7 +14,7 @@ public class ChangePasswordRequest extends Request {
     static private String mUuid;
 
 
-    public ChangePasswordRequest(String oldPassword, String newPassword, String uuid, SuccessListener successListener, ErrorListener errorListener) {
+    public ChangePasswordRequest(String oldPassword, String newPassword, String uuid) {
         super(path, MethodType.POST);
         mOldPassword = oldPassword;
         mNewPassword = newPassword;

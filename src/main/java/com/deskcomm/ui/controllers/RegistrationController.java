@@ -1,10 +1,6 @@
 package com.deskcomm.ui.controllers;
 
-import com.deskcomm.exceptions.ResponseException;
-import com.deskcomm.networking.ErrorListener;
 import com.deskcomm.networking.RegistrationRequest;
-import com.deskcomm.networking.SuccessListener;
-import com.deskcomm.support.L;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,7 +17,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -44,19 +39,6 @@ public class RegistrationController extends Controller implements EventHandler<A
     private PasswordField passFieldPassword, passFieldPasswordRepeat;
     @FXML
     private Text textErrors;
-    private SuccessListener successListener = new SuccessListener() {
-        @Override
-        public void onSuccess(Response response) {
-            L.println(response.readEntity(String.class));
-        }
-    };
-    private ErrorListener errorListener = new ErrorListener() {
-        @Override
-        public void onError(ResponseException e) {
-            L.println(e.getMessage());
-        }
-    };
-
 
     private RegistrationController() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_FILE));
@@ -95,7 +77,7 @@ public class RegistrationController extends Controller implements EventHandler<A
     private void signUpButtonClicked() {
         if (validateFields()) {
             RegistrationRequest request = new RegistrationRequest(textFieldFirstName.getText(), textFieldLastName.getText(), textFieldEmail.getText(),
-                    textFieldMobile.getText(), textFieldEid.getText(), passFieldPassword.getText(), this.successListener, this.errorListener);
+                    textFieldMobile.getText(), textFieldEid.getText(), passFieldPassword.getText());
         }
 
     }

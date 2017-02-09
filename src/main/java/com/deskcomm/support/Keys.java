@@ -41,6 +41,10 @@ public class Keys {
     public static final String JSON_MOBILE = "mobile";
     public static final String PATH = "path";
     public static final String DATA = "data";
+    public static final String SERVER_TIMESTAMP = "serverTimeStamp";
+    public static final CharSequence NO_SUCH_TABLE = "no such table";
+    public static final String REQUEST_CODE = "request_code";
+    public static final String HANDSHAKE_REQ = "HANDSHAKE";
 
     public static class JSON {
         public static final String RESULT = "Result";

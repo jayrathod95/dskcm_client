@@ -13,7 +13,7 @@ public class UserDetailsRequest extends Request {
     final static private int methodType = MethodType.POST;
     Map<String, String> map;
 
-    public UserDetailsRequest(String uuid, String sessionId, SuccessListener successListener, ErrorListener errorListener) {
+    public UserDetailsRequest(String uuid, String sessionId) {
         super(path, methodType);
         map = new HashMap<>();
         map.put(Keys.USER_UUID, uuid);

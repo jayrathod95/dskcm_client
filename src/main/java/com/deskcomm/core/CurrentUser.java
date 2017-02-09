@@ -41,8 +41,11 @@ public class CurrentUser extends User {
         mobile = object.getString(JSON_MOBILE);
         sessionId = object.getString(SESSION_ID);
         uuid = object.getString(USER_UUID);
-        uid = object.getString(USER_UID);
         email = object.getString(USER_EMAIL);
+    }
+
+    public CurrentUser(String uuid, String firstName, String lastName, String email, String mobile, String imageUrl, String gender) {
+        super(uuid, firstName, lastName, email, mobile, imageUrl, gender);
     }
 
 

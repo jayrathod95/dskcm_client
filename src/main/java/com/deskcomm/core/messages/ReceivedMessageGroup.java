@@ -1,6 +1,7 @@
 package com.deskcomm.core.messages;
 
 import com.deskcomm.core.Group;
+import com.deskcomm.core.Persistent;
 import com.deskcomm.core.User;
 import com.deskcomm.db.DbConnection;
 import org.json.JSONObject;
@@ -12,13 +13,12 @@ import java.sql.SQLException;
 /**
  * Created by Swati Shende on 07-Feb-17.
  */
-public class ReceivedMessageGroup {
+public class ReceivedMessageGroup implements Persistent {
     private String id;
     private Group groupId;
     private User sender;
     private String body;
     private String timestamp;
-
     public ReceivedMessageGroup() {
     }
 
@@ -32,7 +32,8 @@ public class ReceivedMessageGroup {
 
     }
 
-    public boolean save() {
+    @Override
+    public boolean insertToTable() throws SQLException, ClassNotFoundException {
         try {
             Connection connection = DbConnection.getConnection();
             PreparedStatement statement = connection.prepareStatement("INSERT INTO messages (id, _from, body, saved_to_server_on, created) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP);");
@@ -54,4 +55,8 @@ public class ReceivedMessageGroup {
         }
     }
 
+    @Override
+    public Object getUpdater() {
+        return null;
+    }
 }

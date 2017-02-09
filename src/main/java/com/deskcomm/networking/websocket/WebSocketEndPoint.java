@@ -1,11 +1,12 @@
 package com.deskcomm.networking.websocket;
 
 import com.deskcomm.core.CurrentUser;
-import com.deskcomm.core.User;
-import com.deskcomm.core.bookkeeping.BookKeeper;
+import com.deskcomm.core.messages.ReceivedMessageUser;
+import com.deskcomm.support.Keys;
 import com.deskcomm.ui.controllers.HomeController;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
+import org.json.JSONObject;
 
 import javax.websocket.*;
 import java.io.IOException;
@@ -30,7 +31,7 @@ public class WebSocketEndPoint {
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
         URI uri = URI.create("ws://localhost:8080/dskcm_rest/ws");
         Session session = container.connectToServer(WebSocketEndPoint.class, uri);
-        Logger.getLogger(session.getId()).log(Level.SEVERE, session.getId());
+//        Logger.getLogger(session.getId()).log(Level.SEVERE, session.getId());
     }
 
     @OnOpen
@@ -40,19 +41,12 @@ public class WebSocketEndPoint {
         Platform.runLater(() -> {
             HomeController.getInstance().getLabelFooterStatus().setText("Online");
         });
-
-        try {
-            session.getBasicRemote().sendText("New User Connected: " + CurrentUser.getInstance().getFullName());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        sendHandShakeMessage();
+        // session.getBasicRemote().sendText("New User Connected: " + CurrentUser.getInstance().getFullName());
 
 
     }
+
 
     @OnMessage
     public void onMessage(InputStream input) {
@@ -63,25 +57,42 @@ public class WebSocketEndPoint {
 
     @OnMessage
     public void onMessage(String rawMessage, Session session) {
-        //Logger.getLogger("").log(Level.SEVERE, "OnMessage-" + rawMessage + "-" + session.getId());
+
         WebSocketMessage webSocketMessage = new WebSocketMessage(rawMessage);
-
         Map<Integer, String> pathComponents = webSocketMessage.getPathDecomposed();
-
 
         switch (webSocketMessage.getPath()) {
             case "message/user/":
+                ReceivedMessageUser messageUser = new ReceivedMessageUser(webSocketMessage.getData());
                 break;
             case "message/group/":
                 break;
             case "event":
                 break;
-            case "bookkeeping/users/add":
-                BookKeeper.getUsersUpdater().getAdder().add(new User(webSocketMessage.getData()));
+            case "bookkeeping/users/all":
+                //  BookKeeper.updateUsers(webSocketMessage.getData());
                 break;
-
+            case "response/" + Keys.HANDSHAKE_REQ:
+                handleHandShakeResponse(webSocketMessage.getData());
+                break;
         }
+    }
 
+    private void handleHandShakeResponse(JSONObject data) {
+        System.out.println(data);
+        try {
+            if (data.getBoolean(Keys.JSON_RESULT)) {
+                WebSocketMessage webSocketMessage = new WebSocketMessage();
+                webSocketMessage.setPath("request/get_users");
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put(Keys.USER_UUID, CurrentUser.getInstance().getUuid());
+                jsonObject.put(Keys.SESSION_ID, CurrentUser.getInstance().getSessionId());
+                webSocketMessage.setData(jsonObject);
+                webSocketMessage.send(session);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @OnClose
@@ -97,5 +108,19 @@ public class WebSocketEndPoint {
     public void onError(Throwable throwable) {
         throwable.printStackTrace();
 
+    }
+
+    private void sendHandShakeMessage() {
+        try {
+            WebSocketMessage webSocketMessage = new WebSocketMessage();
+            webSocketMessage.setPath("request/" + Keys.HANDSHAKE_REQ);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(Keys.USER_UUID, CurrentUser.getInstance().getUuid());
+            jsonObject.put(Keys.SESSION_ID, CurrentUser.getInstance().getSessionId());
+            webSocketMessage.setData(jsonObject);
+            session.getBasicRemote().sendText(webSocketMessage.toString());
+        } catch (IOException | ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

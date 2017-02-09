@@ -54,7 +54,7 @@ public class Request {
         mediaTypes = array._array;
     }
 
-    public Request(String path, int methodType, Map<String, String> params, SuccessListener successListener, ErrorListener errorListener) {
+    public Request(String path, int methodType, Map<String, String> params) {
         this.path = path;
         this.methodType = methodType;
         this.params = params;

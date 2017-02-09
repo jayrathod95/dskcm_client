@@ -21,7 +21,7 @@ public class RegistrationRequest extends Request {
     private String eid;
     private String password;
 
-    public RegistrationRequest(@NotNull String firstName, @NotNull String lastName, @NotNull String Email, @Nullable String mobile, @NotNull String eid, @NotNull String password, @NotNull SuccessListener successListener, @NotNull ErrorListener errorListener) {
+    public RegistrationRequest(@NotNull String firstName, @NotNull String lastName, @NotNull String Email, @Nullable String mobile, @NotNull String eid, @NotNull String password) {
         super(path, methodType, MediaType.APPLICATION_JSON, MediaType.TEXT_HTML, MediaType.TEXT_PLAIN);
         this.firstName = firstName;
         this.lastName = lastName;

@@ -1,9 +1,6 @@
 package com.deskcomm.ui.controllers;
 
 import com.deskcomm.core.CurrentUser;
-import com.deskcomm.exceptions.ResponseException;
-import com.deskcomm.networking.ErrorListener;
-import com.deskcomm.networking.SuccessListener;
 import com.deskcomm.support.L;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -17,7 +14,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.json.JSONObject;
 
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -38,8 +34,6 @@ public class LoginController extends Controller {
     private Button btnLogin, btnSignup;
     @FXML
     private TextField textFieldEmail, textFieldPassword;
-    private SuccessListener successListener;
-    private ErrorListener errorListener;
 
     private LoginController() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_FILE));
@@ -67,31 +61,6 @@ public class LoginController extends Controller {
 
 
     private void init() {
-        successListener = new SuccessListener() {
-            @Override
-            public void onSuccess(Response mResponse) {
-                String response = mResponse.readEntity(String.class);
-                L.println(response);
-                try {
-                    if (CurrentUser.getInstance().save(response)) {
-                        Controller controller = HomeController.getInstance();
-                        controller.startControlling(primaryStage);
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        errorListener = new ErrorListener() {
-            @Override
-            public void onError(ResponseException e) {
-                e.printStackTrace();
-                L.println(e.getMessage());
-            }
-        };
 
         btnSignup.setOnAction(event -> {
             try {

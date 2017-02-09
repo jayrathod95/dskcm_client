@@ -1,6 +1,7 @@
 package com.deskcomm.core;
 
 import com.deskcomm.db.DbConnection;
+import com.deskcomm.support.Keys;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
@@ -79,7 +80,7 @@ public class Event implements Persistent {
             connection.close();
             return updateCount > 0;
         } catch (SQLException e) {
-            if (e.getMessage().contains("no such table")) {
+            if (e.getMessage().contains(Keys.NO_SUCH_TABLE)) {
                 createTable();
                 return insertToTable();
             } else throw e;
@@ -231,7 +232,9 @@ public class Event implements Persistent {
             return i > 0;
         }
 
-        public boolean updateOrganisers() throws SQLException, ClassNotFoundException {
+        public boolean updateOrganisers(String... userUuids) throws SQLException, ClassNotFoundException {
+
+
             return false;
         }
 

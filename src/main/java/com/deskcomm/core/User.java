@@ -22,7 +22,18 @@ public class User implements Persistent {
     String email;
     String mobile;
     String imageUrl;
-    String uid;
+
+
+    public User(String uuid, String firstName, String lastName, String email, String mobile, String imageUrl, String gender) {
+        this.gender = gender;
+        this.uuid = uuid;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.mobile = mobile;
+        this.imageUrl = imageUrl;
+    }
+
 
     public User(String uuid) {
         this.uuid = uuid;
@@ -39,11 +50,12 @@ public class User implements Persistent {
         setGender(user.getString(Keys.GENDER));
     }
 
+
     public User() {
     }
 
     @Override
-    public boolean insertToTable() {
+    public boolean insertToTable() throws SQLException {
         try {
             Connection connection = DbConnection.getConnection();
             PreparedStatement statement = connection.prepareStatement("INSERT INTO users(uuid,fname,lname,email,mobile,img_url,gender) VALUES(?,?,?,?,?,?,?)");
@@ -61,8 +73,10 @@ public class User implements Persistent {
             return updateCount > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            createTable();
-            return insertToTable();
+            if (e.getMessage().contains(Keys.NO_SUCH_TABLE)) {
+                createTable();
+                return insertToTable();
+            } else throw e;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             return false;
@@ -71,12 +85,13 @@ public class User implements Persistent {
     }
 
     public JSONObject toJSON() {
-        return new JSONObject().accumulate(Keys.USER_UID, uuid)
+        return new JSONObject().accumulate(Keys.USER_UUID, uuid)
                 .accumulate(Keys.JSON_FNAME, firstName)
                 .accumulate(Keys.JSON_LNAME, lastName)
                 .accumulate(Keys.JSON_EMAIL, email)
                 .accumulate(Keys.JSON_MOBILE, email)
-                .accumulate(Keys.USER_IMG_URL, imageUrl);
+                .accumulate(Keys.USER_IMG_URL, imageUrl)
+                .accumulate(Keys.GENDER, gender);
     }
 
     @Override
@@ -124,7 +139,6 @@ public class User implements Persistent {
         this.mobile = mobile;
     }
 
-
     public String getImageUrl() {
         return imageUrl;
     }
@@ -132,7 +146,6 @@ public class User implements Persistent {
     private void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-
 
     public String getGender() {
         return gender;
@@ -149,16 +162,6 @@ public class User implements Persistent {
     public String getUuidTrimmed() {
         return uuid.substring(0, 8);
     }
-
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
 
     public boolean save() {
         try {
@@ -184,6 +187,7 @@ public class User implements Persistent {
         return false;
     }
 
+    @SuppressWarnings("Duplicates")
     public void createTable() {
         Connection connection = null;
         PreparedStatement statement;
@@ -213,6 +217,7 @@ public class User implements Persistent {
 
 
     public class Updater {
+
         public boolean updateFirstName(String value) throws SQLException, ClassNotFoundException {
             Connection connection = DbConnection.getConnection();
             PreparedStatement statement = connection.prepareStatement("UPDATE users SET fname=? WHERE uuid=?");

@@ -1,5 +1,6 @@
 package com.deskcomm.core.messages;
 
+import com.deskcomm.core.Persistent;
 import com.deskcomm.core.User;
 import com.deskcomm.db.DbConnection;
 import org.json.JSONObject;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
  * This class represents a received message from a user
  */
 
-public class ReceivedMessageUser {
+public class ReceivedMessageUser implements Persistent {
 
     private String id;
     private User sender;
@@ -40,7 +41,8 @@ public class ReceivedMessageUser {
     }
 
 
-    public boolean save() {
+    @Override
+    public boolean insertToTable() throws SQLException, ClassNotFoundException {
         try {
             Connection connection = DbConnection.getConnection();
             PreparedStatement statement = connection.prepareStatement("INSERT INTO messages (id, _from, body, saved_to_server_on, created) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP);");
@@ -59,5 +61,11 @@ public class ReceivedMessageUser {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public Object getUpdater() {
+
+        return null;
     }
 }

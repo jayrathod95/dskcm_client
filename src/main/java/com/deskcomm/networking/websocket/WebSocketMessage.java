@@ -4,6 +4,7 @@ import com.deskcomm.support.Keys;
 import com.deskcomm.support.PathDecoder;
 import org.json.JSONObject;
 
+import javax.websocket.Session;
 import java.util.Map;
 
 /**
@@ -11,16 +12,20 @@ import java.util.Map;
  */
 public class WebSocketMessage {
 
-    private final JSONObject jsonObject;
+    private JSONObject jsonObject;
     private String path;
-    private String data;
+    private JSONObject data;
     private Map<Integer, String> pathDecomposed;
 
-    public WebSocketMessage(String rawMessage) {
-        jsonObject = new JSONObject(rawMessage);
+    public WebSocketMessage(String wholeMessageJsonString) {
+        jsonObject = new JSONObject(wholeMessageJsonString);
         path = jsonObject.getString(Keys.PATH);
-        data = jsonObject.getString(Keys.DATA);
+        data = jsonObject.getJSONObject(Keys.DATA);
     }
+
+    public WebSocketMessage() {
+    }
+
 
     public JSONObject toJsonObject() {
         return jsonObject;
@@ -30,11 +35,31 @@ public class WebSocketMessage {
         return path;
     }
 
-    public String getData() {
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public JSONObject getData() {
         return data;
+    }
+
+    public void setData(JSONObject data) {
+        this.data = data;
     }
 
     public Map<Integer, String> getPathDecomposed() {
         return PathDecoder.getPathParams(path);
+    }
+
+    @Override
+    public String toString() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Keys.PATH, path);
+        jsonObject.put(Keys.DATA, data);
+        return jsonObject.toString();
+    }
+
+    public void send(Session session) {
+        session.getAsyncRemote().sendText(toString());
     }
 }
