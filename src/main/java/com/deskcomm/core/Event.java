@@ -99,8 +99,6 @@ public class Event implements Persistent {
             boolean i = statement.execute();
             statement.close();
             connection.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
             if (connection != null) try {

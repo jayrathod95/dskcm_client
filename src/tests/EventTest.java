@@ -1,5 +1,8 @@
 import com.deskcomm.core.Event;
+import com.deskcomm.db.DbConnection;
 import org.junit.Test;
+
+import java.sql.Connection;
 
 /**
  * Created by Jay Rathod on 08-02-2017.
@@ -8,10 +11,13 @@ public class EventTest {
     @Test
     public void insertToTable() throws Exception {
 
+        Connection connection = DbConnection.getConnection();
+        connection.setAutoCommit(false);
+        //insert to messages
+        //ddddddddddddddddd.
 
-        Event event = new Event("111111111", "aaaaaaaaaaa", "121212", "cccccccccc", "vvvvvvvvvv", "090909", null, null);
-        System.out.println(event.insertToTable());
-        System.out.println(event.getUpdater().updateVenue("Nagpur"));
+
+        connection.commit();
 
     }
 

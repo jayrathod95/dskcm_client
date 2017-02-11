@@ -14,17 +14,17 @@ import java.sql.SQLException;
  * This class represents a received message from a user
  */
 
-public class ReceivedMessageUser implements Persistent {
+public class InboundPersonalMessage implements Persistent {
 
     private String id;
     private User sender;
     private String body;
     private String timestamp;
 
-    public ReceivedMessageUser() {
+    public InboundPersonalMessage() {
     }
 
-    public ReceivedMessageUser(String jsonString) {
+    public InboundPersonalMessage(String jsonString) {
         JSONObject jsonObject = new JSONObject(jsonString);
         this.id = jsonObject.getString("id");
         this.sender = new User(jsonObject.getString("sender"));
@@ -33,7 +33,7 @@ public class ReceivedMessageUser implements Persistent {
 
     }
 
-    public ReceivedMessageUser(JSONObject jsonObject) {
+    public InboundPersonalMessage(JSONObject jsonObject) {
         this.id = jsonObject.getString("id");
         this.sender = new User(jsonObject.getString("sender"));
         this.body = jsonObject.getString("body");
@@ -54,9 +54,6 @@ public class ReceivedMessageUser implements Persistent {
             statement.close();
             connection.close();
             return i > 0;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return false;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

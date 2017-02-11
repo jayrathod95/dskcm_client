@@ -3,29 +3,54 @@ package com.deskcomm.core.messages;
 import com.deskcomm.core.Persistent;
 import org.json.JSONObject;
 
-import java.sql.SQLException;
-
 /**
  * Created by Jay Rathod on 06-02-2017.
  */
-public class Message implements Persistent {
-    String id;
-    String from;
-    String body;
+abstract public class Message implements Persistent {
+    protected String messageId;
+    protected String body;
+    protected String from;
+    protected String toUuid;
 
-    public Message(String jsonString) {
-        JSONObject jsonObject = new JSONObject(jsonString);
-        id = jsonObject.getString("id");
 
+    public Message(String messageId, String body, String from, String toUuid) {
+        this.messageId = messageId;
+        this.body = body;
+        this.from = from;
+        this.toUuid = toUuid;
     }
 
-    @Override
-    public boolean insertToTable() throws SQLException, ClassNotFoundException {
-        return false;
+    public String getMessageId() {
+        return messageId;
     }
 
-    @Override
-    public Object getUpdater() {
-        return null;
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getToUuid() {
+        return toUuid;
+    }
+
+    public void setToUuid(String toUuid) {
+        this.toUuid = toUuid;
+    }
+
+    abstract JSONObject toJSON();
 }

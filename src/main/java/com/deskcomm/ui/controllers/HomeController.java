@@ -171,14 +171,7 @@ public class HomeController extends Controller implements EventHandler<MouseEven
 
 
         buttonLogout.setOnAction(event -> {
-            try {
-                CurrentUser.getInstance().logout();
-            } catch (SQLException e) {
-                e.printStackTrace();
-
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            CurrentUser.getInstance().logout();
             try {
                 LoginController.getInstance().startControlling(primaryStage);
             } catch (IOException e) {

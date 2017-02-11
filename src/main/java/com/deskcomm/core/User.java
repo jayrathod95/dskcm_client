@@ -4,6 +4,7 @@ import com.deskcomm.db.DbConnection;
 import com.deskcomm.support.Keys;
 import org.json.JSONObject;
 
+import javax.websocket.Session;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -77,9 +78,6 @@ public class User implements Persistent {
                 createTable();
                 return insertToTable();
             } else throw e;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return false;
         }
 
     }
@@ -178,8 +176,6 @@ public class User implements Persistent {
             statement.close();
             connection.close();
             return i > 0;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -197,8 +193,6 @@ public class User implements Persistent {
             statement.execute();
             statement.close();
             connection.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
             if (connection != null) try {
@@ -274,5 +268,7 @@ public class User implements Persistent {
         }
 
 
+        public void updateWsSession(Session session) {
+        }
     }
 }

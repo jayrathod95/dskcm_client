@@ -27,8 +27,9 @@ public class CurrentUser extends User {
     private String sessionId;
     private String created;
     private String loggedInOn;
+    private Object identity;
 
-    private CurrentUser() throws SQLException, ClassNotFoundException {
+    private CurrentUser() throws SQLException {
         UserPrefsTable.createTableIfNotExits();
     }
 
@@ -49,29 +50,33 @@ public class CurrentUser extends User {
     }
 
 
-    public static CurrentUser getInstance() throws SQLException, ClassNotFoundException {
+    public static CurrentUser getInstance() {
         if (mCurrentUser == null || !mCurrentUser.isLoggedIn) {
-            mCurrentUser = new CurrentUser();
-            Connection connection = DbConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT session_id,_uuid,fname,lname,email,mobile,gender,img_url,created FROM user_preferences LIMIT 1");
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                mCurrentUser.isLoggedIn = true;
-                mCurrentUser.sessionId = resultSet.getString(SESSION_ID);
-                mCurrentUser.uuid = resultSet.getString(USER_UUID);
-                mCurrentUser.firstName = resultSet.getString(USER_FIRSTNAME);
-                mCurrentUser.lastName = resultSet.getString(USER_LASTNAME);
-                mCurrentUser.email = resultSet.getString(USER_EMAIL);
-                mCurrentUser.mobile = resultSet.getString(USER_MOBILE);
-                mCurrentUser.imageUrl = resultSet.getString(USER_IMG_URL);
-                mCurrentUser.loggedInOn = resultSet.getString(USER_CREATED);
-                mCurrentUser.gender = resultSet.getString(GENDER);
-            } else {
-                mCurrentUser.isLoggedIn = false;
+            try {
+                mCurrentUser = new CurrentUser();
+                Connection connection = DbConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT session_id,_uuid,fname,lname,email,mobile,gender,img_url,created FROM user_preferences LIMIT 1");
+                ResultSet resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    mCurrentUser.isLoggedIn = true;
+                    mCurrentUser.sessionId = resultSet.getString(SESSION_ID);
+                    mCurrentUser.uuid = resultSet.getString(USER_UUID);
+                    mCurrentUser.firstName = resultSet.getString(USER_FIRSTNAME);
+                    mCurrentUser.lastName = resultSet.getString(USER_LASTNAME);
+                    mCurrentUser.email = resultSet.getString(USER_EMAIL);
+                    mCurrentUser.mobile = resultSet.getString(USER_MOBILE);
+                    mCurrentUser.imageUrl = resultSet.getString(USER_IMG_URL);
+                    mCurrentUser.loggedInOn = resultSet.getString(USER_CREATED);
+                    mCurrentUser.gender = resultSet.getString(GENDER);
+                } else {
+                    mCurrentUser.isLoggedIn = false;
+                }
+                resultSet.close();
+                statement.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            resultSet.close();
-            statement.close();
-            connection.close();
         }
         return mCurrentUser;
     }
@@ -82,11 +87,10 @@ public class CurrentUser extends User {
             return table.clearRecord();
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
         return false;
     }
+
 
     public Response<JSONObject> login(String email, String password) {
         //     LoginRequest request=new LoginRequest();
@@ -142,5 +146,9 @@ public class CurrentUser extends User {
 
     public String getLoggedInOn() {
         return loggedInOn;
+    }
+
+    public Identity getIdentity() {
+        return new Identity(uuid, sessionId);
     }
 }

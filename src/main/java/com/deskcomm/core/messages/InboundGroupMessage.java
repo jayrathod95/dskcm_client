@@ -13,16 +13,18 @@ import java.sql.SQLException;
 /**
  * Created by Swati Shende on 07-Feb-17.
  */
-public class ReceivedMessageGroup implements Persistent {
+public class InboundGroupMessage implements Persistent {
     private String id;
     private Group groupId;
     private User sender;
     private String body;
     private String timestamp;
-    public ReceivedMessageGroup() {
+
+    public InboundGroupMessage() {
     }
 
-    public ReceivedMessageGroup(String jsonString) {
+
+    public InboundGroupMessage(String jsonString) {
         JSONObject jsonObject = new JSONObject(jsonString);
         this.id = jsonObject.getString("id");
         this.groupId = new Group(jsonObject.getString("groupId"));
@@ -41,14 +43,10 @@ public class ReceivedMessageGroup implements Persistent {
             statement.setString(2, groupId.getUuid());
             statement.setString(3, sender.getUuid());
             statement.setString(4, body);
-            statement.setString(5, timestamp);
             int i = statement.executeUpdate();
             statement.close();
             connection.close();
             return i > 0;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return false;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

@@ -15,7 +15,6 @@ public class Keys {
     public static final int ERROR_NONE = 0;
     public static final int ERROR_KNOWN = 1;
     public static final int ERROR_UNKNOWN = 2;
-    public static final String JSON_ERROR_ID = "error_id";
     public static final String ERROR_CODE = "error_code";
 
     final public static String GROUP_ID = "group_uuid";
@@ -39,12 +38,21 @@ public class Keys {
     public static final String GENDER = "gender";
     public static final String JSON_EMAIL = "email";
     public static final String JSON_MOBILE = "mobile";
-    public static final String PATH = "path";
-    public static final String DATA = "data";
+    public static final String WS_PATH = "path";
+    public static final String WS_DATA = "data";
     public static final String SERVER_TIMESTAMP = "serverTimeStamp";
     public static final CharSequence NO_SUCH_TABLE = "no such table";
     public static final String REQUEST_CODE = "request_code";
     public static final String HANDSHAKE_REQ = "HANDSHAKE";
+    public static final String TO_USER = "_to";
+    public static final String BODY = "body";
+    public static final String MESSAGE_ID = "message_id";
+    public static final String MESSAGE_TO = "_to";
+    public static final String MESSAGE_FROM = "from";
+    public static final String MESSAGE_BODY = "body";
+
+    public static final String WS_IDENTITY = "identity";
+
 
     public static class JSON {
         public static final String RESULT = "Result";

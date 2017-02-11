@@ -14,8 +14,12 @@ public class DbConnection {
 
     }
 
-    public static Connection getConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("org.sqlite.JDBC");
+    public static Connection getConnection() throws SQLException {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         return DriverManager.getConnection(JDBC_SQLITE_URL);
     }

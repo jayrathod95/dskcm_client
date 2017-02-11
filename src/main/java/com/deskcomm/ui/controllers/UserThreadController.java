@@ -1,6 +1,7 @@
 package com.deskcomm.ui.controllers;
 
 import com.deskcomm.core.User;
+import com.deskcomm.core.messages.OutboundPersonalMessage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -41,7 +42,11 @@ public class UserThreadController extends Controller {
             if (textFieldMessage.getText().length() > 0 && textFieldMessage.getText().trim().length() > 0) {
                 listView.getItems().add(new Text(textFieldMessage.getText()));
                 listView.scrollTo(listView.getItems().size());
+
+                OutboundPersonalMessage message = new OutboundPersonalMessage(user.getUuid(), textFieldMessage.getText());
+                message.send();
                 textFieldMessage.setText("");
+
             }
 
         });
@@ -50,6 +55,8 @@ public class UserThreadController extends Controller {
                 if (textFieldMessage.getText().length() > 0 && textFieldMessage.getText().trim().length() > 0) {
                     listView.getItems().add(new Text(textFieldMessage.getText()));
                     listView.scrollTo(listView.getItems().size());
+                    OutboundPersonalMessage message = new OutboundPersonalMessage(user.getUuid(), textFieldMessage.getText());
+                    message.send();
                     textFieldMessage.setText("");
                 }
             }

@@ -42,7 +42,7 @@ public class UserPrefsTable {
     private String gender = null;
 
     public UserPrefsTable(String sessionId, String sessionId1, boolean loginStatus, String _uuid, String firstName,
-                          String lastName, String gender, String email, @Nullable String mobile, @Nullable String img_url) throws SQLException, ClassNotFoundException {
+                          String lastName, String gender, String email, @Nullable String mobile, @Nullable String img_url) throws SQLException {
         createTableIfNotExits();
         this.sessionId = sessionId;
         this.sessionId1 = sessionId1;
@@ -56,7 +56,7 @@ public class UserPrefsTable {
         this.gender = gender;
     }
 
-    public UserPrefsTable(JSONObject jsonObject) throws SQLException, ClassNotFoundException {
+    public UserPrefsTable(JSONObject jsonObject) throws SQLException {
         createTableIfNotExits();
         sessionId = jsonObject.getString(Keys.JSON.SESSION_ID);
         sessionId1 = UUID.randomUUID().toString();
@@ -72,11 +72,11 @@ public class UserPrefsTable {
 
     }
 
-    public UserPrefsTable() throws SQLException, ClassNotFoundException {
+    public UserPrefsTable() throws SQLException {
         createTableIfNotExits();
     }
 
-    public static void createTableIfNotExits() throws SQLException, ClassNotFoundException {
+    public static void createTableIfNotExits() throws SQLException {
         Connection connection = DbConnection.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS user_preferences(\n" +
                 "  session_id TEXT NOT NULL,\n" +
@@ -97,11 +97,11 @@ public class UserPrefsTable {
 
     }
 
-    public boolean update() throws SQLException, ClassNotFoundException {
+    public boolean update() throws SQLException {
         return insert();
     }
 
-    private boolean insert() throws SQLException, ClassNotFoundException {
+    private boolean insert() throws SQLException {
         String sql = "INSERT INTO user_preferences(session_id,session_id1,login_status,_uuid,fname,lname,email,mobile,img_url,created,gender)" +
                 "VALUES(?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP,?) ";
         Connection connection = DbConnection.getConnection();
@@ -127,7 +127,7 @@ public class UserPrefsTable {
         return i > 0;
     }
 
-    public boolean fetchData() throws SQLException, ClassNotFoundException {
+    public boolean fetchData() throws SQLException {
         Connection connection = DbConnection.getConnection();
         PreparedStatement statement = connection.prepareStatement("SELECT session_id,session_id1,login_status,_uuid,fname,lname,email,mobile,img_url,created FROM user_preferences LIMIT 1");
         ResultSet resultSet = statement.executeQuery();
@@ -156,7 +156,7 @@ public class UserPrefsTable {
     }
 
 /*
-    private boolean updateData() throws SQLException, ClassNotFoundException {
+    private boolean updateData() throws SQLException {
         PreparedStatement statement=DbConnection.getConnection().prepareStatement("UPDATE " + TABLE_NAME +
                 " SET "+COL_SESSION_ID+" = "+sessionId+
                 " SET "+COL_SESSION_ID1+" = "+sessionId1+
@@ -179,7 +179,7 @@ public class UserPrefsTable {
         return sessionId;
     }
 
-    public boolean updateSessionId(String sessionId) throws SQLException, ClassNotFoundException {
+    public boolean updateSessionId(String sessionId) throws SQLException {
         // this.sessionId = sessionId;
         return updateProperty(COL_SESSION_ID, sessionId);
 
@@ -189,7 +189,7 @@ public class UserPrefsTable {
         return sessionId1;
     }
 
-    public boolean updateSessionId1(String sessionId1) throws SQLException, ClassNotFoundException {
+    public boolean updateSessionId1(String sessionId1) throws SQLException {
         //this.sessionId1 = sessionId1;
         return updateProperty(COL_SESSION_ID1, sessionId1);
 
@@ -199,7 +199,7 @@ public class UserPrefsTable {
         return loginStatus;
     }
 
-    public boolean updateLoginStatus(String loginStatus) throws SQLException, ClassNotFoundException {
+    public boolean updateLoginStatus(String loginStatus) throws SQLException {
         //this.loginStatus = loginStatus;
         return updateProperty(COL_LOGIN_STATUS, loginStatus);
 
@@ -209,7 +209,7 @@ public class UserPrefsTable {
         return _uuid;
     }
 
-    public boolean updateUUID(String _uuid) throws SQLException, ClassNotFoundException {
+    public boolean updateUUID(String _uuid) throws SQLException {
         //this._uuid = _uuid;
         return updateProperty(COL_UUID, _uuid);
 
@@ -217,7 +217,7 @@ public class UserPrefsTable {
     }
 
 
-    public boolean updateUserName(String userName) throws SQLException, ClassNotFoundException {
+    public boolean updateUserName(String userName) throws SQLException {
         //  this.userName = userName;
         return updateProperty(COL_FNAME, userName);
 
@@ -227,7 +227,7 @@ public class UserPrefsTable {
         return firstName;
     }
 
-    public boolean updateFirstName(String firstName) throws SQLException, ClassNotFoundException {
+    public boolean updateFirstName(String firstName) throws SQLException {
         //this.firstName = firstName;
         return updateProperty(COL_FNAME, firstName);
 
@@ -238,7 +238,7 @@ public class UserPrefsTable {
         return lastName;
     }
 
-    public boolean updateLastName(String lastName) throws SQLException, ClassNotFoundException {
+    public boolean updateLastName(String lastName) throws SQLException {
         //this.lastName = lastName;
         return updateProperty(COL_LNAME, lastName);
 
@@ -249,7 +249,7 @@ public class UserPrefsTable {
         return email;
     }
 
-    public boolean updateEmail(String email) throws SQLException, ClassNotFoundException {
+    public boolean updateEmail(String email) throws SQLException {
         //this.email = email;
         return updateProperty(COL_EMAIL, email);
 
@@ -259,7 +259,7 @@ public class UserPrefsTable {
         return mobile;
     }
 
-    public boolean updateMobile(String mobile) throws SQLException, ClassNotFoundException {
+    public boolean updateMobile(String mobile) throws SQLException {
 
         //this.mobile = mobile;
         return updateProperty(COL_MOBILE, mobile);
@@ -270,7 +270,7 @@ public class UserPrefsTable {
         return created;
     }
 
-    public boolean updateCreated(String created) throws SQLException, ClassNotFoundException {
+    public boolean updateCreated(String created) throws SQLException {
 
         //this.created = created;
         return updateProperty(COL_CREATED, created);
@@ -280,7 +280,7 @@ public class UserPrefsTable {
         return img_url;
     }
 
-    public boolean updateImg_url(String img_url) throws SQLException, ClassNotFoundException {
+    public boolean updateImg_url(String img_url) throws SQLException {
         //   this.img_url = img_url;
         return updateProperty(COL_IMG_URL, img_url);
     }
@@ -289,7 +289,7 @@ public class UserPrefsTable {
         return gender;
     }
 
-    private boolean updateProperty(String columnName, String newData) throws SQLException, ClassNotFoundException {
+    private boolean updateProperty(String columnName, String newData) throws SQLException {
         Connection connection = DbConnection.getConnection();
         PreparedStatement statement = connection.prepareStatement("UPDATE " + TABLE_NAME + " SET " + columnName + "=?");
         statement.setString(1, newData);
@@ -301,7 +301,7 @@ public class UserPrefsTable {
         return result > 0;
     }
 
-    public boolean clearRecord() throws SQLException, ClassNotFoundException {
+    public boolean clearRecord() throws SQLException {
         Connection connection = DbConnection.getConnection();
         PreparedStatement statement = connection.prepareStatement("DELETE FROM " + TABLE_NAME);
         boolean execute = statement.execute();

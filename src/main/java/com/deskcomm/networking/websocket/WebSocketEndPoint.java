@@ -1,7 +1,7 @@
 package com.deskcomm.networking.websocket;
 
 import com.deskcomm.core.CurrentUser;
-import com.deskcomm.core.messages.ReceivedMessageUser;
+import com.deskcomm.core.messages.InboundPersonalMessage;
 import com.deskcomm.support.Keys;
 import com.deskcomm.ui.controllers.HomeController;
 import javafx.application.Platform;
@@ -12,8 +12,6 @@ import javax.websocket.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.sql.SQLException;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,6 +32,10 @@ public class WebSocketEndPoint {
 //        Logger.getLogger(session.getId()).log(Level.SEVERE, session.getId());
     }
 
+    public static void sendMessage(String string) {
+        WebSocketEndPoint.session.getAsyncRemote().sendText(string);
+    }
+
     @OnOpen
     public void onOpen(Session session) {
         WebSocketEndPoint.session = session;
@@ -47,7 +49,6 @@ public class WebSocketEndPoint {
 
     }
 
-
     @OnMessage
     public void onMessage(InputStream input) {
         System.out.println("WebSocket InputStream Received!");
@@ -58,14 +59,15 @@ public class WebSocketEndPoint {
     @OnMessage
     public void onMessage(String rawMessage, Session session) {
 
-        WebSocketMessage webSocketMessage = new WebSocketMessage(rawMessage);
-        Map<Integer, String> pathComponents = webSocketMessage.getPathDecomposed();
+        InboundWebsocketMessage webSocketMessage = new InboundWebsocketMessage(rawMessage);
 
         switch (webSocketMessage.getPath()) {
             case "message/user/":
-                ReceivedMessageUser messageUser = new ReceivedMessageUser(webSocketMessage.getData());
+                InboundPersonalMessage messageUser = new InboundPersonalMessage(webSocketMessage.getData());
+
                 break;
             case "message/group/":
+
                 break;
             case "event":
                 break;
@@ -80,18 +82,8 @@ public class WebSocketEndPoint {
 
     private void handleHandShakeResponse(JSONObject data) {
         System.out.println(data);
-        try {
-            if (data.getBoolean(Keys.JSON_RESULT)) {
-                WebSocketMessage webSocketMessage = new WebSocketMessage();
-                webSocketMessage.setPath("request/get_users");
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put(Keys.USER_UUID, CurrentUser.getInstance().getUuid());
-                jsonObject.put(Keys.SESSION_ID, CurrentUser.getInstance().getSessionId());
-                webSocketMessage.setData(jsonObject);
-                webSocketMessage.send(session);
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+        if (data.getBoolean(Keys.JSON_RESULT)) {
+            CurrentUser.getInstance().getUpdater().updateWsSession(session);
         }
     }
 
@@ -112,15 +104,12 @@ public class WebSocketEndPoint {
 
     private void sendHandShakeMessage() {
         try {
-            WebSocketMessage webSocketMessage = new WebSocketMessage();
-            webSocketMessage.setPath("request/" + Keys.HANDSHAKE_REQ);
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(Keys.USER_UUID, CurrentUser.getInstance().getUuid());
-            jsonObject.put(Keys.SESSION_ID, CurrentUser.getInstance().getSessionId());
-            webSocketMessage.setData(jsonObject);
+            OutboundWebsocketMessage webSocketMessage = new OutboundWebsocketMessage("request/" + Keys.HANDSHAKE_REQ, null, true);
             session.getBasicRemote().sendText(webSocketMessage.toString());
-        } catch (IOException | ClassNotFoundException | SQLException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
 }
