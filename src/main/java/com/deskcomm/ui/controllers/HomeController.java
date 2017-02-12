@@ -5,6 +5,7 @@ import com.deskcomm.core.User;
 import com.deskcomm.networking.GetAllUsersRequest;
 import com.deskcomm.networking.websocket.WebSocketEndPoint;
 import com.deskcomm.support.L;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -33,9 +34,8 @@ public class HomeController extends Controller implements EventHandler<MouseEven
     private static final double PREF_HEIGHT = 643;
     private static final String FXML_FILE_2 = "../fxmls/row_users.fxml";
     private static HomeController homeController;
-    private final FXMLLoader loader;
     final private String FXML_FILE = "../fxmls/home1.fxml";
-
+    private FXMLLoader loader;
     @FXML
     private Label labelUserName;
     @FXML
@@ -82,6 +82,15 @@ public class HomeController extends Controller implements EventHandler<MouseEven
     @Singleton
     private HomeController() {
         L.println("Inside Home");
+        init();
+    }
+
+    public static HomeController getInstance() {
+        if (homeController == null) homeController = new HomeController();
+        return homeController;
+    }
+
+    private void init() {
         loader = new FXMLLoader(getClass().getResource(FXML_FILE));
         loader.setController(this);
         try {
@@ -93,15 +102,11 @@ public class HomeController extends Controller implements EventHandler<MouseEven
         }
     }
 
-    public static HomeController getInstance() {
-        if (homeController == null) homeController = new HomeController();
-        return homeController;
-    }
-
     public void startControlling(final Stage primaryStage) throws SQLException, ClassNotFoundException {
         this.primaryStage = primaryStage;
         //this.primaryStage.setResizable(false);
         System.out.print("startControlling");
+        if (rootvBox == null) init();
         scene = new Scene(rootvBox, PREF_WIDTH, PREF_HEIGHT);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -174,6 +179,8 @@ public class HomeController extends Controller implements EventHandler<MouseEven
             CurrentUser.getInstance().logout();
             try {
                 LoginController.getInstance().startControlling(primaryStage);
+                Platform.runLater(() -> rootvBox = null);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -22,9 +22,12 @@ public class Response<T> {
         try {
             JSONObject builder = new JSONObject(jsonString);
             result = builder.getBoolean(JSON_RESULT);
+
             errorType = builder.getInt(JSON_ERROR_TYPE);
-            message = builder.getString(JSON_MESSAGE);
-            data = (T) builder.get(JSON_DATA);
+            if (builder.has(JSON_MESSAGE))
+                message = builder.getString(JSON_MESSAGE);
+            if (builder.has(JSON_DATA))
+                data = (T) builder.get(JSON_DATA);
             errorCode = builder.getString(ERROR_CODE);
         } catch (JSONException e) {
             e.printStackTrace();

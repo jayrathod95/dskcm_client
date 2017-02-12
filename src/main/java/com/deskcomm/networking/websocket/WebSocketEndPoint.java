@@ -62,11 +62,11 @@ public class WebSocketEndPoint {
         InboundWebsocketMessage webSocketMessage = new InboundWebsocketMessage(rawMessage);
 
         switch (webSocketMessage.getPath()) {
-            case "message/user/":
-                InboundPersonalMessage messageUser = new InboundPersonalMessage(webSocketMessage.getData());
-
+            case "message/personal":
+                InboundPersonalMessage personalMessage = new InboundPersonalMessage(webSocketMessage.getData());
+                personalMessage.insertToTable();
                 break;
-            case "message/group/":
+            case "message/group":
 
                 break;
             case "event":

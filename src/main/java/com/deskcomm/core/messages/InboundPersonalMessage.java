@@ -42,7 +42,7 @@ public class InboundPersonalMessage implements Persistent {
 
 
     @Override
-    public boolean insertToTable() throws SQLException, ClassNotFoundException {
+    public boolean insertToTable() {
         try {
             Connection connection = DbConnection.getConnection();
             PreparedStatement statement = connection.prepareStatement("INSERT INTO messages (id, _from, body, saved_to_server_on, created) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP);");

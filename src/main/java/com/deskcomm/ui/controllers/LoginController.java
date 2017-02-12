@@ -2,15 +2,16 @@ package com.deskcomm.ui.controllers;
 
 import com.deskcomm.core.CurrentUser;
 import com.deskcomm.support.L;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.json.JSONObject;
 
@@ -28,7 +29,7 @@ public class LoginController extends Controller {
     @FXML
     Label labelError;
     private String windowTitle = "Log In";
-    private Parent root;
+    private Pane root;
     private Stage primaryStage = null;
     @FXML
     private Button btnLogin, btnSignup;
@@ -36,32 +37,38 @@ public class LoginController extends Controller {
     private TextField textFieldEmail, textFieldPassword;
 
     private LoginController() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_FILE));
-        loader.setController(this);
-        root = loader.load();
         init();
 
     }
 
     public static LoginController getInstance() throws IOException {
-        if (loginController == null) new LoginController();
+        if (loginController == null) loginController = new LoginController();
         return loginController;
     }
 
     @Override
     public void startControlling(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        Scene scene = new Scene(root, PREF_WIDTH, PREF_HEIGHT);
+        Scene scene;
+        if (root == null) init();
+        scene = new Scene(root, PREF_WIDTH, PREF_HEIGHT);
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.setTitle(windowTitle);
         primaryStage.getIcons().add(new Image(this.getClass().getResource("../../resources/images/dskcm_logo_temp.png").toString()));
         if (!primaryStage.isShowing()) primaryStage.show();
+
     }
 
 
     private void init() {
-
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_FILE));
+        loader.setController(this);
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         btnSignup.setOnAction(event -> {
             try {
                 RegistrationController controller = RegistrationController.getInstance();
@@ -91,7 +98,9 @@ public class LoginController extends Controller {
                     try {
                         if (response.isResult() && CurrentUser.getInstance().save(response.getData())) {
                             HomeController controller = HomeController.getInstance();
+                            //primaryStage.close();
                             controller.startControlling(primaryStage);
+                            Platform.runLater(() -> root = null);
                         } else {
                             labelError.setText(response.getMessage());
                         }
