@@ -114,6 +114,11 @@ public class Event implements Persistent {
         return new Event.Updater();
     }
 
+    @Override
+    public boolean fetchFromDb() {
+        return false;
+    }
+
     public void setServerTimeStamp(String serverTimeStamp) {
         this.serverTimeStamp = serverTimeStamp;
     }

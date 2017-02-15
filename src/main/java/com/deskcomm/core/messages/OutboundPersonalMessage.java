@@ -40,6 +40,11 @@ public class OutboundPersonalMessage extends Message implements Sendable {
     }
 
     @Override
+    public boolean fetchFromDb() {
+        return false;
+    }
+
+    @Override
     public void send() {
         OutboundWebsocketMessage outboundWebsocketMessage = new OutboundWebsocketMessage("message/personal", this.toJSON(), true);
         outboundWebsocketMessage.send();

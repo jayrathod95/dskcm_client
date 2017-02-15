@@ -2,12 +2,14 @@ package com.deskcomm.core;
 
 import com.deskcomm.core.messages.Message;
 import com.deskcomm.db.DbConnection;
-import com.deskcomm.support.Keys;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import static com.deskcomm.support.Keys.*;
 
 /**
  * Created by Jay Rathod on 05-02-2017.
@@ -35,11 +37,32 @@ public class Group implements Persistent {
     }
 
     public Group(JSONObject jsonObject) {
-        setUuid(jsonObject.getString(Keys.GROUP_ID));
-        setUuid(jsonObject.getString(Keys.GROUP_NAME));
-        setUuid(jsonObject.getString(Keys.GROUP_ICON_URL));
-        setUuid(jsonObject.getString(Keys.GROUP_MEMBER_IDS));
-        setServerTimeStamp(jsonObject.getString(Keys.SERVER_TIMESTAMP));
+        setUuid(jsonObject.getString(GROUP_ID));
+        setUuid(jsonObject.getString(GROUP_NAME));
+        setUuid(jsonObject.getString(GROUP_ICON_URL));
+        setUuid(jsonObject.getString(GROUP_MEMBER_IDS));
+        setServerTimeStamp(jsonObject.getString(SERVER_TIMESTAMP));
+    }
+
+    @Override
+    public String toString() {
+        return toJSON().toString();
+    }
+
+    public JSONObject toJSON() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(GROUP_NAME, groupName);
+        jsonObject.put(GROUP_ID, uuid);
+        jsonObject.put(GROUP_ICON_URL, iconUrl);
+        jsonObject.put(GROUP_CREATED_BY, createdBy);
+        JSONArray memberIds = new JSONArray();
+        for (User user :
+                members) {
+            memberIds.put(user.getUuid());
+        }
+        jsonObject.put(GROUP_MEMBER_IDS, memberIds);
+        if (serverTimeStamp != null) jsonObject.put(SERVER_TIMESTAMP, serverTimeStamp);
+        return jsonObject;
     }
 
     public Message[] getMessages() {
@@ -134,6 +157,11 @@ public class Group implements Persistent {
     @Override
     public Updater getUpdater() {
         return new Updater();
+    }
+
+    @Override
+    public boolean fetchFromDb() {
+        return false;
     }
 
     public void setServerTimeStamp(String serverTimeStamp) {
@@ -262,7 +290,6 @@ public class Group implements Persistent {
 
 
     }
-
 
 
 }

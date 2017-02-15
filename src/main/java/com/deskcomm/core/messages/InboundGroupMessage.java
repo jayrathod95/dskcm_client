@@ -57,4 +57,9 @@ public class InboundGroupMessage implements Persistent {
     public Object getUpdater() {
         return null;
     }
+
+    @Override
+    public boolean fetchFromDb() {
+        return false;
+    }
 }

@@ -8,4 +8,6 @@ import java.sql.SQLException;
 public interface Persistent {
     boolean insertToTable() throws SQLException, ClassNotFoundException;
     Object getUpdater();
+
+    boolean fetchFromDb();
 }

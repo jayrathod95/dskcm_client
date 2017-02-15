@@ -84,6 +84,7 @@ public class CurrentUser extends User {
     public boolean logout() {
         try {
             UserPrefsTable table = new UserPrefsTable();
+            mCurrentUser = null;
             return table.clearRecord();
         } catch (SQLException e) {
             e.printStackTrace();

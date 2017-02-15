@@ -7,14 +7,15 @@ import org.json.JSONObject;
 import javax.websocket.Session;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Created by Jay Rathod on 15-01-2017.
  */
 public class User implements Persistent {
 
-    protected String gender;
     protected String uuidTrimmed;
     protected String fullName;
     String uuid;
@@ -23,6 +24,7 @@ public class User implements Persistent {
     String email;
     String mobile;
     String imageUrl;
+    String gender;
 
 
     public User(String uuid, String firstName, String lastName, String email, String mobile, String imageUrl, String gender) {
@@ -55,6 +57,30 @@ public class User implements Persistent {
     public User() {
     }
 
+    public static ArrayList<User> getAllUsers() {
+        try {
+            ArrayList<User> arrayList = new ArrayList<>();
+            Connection connection = DbConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT uuid,fname,lname,email,mobile,img_url,gender FROM users");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                User user = new User();
+                user.setUuid(resultSet.getString(1));
+                user.setFirstName(resultSet.getString(2));
+                user.setLastName(resultSet.getString(3));
+                user.setEmail(resultSet.getString(4));
+                user.setMobile(resultSet.getString(5));
+                user.setImageUrl(resultSet.getString(6));
+                user.setGender(resultSet.getString(7));
+                arrayList.add(user);
+            }
+            return arrayList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     public boolean insertToTable() throws SQLException {
         try {
@@ -79,7 +105,6 @@ public class User implements Persistent {
                 return insertToTable();
             } else throw e;
         }
-
     }
 
     public JSONObject toJSON() {
@@ -154,7 +179,39 @@ public class User implements Persistent {
     }
 
     public String getFullName() {
+        if (firstName == null) this.fetchFromDb();
         return firstName + " " + lastName;
+    }
+
+    @Override
+    public boolean fetchFromDb() {
+        Connection connection = null;
+        try {
+            connection = DbConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT fname,lname,email,img_url,gender FROM users WHERE uuid=?");
+            statement.setString(1, uuid);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                firstName = resultSet.getString(1);
+                lastName = resultSet.getString(2);
+                email = resultSet.getString(3);
+                imageUrl = resultSet.getString(4);
+                gender = resultSet.getString(5);
+                statement.close();
+                connection.close();
+                return true;
+            }
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            if (connection != null) try {
+                connection.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return false;
     }
 
     public String getUuidTrimmed() {

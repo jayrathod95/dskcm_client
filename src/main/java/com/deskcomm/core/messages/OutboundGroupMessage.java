@@ -41,6 +41,11 @@ public class OutboundGroupMessage extends Message implements Sendable {
     }
 
     @Override
+    public boolean fetchFromDb() {
+        return false;
+    }
+
+    @Override
     public void send() {
         OutboundWebsocketMessage websocketMessage = new OutboundWebsocketMessage("message/group", this.toJSON(), true);
         websocketMessage.send();

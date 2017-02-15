@@ -1,11 +1,15 @@
 package com.deskcomm.networking.websocket;
 
 import com.deskcomm.core.CurrentUser;
+import com.deskcomm.core.bookkeeping.UsersUpdater;
 import com.deskcomm.core.messages.InboundPersonalMessage;
 import com.deskcomm.support.Keys;
 import com.deskcomm.ui.controllers.HomeController;
+import com.deskcomm.ui.rows.PersonalThreadRow;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import org.json.JSONObject;
 
 import javax.websocket.*;
@@ -45,8 +49,6 @@ public class WebSocketEndPoint {
         });
         sendHandShakeMessage();
         // session.getBasicRemote().sendText("New User Connected: " + CurrentUser.getInstance().getFullName());
-
-
     }
 
     @OnMessage
@@ -63,19 +65,22 @@ public class WebSocketEndPoint {
 
         switch (webSocketMessage.getPath()) {
             case "message/personal":
+                System.out.println(webSocketMessage.getData());
                 InboundPersonalMessage personalMessage = new InboundPersonalMessage(webSocketMessage.getData());
-                personalMessage.insertToTable();
+                //personalMessage.insertToTable();
+                updateUserInterface(personalMessage);
                 break;
             case "message/group":
 
                 break;
             case "event":
                 break;
-            case "bookkeeping/users/all":
-                //  BookKeeper.updateUsers(webSocketMessage.getData());
-                break;
             case "response/" + Keys.HANDSHAKE_REQ:
                 handleHandShakeResponse(webSocketMessage.getData());
+                break;
+            case "bookkeeping/users":
+                JSONObject data = webSocketMessage.getData();
+                UsersUpdater.getInstance().updateAllUsers(data.getJSONArray("users"));
                 break;
         }
     }
@@ -84,6 +89,10 @@ public class WebSocketEndPoint {
         System.out.println(data);
         if (data.getBoolean(Keys.JSON_RESULT)) {
             CurrentUser.getInstance().getUpdater().updateWsSession(session);
+            OutboundWebsocketMessage message = new OutboundWebsocketMessage("request/users", null, true);
+            message.send();
+            OutboundWebsocketMessage websocketMessage = new OutboundWebsocketMessage("messages/get_undelivered_messages", null, true);
+            websocketMessage.send();
         }
     }
 
@@ -109,6 +118,18 @@ public class WebSocketEndPoint {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    private void updateUserInterface(InboundPersonalMessage personalMessage) {
+        PersonalThreadRow row = new PersonalThreadRow(personalMessage.getId(), personalMessage.getFromUser(), personalMessage.getBody(), personalMessage.getTimestamp());
+        AnchorPane anc = row.create();
+        if (anc != null)
+            Platform.runLater(() -> {
+                ObservableList<AnchorPane> userThreadsObservableList = HomeController.getInstance().getUserThreadsObservableList();
+                userThreadsObservableList.removeIf(next -> next.getUserData().equals(anc.getUserData()));
+                HomeController.getInstance().getUserThreadsObservableList().add(0, anc);
+            });
     }
 
 

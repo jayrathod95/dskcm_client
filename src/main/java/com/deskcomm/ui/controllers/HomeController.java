@@ -2,10 +2,12 @@ package com.deskcomm.ui.controllers;
 
 import com.deskcomm.core.CurrentUser;
 import com.deskcomm.core.User;
+import com.deskcomm.db.DbConnection;
 import com.deskcomm.networking.GetAllUsersRequest;
 import com.deskcomm.networking.websocket.WebSocketEndPoint;
 import com.deskcomm.support.L;
-import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -15,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.json.JSONArray;
@@ -24,22 +27,23 @@ import javax.inject.Singleton;
 import javax.websocket.DeploymentException;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.sql.SQLException;
 
 /**
  * Created by Jay Rathod on 20-01-2017.
  */
+@Singleton
 public class HomeController extends Controller implements EventHandler<MouseEvent> {
     private static final double PREF_WIDTH = 954;
     private static final double PREF_HEIGHT = 643;
     private static final String FXML_FILE_2 = "../fxmls/row_users.fxml";
     private static HomeController homeController;
     final private String FXML_FILE = "../fxmls/home1.fxml";
+    final private String FXML_FILE_3 = "../fxmls/create_new_group.fxml";
     private FXMLLoader loader;
     @FXML
     private Label labelUserName;
     @FXML
-    private Button buttonLogout, buttonLoadUsers;
+    private Button buttonLogout, buttonLoadUsers, buttonCreateGroup;
     @FXML
     private Tab tabUsers;
     @FXML
@@ -50,6 +54,10 @@ public class HomeController extends Controller implements EventHandler<MouseEven
     private Label labelUserNameList, labelFooterUserName, labelFooterStatus;
     @FXML
     private ScrollPane scrollPaneUsersList;
+    @FXML
+    private AnchorPane threadsListViewHolder;
+    private ObservableList<AnchorPane> userThreadsObservableList = FXCollections.observableArrayList();
+
 
     private String windowTitle = "Log In";
     private TabPane tabPane;
@@ -62,6 +70,7 @@ public class HomeController extends Controller implements EventHandler<MouseEven
             String uuid = ((VBox) event.getSource()).getId();
             int i = (int) ((VBox) event.getSource()).getUserData();
             L.println(i);
+
 
             User user = new User(jsonArrayOfUsers.getJSONObject(i));
             Tab tab = new Tab(user.getFullName());
@@ -79,7 +88,6 @@ public class HomeController extends Controller implements EventHandler<MouseEven
         }
     };
 
-    @Singleton
     private HomeController() {
         L.println("Inside Home");
         init();
@@ -90,23 +98,10 @@ public class HomeController extends Controller implements EventHandler<MouseEven
         return homeController;
     }
 
-    private void init() {
-        loader = new FXMLLoader(getClass().getResource(FXML_FILE));
-        loader.setController(this);
-        try {
-            rootvBox = loader.load();
-            tabPane = (TabPane) loader.getNamespace().get("centerTabPane");
-            tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void startControlling(final Stage primaryStage) throws SQLException, ClassNotFoundException {
+    public void startControlling(Stage primaryStage) {
         this.primaryStage = primaryStage;
         //this.primaryStage.setResizable(false);
-        System.out.print("startControlling");
-        if (rootvBox == null) init();
+        System.out.print("DatabaseFile: " + DbConnection.JDBC_SQLITE_URL);
         scene = new Scene(rootvBox, PREF_WIDTH, PREF_HEIGHT);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -164,6 +159,10 @@ public class HomeController extends Controller implements EventHandler<MouseEven
 
     private void startControllingChatsTab(Tab tab) {
         tab.setClosable(false);
+        ListView<AnchorPane> threadsListView = new ListView<>(userThreadsObservableList);
+        threadsListView.setPrefWidth(primaryStage.getWidth());
+        threadsListView.setPrefHeight(threadsListViewHolder.getHeight());
+        threadsListViewHolder.getChildren().add(threadsListView);
 
     }
 
@@ -179,8 +178,7 @@ public class HomeController extends Controller implements EventHandler<MouseEven
             CurrentUser.getInstance().logout();
             try {
                 LoginController.getInstance().startControlling(primaryStage);
-                Platform.runLater(() -> rootvBox = null);
-
+                homeController = null;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -224,5 +222,29 @@ public class HomeController extends Controller implements EventHandler<MouseEven
 
     synchronized public Label getLabelFooterStatus() {
         return this.labelFooterStatus;
+    }
+
+    public ObservableList<AnchorPane> getUserThreadsObservableList() {
+        return userThreadsObservableList;
+    }
+
+    private void init() {
+
+
+        loader = new FXMLLoader(getClass().getResource(FXML_FILE));
+        loader.setController(this);
+        try {
+            rootvBox = loader.load();
+            tabPane = (TabPane) loader.getNamespace().get("centerTabPane");
+            tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        buttonCreateGroup.setOnAction(event -> {
+            GroupCreatorController creatorController = GroupCreatorController.getInstance();
+            creatorController.startControlling(new Stage());
+        });
+
     }
 }

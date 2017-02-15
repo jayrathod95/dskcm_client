@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="51.0" prefWidth="530.0" xmlns="http://javafx.com/javafx/8.0.102">
+    <children>
+        <ImageView fx:id="imageView" fitHeight="39.0" fitWidth="39.0" layoutX="14.0" layoutY="6.0" pickOnBounds="true">
+            <image>
+                <Image url="@../../resources/images/avatar_m.png"/>
+            </image>
+        </ImageView>
+        <Label fx:id="userName" layoutX="69.0" layoutY="11.0" prefHeight="30.0" prefWidth="443.0" text="Jay Rathod">
+            <font>
+                <Font name="System Bold" size="16.0"/>
+            </font>
+            <tooltip>
+                <Tooltip text="Empty Tooltip"/>
+            </tooltip>
+        </Label>
+        <CheckBox fx:id="checkBox" layoutX="454.0" layoutY="11.0" mnemonicParsing="false" prefHeight="30.0"
+                  prefWidth="7.0"/>
+    </children>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
+</AnchorPane>

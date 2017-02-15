@@ -4,6 +4,8 @@ package com.deskcomm.support;
  * Created by Jay Rathod on 07-01-2017.
  */
 public class Keys {
+    public static final String GROUP_CREATED_BY = "created_by";
+
     final public static String USER_FIRSTNAME = "fname";
     final public static String USER_LASTNAME = "lname";
     final public static String USER_EMAIL = "email";

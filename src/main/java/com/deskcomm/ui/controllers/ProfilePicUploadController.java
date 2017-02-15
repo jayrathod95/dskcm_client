@@ -24,7 +24,6 @@ import org.json.JSONObject;
 
 import javax.ws.rs.core.Response;
 import java.io.*;
-import java.sql.SQLException;
 
 /**
  * Created by Jay Rathod on 03-02-2017.
@@ -140,7 +139,7 @@ public class ProfilePicUploadController extends Controller {
 
 
     @Override
-    public void startControlling(Stage primaryStage) throws SQLException, ClassNotFoundException {
+    public void startControlling(Stage primaryStage) {
         this.primaryStage = primaryStage;
         Scene scene = new Scene(rootPane, PREF_WIDTH, PREF_HEIGHT);
         primaryStage.setScene(scene);

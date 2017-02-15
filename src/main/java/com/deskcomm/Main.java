@@ -8,10 +8,11 @@ import com.deskcomm.ui.controllers.TempController;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class Main extends Application {
@@ -49,6 +50,10 @@ public class Main extends Application {
         if (TESTING_MODE == 1) {
             TempController controller = TempController.getInstance();
             controller.startControlling(primaryStage);
+            Button button = new Button();
+            ListView<Button> listView = new ListView<>();
+            GridPane gridPane;
+
 
 
         } else {
@@ -64,10 +69,6 @@ public class Main extends Application {
                     // ProfilePicUploadController controller = new ProfilePicUploadController();
                     controller.startControlling(primaryStage);
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }

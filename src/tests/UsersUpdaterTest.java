@@ -12,7 +12,7 @@ public class UsersUpdaterTest {
         User user = new User("1234", "jay", "rathod", "asasas", "123", "aaaaaaaaaa", "M");
         JSONArray array = new JSONArray();
         array.put(user.toJSON());
-        boolean b = BookKeeper.getUsersUpdater().updateUsers(array);
+        boolean b = BookKeeper.getUsersUpdater().updateAllUsers(array);
         System.out.println(b);
     }
 }

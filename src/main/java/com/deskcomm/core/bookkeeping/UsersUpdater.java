@@ -15,7 +15,14 @@ import java.sql.SQLException;
  */
 public class UsersUpdater {
 
-    public boolean updateUsers(JSONArray jsonArrayUsers) {
+    private static UsersUpdater usersUpdater = null;
+
+    public static UsersUpdater getInstance() {
+        if (usersUpdater == null) usersUpdater = new UsersUpdater();
+        return usersUpdater;
+    }
+
+    public boolean updateAllUsers(JSONArray jsonArrayUsers) {
         boolean b = false;
         try {
             deleteAllUsers();

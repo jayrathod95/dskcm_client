@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity" prefHeight="628.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.102">
+    <padding>
+        <Insets bottom="15.0" left="30.0" right="30.0" top="30.0"/>
+    </padding>
+    <children>
+        <TextField fx:id="textFieldGroupName" alignment="CENTER" prefHeight="36.0" prefWidth="539.0"
+                   promptText="Group Name"/>
+        <Label fx:id="labelUserSelected" alignment="CENTER" contentDisplay="CENTER" prefHeight="47.0" prefWidth="540.0"
+               text="0 members selected" textAlignment="CENTER">
+            <VBox.margin>
+                <Insets top="10.0"/>
+            </VBox.margin>
+            <font>
+                <Font name="System Bold" size="14.0"/>
+            </font>
+        </Label>
+        <AnchorPane fx:id="anchorpaneUsersList" prefHeight="446.0" prefWidth="540.0"
+                    style="-fx-background-color: lightblue;"/>
+        <AnchorPane fx:id="buttonIcon" prefHeight="51.0" prefWidth="540.0">
+            <children>
+                <Button fx:id="buttonCreateGroup" layoutX="429.0" layoutY="16.0" mnemonicParsing="false"
+                        prefHeight="25.0" prefWidth="104.0" text="CREATE GROUP"/>
+                <Button fx:id="buttonCancel" layoutX="342.0" layoutY="16.0" mnemonicParsing="false" prefHeight="25.0"
+                        prefWidth="76.0" text="CANCEL"/>
+                <Button layoutX="14.0" layoutY="13.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="146.0"
+                        text="SELECT GROUP ICON"/>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>
