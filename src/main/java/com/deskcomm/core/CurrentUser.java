@@ -1,12 +1,14 @@
 package com.deskcomm.core;
 
 import com.deskcomm.db.DbConnection;
+import com.deskcomm.db.Table;
 import com.deskcomm.db.tables.UserPrefsTable;
 import com.deskcomm.networking.LoginRequest;
 import com.deskcomm.support.Keys;
 import com.deskcomm.support.Response;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -82,14 +84,9 @@ public class CurrentUser extends User {
     }
 
     public boolean logout() {
-        try {
-            UserPrefsTable table = new UserPrefsTable();
-            mCurrentUser = null;
-            return table.clearRecord();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+        File file = new File(DbConnection.DATABASE_NAME);
+        return file.delete();
+
     }
 
 
@@ -111,29 +108,37 @@ public class CurrentUser extends User {
     }
 
     //Saves data to Local Database
-    public boolean save(JSONObject object) throws SQLException, ClassNotFoundException {
+    public boolean save(JSONObject object) throws SQLException {
 
-        CurrentUser currentUser = new CurrentUser(object);
+        try {
+            CurrentUser currentUser = new CurrentUser(object);
 
-        String sql = "INSERT INTO user_preferences(session_id,session_id1,login_status,_uuid,fname,lname,email,mobile,img_url,created,gender)" +
-                "VALUES(?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP,?) ";
+            String sql = "INSERT INTO user_preferences(session_id,session_id1,login_status,_uuid,fname,lname,email,mobile,img_url,created,gender)" +
+                    "VALUES(?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP,?) ";
 
-        Connection connection = DbConnection.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, currentUser.getSessionId());
-        statement.setString(2, UUID.randomUUID().toString());
-        statement.setString(3, Keys.LOGGED_IN);
-        statement.setString(4, currentUser.getUuid());
-        statement.setString(5, currentUser.getFirstName());
-        statement.setString(6, currentUser.getLastName());
-        statement.setString(7, currentUser.getEmail());
-        statement.setString(8, currentUser.getMobile());
-        statement.setString(9, currentUser.getImageUrl());
-        statement.setString(10, currentUser.getGender());
-        int i = statement.executeUpdate();
-        statement.close();
-        connection.close();
-        return i > 0;
+            Connection connection = DbConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, currentUser.getSessionId());
+            statement.setString(2, UUID.randomUUID().toString());
+            statement.setString(3, Keys.LOGGED_IN);
+            statement.setString(4, currentUser.getUuid());
+            statement.setString(5, currentUser.getFirstName());
+            statement.setString(6, currentUser.getLastName());
+            statement.setString(7, currentUser.getEmail());
+            statement.setString(8, currentUser.getMobile());
+            statement.setString(9, currentUser.getImageUrl());
+            statement.setString(10, currentUser.getGender());
+            int i = statement.executeUpdate();
+            statement.close();
+            connection.close();
+            return i > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            if (e.getMessage().contains(Keys.NO_SUCH_TABLE)) {
+                Table.createUserPreferencesTable();
+                return save(object);
+            } else throw e;
+        }
     }
 
 

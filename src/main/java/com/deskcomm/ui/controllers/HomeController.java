@@ -3,12 +3,12 @@ package com.deskcomm.ui.controllers;
 import com.deskcomm.core.CurrentUser;
 import com.deskcomm.core.User;
 import com.deskcomm.db.DbConnection;
-import com.deskcomm.networking.GetAllUsersRequest;
 import com.deskcomm.networking.websocket.WebSocketEndPoint;
 import com.deskcomm.support.L;
+import com.deskcomm.ui.rows.UserListRow;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.json.JSONArray;
@@ -25,8 +26,8 @@ import org.json.JSONException;
 
 import javax.inject.Singleton;
 import javax.websocket.DeploymentException;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by Jay Rathod on 20-01-2017.
@@ -43,7 +44,7 @@ public class HomeController extends Controller implements EventHandler<MouseEven
     @FXML
     private Label labelUserName;
     @FXML
-    private Button buttonLogout, buttonLoadUsers, buttonCreateGroup;
+    private Button buttonLogout, buttonLoadUsers, buttonCreateGroup, buttonNewEvent;
     @FXML
     private Tab tabUsers;
     @FXML
@@ -55,11 +56,12 @@ public class HomeController extends Controller implements EventHandler<MouseEven
     @FXML
     private ScrollPane scrollPaneUsersList;
     @FXML
-    private AnchorPane threadsListViewHolder;
+    private AnchorPane threadsListViewHolder, usersListHolder;
     private ObservableList<AnchorPane> userThreadsObservableList = FXCollections.observableArrayList();
+    private ObservableList<HBox> usersObservableList = FXCollections.observableArrayList();
 
 
-    private String windowTitle = "Log In";
+    private String windowTitle = "DeskComm";
     private TabPane tabPane;
     private Stage primaryStage;
     private JSONArray jsonArrayOfUsers;
@@ -80,7 +82,7 @@ public class HomeController extends Controller implements EventHandler<MouseEven
             tabPane.getSelectionModel().select(tab);
             UserThreadController controller = null;
             try {
-                controller = UserThreadController.getInstance(user, tab);
+                controller = UserThreadController.getInstance(user);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -105,6 +107,7 @@ public class HomeController extends Controller implements EventHandler<MouseEven
         scene = new Scene(rootvBox, PREF_WIDTH, PREF_HEIGHT);
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.setTitle(windowTitle);
         L.println(CurrentUser.getInstance().getFirstName() + " " + CurrentUser.getInstance().getLastName());
         labelUserName.setText(CurrentUser.getInstance().getFirstName() + " " + CurrentUser.getInstance().getLastName());
         labelFooterUserName.setText(CurrentUser.getInstance().getFullName());
@@ -114,6 +117,7 @@ public class HomeController extends Controller implements EventHandler<MouseEven
         startControllingEventsTab(tabPane.getTabs().get(2));
         startControllingAccountTab(tabPane.getTabs().get(3));
         startControllingMoreTab(tabPane.getTabs().get(4));
+
         try {
             WebSocketEndPoint.connectToWebSocket();
         } catch (IOException e) {
@@ -126,44 +130,40 @@ public class HomeController extends Controller implements EventHandler<MouseEven
 
     private void startControllingUsersTab(Tab tab) {
         tab.setClosable(false);
-        buttonLoadUsers.setOnAction(event -> {
+        ListView<HBox> usersListView = new ListView<HBox>(usersObservableList);
+        usersListView.setPrefWidth(usersListHolder.getWidth());
+        usersListView.setPrefHeight(usersListHolder.getHeight());
+        usersListHolder.getChildren().add(usersListView);
+        ArrayList<User> users = User.getAllUsers();
 
-            Task<com.deskcomm.support.Response<JSONArray>> fetchUsersListTask = new Task<com.deskcomm.support.Response<JSONArray>>() {
-                @Override
-                protected com.deskcomm.support.Response<JSONArray> call() throws Exception {
-                    GetAllUsersRequest request = new GetAllUsersRequest(CurrentUser.getInstance().getUuid(), CurrentUser.getInstance().getSessionId());
-                    Response response = request.perform();
-                    String s = response.readEntity(String.class);
-                    L.println(s);
-                    if (response.getStatus() >= 200 && response.getStatus() < 300)
-                        return new com.deskcomm.support.Response<>(s);
-                    else
-                        throw new Exception(Response.Status.fromStatusCode(response.getStatus()).getReasonPhrase() + " - " + response.getStatus());
-                }
-            };
-            new Thread(fetchUsersListTask).start();
-            fetchUsersListTask.setOnSucceeded(event1 -> {
-                try {
-                    inflateUsersList(fetchUsersListTask.getValue());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        if (users != null)
+            users.forEach(user -> {
+                UserListRow row = new UserListRow(user);
+                HBox pane = row.create();
+                if (pane != null) usersObservableList.add(pane);
             });
-            fetchUsersListTask.setOnFailed(event2 -> {
-                L.println(fetchUsersListTask.getException().getMessage());
-
-            });
-        });
-
     }
 
     private void startControllingChatsTab(Tab tab) {
         tab.setClosable(false);
+        userThreadsObservableList.addListener(new ListChangeListener<AnchorPane>() {
+            @Override
+            public void onChanged(Change<? extends AnchorPane> c) {
+
+                System.out.println(c.getAddedSize());
+            }
+        });
+        if (userThreadsObservableList.size() == 0) {
+            Button button = new Button();
+            button.setOnAction(event -> {
+                getTabPane().getSelectionModel().select(tabUsers);
+            });
+            threadsListViewHolder.getChildren().add(button);
+        }
         ListView<AnchorPane> threadsListView = new ListView<>(userThreadsObservableList);
         threadsListView.setPrefWidth(primaryStage.getWidth());
         threadsListView.setPrefHeight(threadsListViewHolder.getHeight());
         threadsListViewHolder.getChildren().add(threadsListView);
-
     }
 
     private void startControllingEventsTab(Tab tab) {
@@ -187,8 +187,16 @@ public class HomeController extends Controller implements EventHandler<MouseEven
 
     }
 
+    public TabPane getTabPane() {
+        return tabPane;
+    }
+
     private void startControllingMoreTab(Tab tab) {
         tab.setClosable(false);
+        buttonNewEvent.setOnAction(event -> {
+            EventCreateDialog dialog = new EventCreateDialog(primaryStage);
+            dialog.show();
+        });
     }
 
     private void inflateUsersList(com.deskcomm.support.Response<JSONArray> response) throws JSONException, IOException {
@@ -246,5 +254,9 @@ public class HomeController extends Controller implements EventHandler<MouseEven
             creatorController.startControlling(new Stage());
         });
 
+    }
+
+    public Stage getStage() {
+        return primaryStage;
     }
 }

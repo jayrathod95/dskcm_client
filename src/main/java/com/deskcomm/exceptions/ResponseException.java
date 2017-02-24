@@ -8,9 +8,14 @@ import javax.ws.rs.core.Response;
 public class ResponseException extends Throwable {
 
     private Response.Status status;
+    private Response.StatusType statusInfo;
 
     public ResponseException(Response.Status status) {
         this.status = status;
+    }
+
+    public ResponseException(Response.StatusType statusInfo) {
+        this.statusInfo = statusInfo;
     }
 
 
@@ -25,5 +30,13 @@ public class ResponseException extends Throwable {
 
     public void setStatus(Response.Status status) {
         this.status = status;
+    }
+
+    public Response.StatusType getStatusInfo() {
+        return statusInfo;
+    }
+
+    public void setStatusInfo(Response.StatusType statusInfo) {
+        this.statusInfo = statusInfo;
     }
 }

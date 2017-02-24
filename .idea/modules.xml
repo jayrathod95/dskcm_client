@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../JFXMaterial-master/JFXMaterial-master/JFXMaterial-Demo/JFXMaterial-Demo.iml" filepath="$PROJECT_DIR$/../JFXMaterial-master/JFXMaterial-master/JFXMaterial-Demo/JFXMaterial-Demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../JFXMaterial-master/JFXMaterial-master/JFXMaterial-Lib/JFXMaterial-Lib.iml" filepath="$PROJECT_DIR$/../JFXMaterial-master/JFXMaterial-master/JFXMaterial-Lib/JFXMaterial-Lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/dskcm_client.iml" filepath="$PROJECT_DIR$/dskcm_client.iml" />
     </modules>
   </component>

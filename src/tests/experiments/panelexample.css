@@ -1,0 +1,23 @@
+#hello {
+    -fx-border-image-source: url(purple_bubble.9.png);
+    -fx-border-image-slice: 11 36 50 11 fill;
+    -fx-border-image-insets: 0px;
+    -fx-border-image-repeat: stretch;
+    -fx-border-image-width: 15px;
+}
+
+#hello2 {
+    -fx-border-image-source: url(border.png), url(trafficlight.png);
+    -fx-border-image-slice: 6px, 16px 46px 0px 0px;
+    -fx-border-image-insets: 0px, 0px;
+    -fx-border-image-repeat: repeat, no-repeat;
+    -fx-border-image-width: 6px, 16px 46px 0px 0px;
+}
+
+#hello3 {
+    -fx-border-image-source: url(border.png), url(trafficlight.png);
+    -fx-border-image-slice: 6px, 16px 0px 0px 0px;
+    -fx-border-image-insets: 0px, 0px;
+    -fx-border-image-repeat: repeat, no-repeat;
+    -fx-border-image-width: 6px, 16px 0px 0px 0px;
+}

@@ -28,7 +28,8 @@ public class Response<T> {
                 message = builder.getString(JSON_MESSAGE);
             if (builder.has(JSON_DATA))
                 data = (T) builder.get(JSON_DATA);
-            errorCode = builder.getString(ERROR_CODE);
+            if (builder.has(ERROR_CODE))
+                errorCode = builder.getString(ERROR_CODE);
         } catch (JSONException e) {
             e.printStackTrace();
         }

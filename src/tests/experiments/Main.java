@@ -1,13 +1,13 @@
 package experiments;
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
@@ -21,25 +21,19 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        VBox vBox = new VBox();
-        ObservableList<String> strings = FXCollections.observableArrayList();
-        ListView<String> listView = new ListView<>(strings);
+        Image image = new Image(getClass().getResourceAsStream("grey_bubble.9-1.png"));
 
-        TextField index = new TextField();
-        TextField data = new TextField();
-        Button button = new Button("Add");
-        vBox.getChildren().addAll(listView, index, data, button);
 
-        Scene scene = new Scene(vBox, 600, 400);
+        Label label = new Label("jay here");
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.ROUND, null, null, null);
+        label.setBackground(new Background(backgroundImage));
+        label.setPrefWidth(300);
+        label.setPrefHeight(300);
+        Pane pane = new Pane();
+        pane.getChildren().add(label);
+        Scene scene = new Scene(pane, 500, 500);
         primaryStage.setScene(scene);
         primaryStage.show();
-
-
-        strings.addAll("Nagpur", "Pune", "Mumbai", "Nashik");
-
-        button.setOnAction(event -> {
-            strings.add(Integer.parseInt(index.getText()), data.getText());
-        });
 
     }
 }

@@ -55,6 +55,17 @@ public class Keys {
 
     public static final String WS_IDENTITY = "identity";
 
+    public static final String EVENT_TITLE = "title";
+    public static final String EVENT_STARTS = "starts";
+    public static final String EVENT_ENDS = "ends";
+    public static final String EVENT_VENUE = "venue";
+    public static final String EVENT_ORGS = "org_ids";
+    public static final String EVENT_DESC = "description";
+    public static final String EVENT_IMAGE_URL = "img_url";
+    public static final String EVENT_CREATED_BY = "created_by";
+    public static final String EVENT_ID = "id";
+
+
 
     public static class JSON {
         public static final String RESULT = "Result";

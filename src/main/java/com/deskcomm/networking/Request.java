@@ -3,6 +3,7 @@ package com.deskcomm.networking;
 import com.deskcomm.support.L;
 import com.sun.xml.internal.fastinfoset.util.StringArray;
 
+import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -108,7 +109,12 @@ public class Request {
         for (int i = 0; i < params.size(); i++) {
             form.param((String) keys.get(i), params.get(keys.get(i)));
         }
-        return target.request(mediaTypes).post(Entity.form(form));
+        try {
+            return target.request(mediaTypes).post(Entity.form(form));
+        } catch (ProcessingException e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     private Response performPut() {

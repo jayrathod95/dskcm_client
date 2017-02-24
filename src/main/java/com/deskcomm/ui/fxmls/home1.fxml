@@ -19,16 +19,10 @@
                 </Tab>
                 <Tab fx:id="tabUsers" text="Users">
                     <content>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                            <children>
-                                <Button fx:id="buttonLoadUsers" layoutX="246.0" layoutY="14.0" mnemonicParsing="false"
-                                        text="Refresh Users List"/>
-                                <ScrollPane layoutX="-1.0" layoutY="40.0" prefHeight="370.0" prefWidth="600.0">
-                                    <content>
-                                        <VBox fx:id="vBoxUsers" prefHeight="334.0" prefWidth="598.0"/>
-                                    </content>
-                                </ScrollPane>
-                            </children>
+                        <AnchorPane fx:id="usersListHolder" prefHeight="200.0" prefWidth="200.0">
+                            <padding>
+                                <Insets top="15.0"/>
+                            </padding>
                         </AnchorPane>
                     </content>
                 </Tab>
@@ -76,8 +70,10 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <Button fx:id="buttonCreateGroup" layoutX="347.0" layoutY="196.0"
-                                        mnemonicParsing="false" text="CREATE GROUP"/>
+                                <Button fx:id="buttonCreateGroup" layoutX="343.0" layoutY="194.0"
+                                        mnemonicParsing="false" prefHeight="25.0" prefWidth="109.0" text="New Group"/>
+                                <Button fx:id="buttonNewEvent" layoutX="339.0" layoutY="230.0" mnemonicParsing="false"
+                                        prefHeight="17.0" prefWidth="116.0" text="New Event"/>
                             </children>
                         </AnchorPane>
                     </content>

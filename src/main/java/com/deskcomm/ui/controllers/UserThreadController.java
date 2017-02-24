@@ -24,9 +24,9 @@ public class UserThreadController extends Controller {
     private ListView listView;
     private Tab tab;
 
-    private UserThreadController(User user, Tab tab) throws IOException {
+    private UserThreadController(User user) throws IOException {
         this.user = user;
-        this.tab = tab;
+        this.tab = new Tab();
         loader = new FXMLLoader(getClass().getResource("../fxmls/user_thread.fxml"));
         root = loader.load();
 
@@ -35,7 +35,6 @@ public class UserThreadController extends Controller {
 
         textFieldMessage = (TextField) loader.getNamespace().get("textFieldMessage");
         button = (Button) loader.getNamespace().get("buttonSend");
-        listView = (ListView) loader.getNamespace().get("listView");
 
 
         button.setOnAction(event -> {
@@ -64,12 +63,18 @@ public class UserThreadController extends Controller {
         tab.setContent(root);
     }
 
-    public static UserThreadController getInstance(User user, Tab tab) throws IOException {
-        if (userThreadController == null) userThreadController = new UserThreadController(user, tab);
+    public static UserThreadController getInstance(User user) throws IOException {
+        if (userThreadController == null) userThreadController = new UserThreadController(user);
         return userThreadController;
     }
 
     @Override
     public void startControlling(Stage primaryStage) {
+        Tab tab = new Tab(user.getFullName());
+        tab.setId(user.getUuidTrimmed());
+        tab.setClosable(true);
+        HomeController.getInstance().getTabPane().getTabs().add(tab);
+        HomeController.getInstance().getTabPane().getSelectionModel().select(tab);
+
     }
 }

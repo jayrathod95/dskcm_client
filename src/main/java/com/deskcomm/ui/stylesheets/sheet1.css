@@ -1,0 +1,15 @@
+#out {
+    -fx-border-image-source: url("purple_bubble.9.png");
+    -fx-border-image-slice: 11 36 50 11 fill;
+    -fx-border-image-width: 10px;
+    -fx-border-image-outset: 0px 0px 0px 0px;
+    -fx-border-image-repeat: stretch stretch;
+}
+
+#in {
+    -fx-border-image-source: url("grey_bubble.9.png");
+    -fx-border-image-slice: 49 30 10 24 fill;
+    -fx-border-image-width: 10px;
+    -fx-border-image-outset: 0px 0px 0px 0px;
+    -fx-border-image-repeat: stretch stretch;
+}

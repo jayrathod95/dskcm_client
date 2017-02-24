@@ -13,22 +13,22 @@ import java.util.Map;
  */
 public class RegistrationRequest extends Request {
     private static String path = "/user/register";
-    private static int methodType = MethodType.PUT;
+    private static int methodType = MethodType.POST;
     private String firstName;
     private String lastName;
     private String email;
     private String mobile;
-    private String eid;
     private String password;
+    private String gender;
 
-    public RegistrationRequest(@NotNull String firstName, @NotNull String lastName, @NotNull String Email, @Nullable String mobile, @NotNull String eid, @NotNull String password) {
+    public RegistrationRequest(@NotNull String firstName, @NotNull String lastName, @NotNull String Email, @Nullable String mobile, @NotNull String password, String gender) {
         super(path, methodType, MediaType.APPLICATION_JSON, MediaType.TEXT_HTML, MediaType.TEXT_PLAIN);
         this.firstName = firstName;
         this.lastName = lastName;
         email = Email;
         this.mobile = mobile;
-        this.eid = eid;
         this.password = password;
+        this.gender = gender;
     }
 
     @Override
@@ -38,8 +38,8 @@ public class RegistrationRequest extends Request {
         map.put(Keys.PARAM.LASTNAME, lastName);
         map.put(Keys.PARAM.EMAIL, email);
         map.put(Keys.PARAM.MOBILE, mobile);
-        map.put(Keys.PARAM.EID, eid);
         map.put(Keys.PARAM.PASSWORD, password);
+        map.put(Keys.GENDER, gender);
         return map;
     }
 }

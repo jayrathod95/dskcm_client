@@ -1,6 +1,7 @@
 package com.deskcomm.core.messages;
 
 import com.deskcomm.core.CurrentUser;
+import com.deskcomm.core.Persistent;
 import com.deskcomm.networking.websocket.OutboundWebsocketMessage;
 import com.deskcomm.support.Keys;
 import org.json.JSONObject;
@@ -11,16 +12,18 @@ import java.util.UUID;
 /**
  * Created by Jay Rathod on 10-02-2017.
  */
-public class OutboundGroupMessage extends Message implements Sendable {
+public class OutboundGroupMessage extends Message implements Sendable, Persistent {
+    String toGroupUuid;
+
 
 
     public OutboundGroupMessage(String recipientGroupUuid, String body) {
-        super(UUID.randomUUID().toString(), body, CurrentUser.getInstance().getUuid(), recipientGroupUuid);
+        super(UUID.randomUUID().toString(), body);
     }
 
     @Override
     JSONObject toJSON() {
-        return new JSONObject().put(Keys.MESSAGE_ID, messageId).put(Keys.MESSAGE_TO, toUuid)
+        return new JSONObject().put(Keys.MESSAGE_ID, id).put(Keys.MESSAGE_TO, toGroupUuid)
                 .put(Keys.MESSAGE_FROM, CurrentUser.getInstance().getUuid())
                 .put(Keys.MESSAGE_BODY, body);
     }

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="JFXMaterial1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../JFXMaterial-master/JFXMaterial-master/JFXMaterial-Lib/dist/JFXMaterial.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

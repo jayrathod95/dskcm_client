@@ -1,6 +1,7 @@
 package com.deskcomm.networking.websocket;
 
 import com.deskcomm.core.CurrentUser;
+import com.deskcomm.core.User;
 import com.deskcomm.core.bookkeeping.UsersUpdater;
 import com.deskcomm.core.messages.InboundPersonalMessage;
 import com.deskcomm.support.Keys;
@@ -67,7 +68,7 @@ public class WebSocketEndPoint {
             case "message/personal":
                 System.out.println(webSocketMessage.getData());
                 InboundPersonalMessage personalMessage = new InboundPersonalMessage(webSocketMessage.getData());
-                //personalMessage.insertToTable();
+                personalMessage.insertToTable();
                 updateUserInterface(personalMessage);
                 break;
             case "message/group":
@@ -93,6 +94,8 @@ public class WebSocketEndPoint {
             message.send();
             OutboundWebsocketMessage websocketMessage = new OutboundWebsocketMessage("messages/get_undelivered_messages", null, true);
             websocketMessage.send();
+            OutboundWebsocketMessage websocketMessage1 = new OutboundWebsocketMessage("event/get/all", null, true);
+            websocketMessage1.send();
         }
     }
 
@@ -122,7 +125,7 @@ public class WebSocketEndPoint {
 
 
     private void updateUserInterface(InboundPersonalMessage personalMessage) {
-        PersonalThreadRow row = new PersonalThreadRow(personalMessage.getId(), personalMessage.getFromUser(), personalMessage.getBody(), personalMessage.getTimestamp());
+        PersonalThreadRow row = new PersonalThreadRow(personalMessage.getId(), new User(personalMessage.getFromUserUuid()), personalMessage.getBody(), personalMessage.getTimestamp());
         AnchorPane anc = row.create();
         if (anc != null)
             Platform.runLater(() -> {

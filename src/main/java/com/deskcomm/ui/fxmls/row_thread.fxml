@@ -17,14 +17,14 @@
                 <Image url="@avatar_f.png"/>
             </image>
         </ImageView>
-        <Label fx:id="labelName" contentDisplay="CENTER" layoutX="97.0" layoutY="14.0" prefHeight="26.0"
+        <Label fx:id="labelUserName" contentDisplay="CENTER" layoutX="97.0" layoutY="14.0" prefHeight="26.0"
                prefWidth="708.0" text="John Doe">
             <font>
                 <Font name="System Bold" size="17.0"/>
             </font>
         </Label>
-        <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="97.0" layoutY="43.0" prefHeight="19.0"
-               prefWidth="546.0"
+        <Label fx:id="labelMessageText" alignment="TOP_LEFT" contentDisplay="TOP" layoutX="97.0" layoutY="43.0"
+               prefHeight="19.0" prefWidth="546.0"
                text="This is a sample message text. This is a sample message text.This is a sample message text.This is a sample message text.">
             <opaqueInsets>
                 <Insets/>

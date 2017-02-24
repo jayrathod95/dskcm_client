@@ -1,32 +1,32 @@
 package com.deskcomm.core;
 
 import com.deskcomm.db.DbConnection;
-import com.deskcomm.support.Keys;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.logging.Logger;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.util.UUID;
+
+import static com.deskcomm.support.Keys.*;
 
 /**
  * Created by Jay Rathod on 05-02-2017.
  */
 public class Event implements Persistent {
-    private final Logger logger = Logger.getLogger(this.getClass().getName());
-    private String clientTimeStamp;
     private String uuid;
-    private String eventName;
-    private String eventTimeStamp;
+    private String title;
+    private String starts;
+    private String ends;
     private String description;
-    private String eventIconUrl;
-    private User[] organisers;
+    private String imageUrl;
     private String venue;
     private String serverTimeStamp;
+    private String clientTimeStamp;
 
+    /*
     public Event(@NotNull String uuid, @NotNull String eventName, @NotNull String eventTimeStamp, @NotNull String description, @NotNull String venue, @NotNull String serverTimeStamp, @Nullable String eventIconUrl, User... organisers) {
         this.uuid = uuid;
         this.eventName = eventName;
@@ -37,7 +37,7 @@ public class Event implements Persistent {
         this.venue = venue;
         this.serverTimeStamp = serverTimeStamp;
     }
-
+*/
     public Event(String uuid) {
         this.uuid = uuid;
     }
@@ -45,42 +45,51 @@ public class Event implements Persistent {
     public Event() {
     }
 
-    public Event(JSONObject jsonObject) {
-        this.eventName = jsonObject.getString("eventName");
-        this.eventTimeStamp = jsonObject.getString("eventTimeStamp");
-        this.description = jsonObject.getString("eventDescription");
-        this.eventIconUrl = jsonObject.getString("eventIconUrl");
-        this.venue = jsonObject.getString("eventVenue");
-        this.serverTimeStamp = jsonObject.getString("serverTimeStamp");
+    public Event(JSONObject jsonObject) throws ParseException {
+        this.uuid = jsonObject.getString(EVENT_ID);
+        this.title = jsonObject.getString(EVENT_TITLE);
+        this.starts = jsonObject.getString(EVENT_STARTS);
+        this.ends = jsonObject.getString(EVENT_ENDS);
+        this.description = jsonObject.getString(EVENT_DESC);
+        if (jsonObject.has(EVENT_IMAGE_URL))
+            this.imageUrl = jsonObject.getString(EVENT_IMAGE_URL);
+        this.venue = jsonObject.getString(EVENT_VENUE);
+        if (jsonObject.has(SERVER_TIMESTAMP))
+            this.serverTimeStamp = jsonObject.getString(SERVER_TIMESTAMP);
+    }
 
-        JSONArray organisers1 = jsonObject.getJSONArray("organisers");
-        organisers = new User[organisers1.length()];
-        for (int i = 0; i < organisers1.length(); i++) {
-            String userId = organisers1.getString(i);
-            this.organisers[i] = new User(userId);
-        }
+    public Event(String uuid, String title, String starts, String ends, String venue, String description, String imageUrl) {
+
+        this.uuid = uuid;
+        this.title = title;
+        this.starts = starts;
+        this.ends = ends;
+        this.venue = venue;
+        this.description = description;
+        this.imageUrl = imageUrl;
     }
 
     @Override
     public boolean insertToTable() throws ClassNotFoundException, SQLException {
         try {
             Connection connection = DbConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO events(uuid,name,description,icon_url,venue,event_time_stamp,server_timestamp)\n" +
-                    "VALUES(?,?,?,?,?,?,?) ");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO events(_uuid,title,starts,ends,venue,description,image_url,server_timestamp)\n" +
+                    "VALUES(?,?,?,?,?,?,?,?) ");
             statement.setString(1, uuid);
-            statement.setString(2, eventName);
-            statement.setString(3, description);
-            statement.setString(4, eventIconUrl);
+            statement.setString(2, title);
+            statement.setString(3, starts);
+            statement.setString(4, ends);
             statement.setString(5, venue);
-            statement.setString(6, eventTimeStamp);
-            statement.setString(7, serverTimeStamp);
+            statement.setString(6, description);
+            statement.setString(7, imageUrl);
+            statement.setString(8, serverTimeStamp);
             statement.executeUpdate();
             int updateCount = statement.getUpdateCount();
             statement.close();
             connection.close();
             return updateCount > 0;
         } catch (SQLException e) {
-            if (e.getMessage().contains(Keys.NO_SUCH_TABLE)) {
+            if (e.getMessage().contains(NO_SUCH_TABLE)) {
                 createTable();
                 return insertToTable();
             } else throw e;
@@ -135,21 +144,6 @@ public class Event implements Persistent {
         return uuid;
     }
 
-    public String getEventName() {
-        return eventName;
-    }
-
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
-    }
-
-    public String getEventDate() {
-        return eventTimeStamp;
-    }
-
-    public void setEventDate(String eventTimeStamp) {
-        this.eventTimeStamp = eventTimeStamp;
-    }
 
     public String getDescription() {
         return description;
@@ -159,28 +153,67 @@ public class Event implements Persistent {
         this.description = description;
     }
 
-    public User[] getOrganisers() {
-        return organisers;
-    }
-
-    public void setOrganisers(User... organisers) {
-        this.organisers = organisers;
-    }
-
-    public String getEventIconUrl() {
-        return eventIconUrl;
-    }
-
-    public void setEventIconUrl(String eventIconUrl) {
-        this.eventIconUrl = eventIconUrl;
-    }
-
     public String getVenue() {
         return venue;
     }
 
     public void setVenue(String venue) {
         this.venue = venue;
+    }
+
+    public JSONObject toJSON() {
+        return new JSONObject()
+                .put(EVENT_ID, uuid)
+                .put(EVENT_TITLE, title)
+                .put(EVENT_STARTS, starts)
+                .put(EVENT_ENDS, ends)
+                .put(EVENT_VENUE, venue)
+                .put(EVENT_DESC, description)
+                .put(EVENT_IMAGE_URL, imageUrl)
+                .put(SERVER_TIMESTAMP, serverTimeStamp)
+                ;
+    }
+
+    @Override
+    public String toString() {
+        return toJSON().toString();
+    }
+
+    public static class Builder {
+        private String title;
+        private Timestamp starts;
+        private Timestamp ends;
+        private String venue;
+        private String description;
+        private String imageUrl;
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public void setStarts(Timestamp starts) {
+            this.starts = starts;
+        }
+
+        public void setEnds(Timestamp ends) {
+            this.ends = ends;
+        }
+
+        public void setVenue(String venue) {
+            this.venue = venue;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public Event build() {
+            return new Event(UUID.randomUUID().toString(), title, starts.toString(), ends.toString(), venue, description, "");
+        }
+
+        public void setImageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
+        }
     }
 
     public class Updater implements com.deskcomm.core.Updater {
@@ -235,12 +268,9 @@ public class Event implements Persistent {
             return i > 0;
         }
 
-        public boolean updateOrganisers(String... userUuids) throws SQLException, ClassNotFoundException {
-
-
+        public boolean updateOrganisers(String... userUuids) {
             return false;
         }
 
     }
-
 }

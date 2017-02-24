@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_dskcm_client" default="compile.module.dskcm_client">
+    <dirname property="module.dskcm_client.basedir" file="${ant.file.module_dskcm_client}"/>
+
+    <property name="module.jdk.home.dskcm_client" value="${project.jdk.home}"/>
+    <property name="module.jdk.bin.dskcm_client" value="${project.jdk.bin}"/>
+    <property name="module.jdk.classpath.dskcm_client" value="${project.jdk.classpath}"/>
+
+    <property name="compiler.args.dskcm_client" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+
+    <property name="dskcm_client.output.dir" value="${module.dskcm_client.basedir}/out/production/dskcm_client"/>
+    <property name="dskcm_client.testoutput.dir" value="${module.dskcm_client.basedir}/out/test/dskcm_client"/>
+
+    <path id="dskcm_client.module.bootclasspath">
+        <!-- Paths to be included in compilation bootclasspath -->
+    </path>
+
+    <path id="dskcm_client.module.production.classpath">
+        <path refid="${module.jdk.classpath.dskcm_client}"/>
+        <path refid="library.sqlite-jdbc-3.16.1.classpath"/>
+        <pathelement location="${idea.home}/redist/annotations-java8.jar"/>
+        <path refid="library.jersey-2.2.classpath"/>
+        <path refid="library.json-20160810.classpath"/>
+        <path refid="library.org.glassfish.jersey.media:jersey-media-multipart:2.26-b02.classpath"/>
+        <path refid="library.org.glassfish.jersey.containers:jersey-container-servlet-core:2.26-b02.classpath"/>
+        <path refid="library.org.glassfish.tyrus.bundles:tyrus-standalone-client-jdk:1.10.classpath"/>
+        <path refid="library.commons-lang:commons-lang:2.6.classpath"/>
+        <path refid="library.controlsfx-8.40.12.classpath"/>
+        <path refid="library.animations.classpath"/>
+        <path refid="library.jfoenix.classpath"/>
+        <path refid="library.fontawesomefx-8.9.classpath"/>
+    </path>
+
+    <path id="dskcm_client.runtime.production.module.classpath">
+        <pathelement location="${dskcm_client.output.dir}"/>
+        <path refid="library.sqlite-jdbc-3.16.1.classpath"/>
+        <pathelement location="${idea.home}/redist/annotations-java8.jar"/>
+        <path refid="library.jersey-2.2.classpath"/>
+        <path refid="library.json-20160810.classpath"/>
+        <path refid="library.org.glassfish.jersey.media:jersey-media-multipart:2.26-b02.classpath"/>
+        <path refid="library.org.glassfish.jersey.containers:jersey-container-servlet-core:2.26-b02.classpath"/>
+        <path refid="library.org.glassfish.tyrus.bundles:tyrus-standalone-client-jdk:1.10.classpath"/>
+        <path refid="library.commons-lang:commons-lang:2.6.classpath"/>
+        <path refid="library.controlsfx-8.40.12.classpath"/>
+        <path refid="library.animations.classpath"/>
+        <path refid="library.jfoenix.classpath"/>
+        <path refid="library.fontawesomefx-8.9.classpath"/>
+    </path>
+
+    <path id="dskcm_client.module.classpath">
+        <path refid="${module.jdk.classpath.dskcm_client}"/>
+        <pathelement location="${dskcm_client.output.dir}"/>
+        <path refid="library.sqlite-jdbc-3.16.1.classpath"/>
+        <pathelement location="${idea.home}/redist/annotations-java8.jar"/>
+        <path refid="library.jersey-2.2.classpath"/>
+        <path refid="library.json-20160810.classpath"/>
+        <path refid="library.org.glassfish.jersey.media:jersey-media-multipart:2.26-b02.classpath"/>
+        <path refid="library.org.glassfish.jersey.containers:jersey-container-servlet-core:2.26-b02.classpath"/>
+        <path refid="library.org.glassfish.tyrus.bundles:tyrus-standalone-client-jdk:1.10.classpath"/>
+        <pathelement location="${idea.home}/lib/hamcrest-core-1.3.jar"/>
+        <pathelement location="${idea.home}/lib/junit-4.12.jar"/>
+        <path refid="library.commons-lang:commons-lang:2.6.classpath"/>
+        <path refid="library.controlsfx-8.40.12.classpath"/>
+        <path refid="library.animations.classpath"/>
+        <path refid="library.jfoenix.classpath"/>
+        <path refid="library.fontawesomefx-8.9.classpath"/>
+    </path>
+
+    <path id="dskcm_client.runtime.module.classpath">
+        <pathelement location="${dskcm_client.testoutput.dir}"/>
+        <pathelement location="${dskcm_client.output.dir}"/>
+        <path refid="library.sqlite-jdbc-3.16.1.classpath"/>
+        <pathelement location="${idea.home}/redist/annotations-java8.jar"/>
+        <path refid="library.jersey-2.2.classpath"/>
+        <path refid="library.json-20160810.classpath"/>
+        <path refid="library.org.glassfish.jersey.media:jersey-media-multipart:2.26-b02.classpath"/>
+        <path refid="library.org.glassfish.jersey.containers:jersey-container-servlet-core:2.26-b02.classpath"/>
+        <path refid="library.org.glassfish.tyrus.bundles:tyrus-standalone-client-jdk:1.10.classpath"/>
+        <pathelement location="${idea.home}/lib/hamcrest-core-1.3.jar"/>
+        <pathelement location="${idea.home}/lib/junit-4.12.jar"/>
+        <path refid="library.commons-lang:commons-lang:2.6.classpath"/>
+        <path refid="library.controlsfx-8.40.12.classpath"/>
+        <path refid="library.animations.classpath"/>
+        <path refid="library.jfoenix.classpath"/>
+        <path refid="library.fontawesomefx-8.9.classpath"/>
+    </path>
+
+
+    <patternset id="excluded.from.module.dskcm_client">
+        <patternset refid="ignored.files"/>
+    </patternset>
+
+    <patternset id="excluded.from.compilation.dskcm_client">
+        <patternset refid="excluded.from.module.dskcm_client"/>
+    </patternset>
+
+    <path id="dskcm_client.module.sourcepath">
+        <dirset dir="${module.dskcm_client.basedir}">
+            <include name="src/main/java"/>
+        </dirset>
+    </path>
+
+    <path id="dskcm_client.module.test.sourcepath">
+        <dirset dir="${module.dskcm_client.basedir}">
+            <include name="src/tests"/>
+        </dirset>
+    </path>
+
+
+    <target name="compile.module.dskcm_client"
+            depends="compile.module.dskcm_client.production,compile.module.dskcm_client.tests"
+            description="Compile module dskcm_client"/>
+
+    <target name="compile.module.dskcm_client.production" depends="register.custom.compilers"
+            description="Compile module dskcm_client; production classes">
+        <mkdir dir="${dskcm_client.output.dir}"/>
+        <javac2 destdir="${dskcm_client.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+                memorymaximumsize="${compiler.max.memory}" fork="true"
+                executable="${module.jdk.bin.dskcm_client}/javac">
+            <compilerarg line="${compiler.args.dskcm_client}"/>
+            <bootclasspath refid="dskcm_client.module.bootclasspath"/>
+            <classpath refid="dskcm_client.module.production.classpath"/>
+            <src refid="dskcm_client.module.sourcepath"/>
+            <patternset refid="excluded.from.compilation.dskcm_client"/>
+        </javac2>
+
+        <copy todir="${dskcm_client.output.dir}">
+            <fileset dir="${module.dskcm_client.basedir}/src/main/java">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile.module.dskcm_client.tests"
+            depends="register.custom.compilers,compile.module.dskcm_client.production"
+            description="compile module dskcm_client; test classes" unless="skip.tests">
+        <mkdir dir="${dskcm_client.testoutput.dir}"/>
+        <javac2 destdir="${dskcm_client.testoutput.dir}" debug="${compiler.debug}"
+                nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true"
+                executable="${module.jdk.bin.dskcm_client}/javac">
+            <compilerarg line="${compiler.args.dskcm_client}"/>
+            <bootclasspath refid="dskcm_client.module.bootclasspath"/>
+            <classpath refid="dskcm_client.module.classpath"/>
+            <src refid="dskcm_client.module.test.sourcepath"/>
+            <patternset refid="excluded.from.compilation.dskcm_client"/>
+        </javac2>
+
+        <copy todir="${dskcm_client.testoutput.dir}">
+            <fileset dir="${module.dskcm_client.basedir}/src/tests">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="clean.module.dskcm_client" description="cleanup module">
+        <delete dir="${dskcm_client.output.dir}"/>
+        <delete dir="${dskcm_client.testoutput.dir}"/>
+    </target>
+</project>

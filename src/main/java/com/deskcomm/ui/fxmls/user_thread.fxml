@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity"
-            prefHeight="408.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.102">
+            minWidth="-Infinity" prefHeight="575.0" prefWidth="954.0" xmlns="http://javafx.com/javafx/8.0.102">
     <top>
         <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <items>
                 <AnchorPane prefHeight="35.0" prefWidth="579.0">
                     <children>
                         <Label fx:id="labelUserName" layoutX="14.0" layoutY="6.0" text="Label"
-                               AnchorPane.bottomAnchor="4.0"
-                               AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="6.0">
+                               AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="6.0">
                             <font>
                                 <Font size="16.0"/>
                             </font>
@@ -25,22 +22,24 @@
         </ToolBar>
     </top>
     <bottom>
-        <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <ToolBar prefHeight="57.0" prefWidth="954.0" BorderPane.alignment="CENTER">
             <items>
-                <AnchorPane>
+                <AnchorPane prefHeight="42.0" prefWidth="818.0">
                     <children>
-                        <TextField fx:id="textFieldMessage" layoutY="1.0" prefHeight="32.0" prefWidth="510.0"
-                                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                   AnchorPane.topAnchor="1.0"/>
-                        <Button fx:id="buttonSend" layoutX="514.0" mnemonicParsing="false" prefHeight="33.0"
-                                prefWidth="67.0" text="SEND" AnchorPane.bottomAnchor="0.0"
-                                AnchorPane.rightAnchor="-76.0" AnchorPane.topAnchor="0.0"/>
+                        <TextField fx:id="textFieldMessage" layoutY="3.0" prefHeight="41.0" prefWidth="818.0"
+                                   AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0"
+                                   AnchorPane.topAnchor="3.0"/>
                     </children>
                 </AnchorPane>
+                <Button fx:id="buttonSend" mnemonicParsing="false" prefHeight="40.0" prefWidth="110.0" text="SEND"/>
             </items>
         </ToolBar>
     </bottom>
     <center>
-        <ListView fx:id="listView" prefHeight="297.0" prefWidth="600.0" BorderPane.alignment="CENTER"/>
+        <ScrollPane fx:id="scrollpane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <content>
+                <VBox fx:id="vbox1" prefHeight="454.0" prefWidth="942.0"/>
+            </content>
+        </ScrollPane>
     </center>
 </BorderPane>

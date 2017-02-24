@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="116.0" prefWidth="218.0" xmlns="http://javafx.com/javafx/8.0.102">
+    <children>
+        <TextFlow layoutX="7.0" layoutY="9.0" prefHeight="70.0" prefWidth="202.0">
+            <children>
+                <Text fx:id="body" fill="#433838" strokeType="OUTSIDE" strokeWidth="0.0"
+                      text="TextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextv"/>
+            </children>
+        </TextFlow>
+        <Label fx:id="timestamp" layoutX="176.0" layoutY="94.0" text="Label"/>
+    </children>
+</AnchorPane>

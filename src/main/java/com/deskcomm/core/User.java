@@ -1,6 +1,8 @@
 package com.deskcomm.core;
 
+import com.deskcomm.core.messages.LocalPersonalMessage;
 import com.deskcomm.db.DbConnection;
+import com.deskcomm.db.Table;
 import com.deskcomm.support.Keys;
 import org.json.JSONObject;
 
@@ -10,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jay Rathod on 15-01-2017.
@@ -77,6 +80,10 @@ public class User implements Persistent {
             return arrayList;
         } catch (SQLException e) {
             e.printStackTrace();
+            if (e.getMessage().equals(Keys.NO_SUCH_TABLE)) {
+                Table.createUsersTable();
+                return getAllUsers();
+            }
             return null;
         }
     }
@@ -101,7 +108,7 @@ public class User implements Persistent {
         } catch (SQLException e) {
             e.printStackTrace();
             if (e.getMessage().contains(Keys.NO_SUCH_TABLE)) {
-                createTable();
+                Table.createUsersTable();
                 return insertToTable();
             } else throw e;
         }
@@ -240,16 +247,38 @@ public class User implements Persistent {
         return false;
     }
 
-    @SuppressWarnings("Duplicates")
-    public void createTable() {
+
+    @Override
+    public Updater getUpdater() {
+        return new Updater();
+    }
+
+    public List<LocalPersonalMessage> getConversation(int limit) {
+
+        List<LocalPersonalMessage> list = new ArrayList<>();
         Connection connection = null;
-        PreparedStatement statement;
         try {
             connection = DbConnection.getConnection();
-            statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS users(uuid TEXT CONSTRAINT users_pk PRIMARY KEY ,fname TEXT NOT NULL ,lname TEXT NOT NULL ,email TEXT NOT NULL ,mobile TEXT,img_url TEXT,gender TEXT NOT NULL, created TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
-            statement.execute();
+            PreparedStatement statement = connection.prepareStatement("SELECT _uuid,data,_to,_from,server_timestamp FROM messages_personal WHERE (_from=? AND _to=?) OR (_from=? AND _to=?)  ORDER BY server_timestamp DESC LIMIT ?");
+            statement.setString(1, uuid);
+            statement.setString(2, CurrentUser.getInstance().getUuid());
+            statement.setString(3, CurrentUser.getInstance().getUuid());
+            statement.setString(4, uuid);
+            statement.setInt(5, limit);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                LocalPersonalMessage message = new LocalPersonalMessage(resultSet.getString(1));
+                message.setBody(resultSet.getString(2));
+                message.setToUserUuid(resultSet.getString(3));
+                message.setFromUserUuid(resultSet.getString(4));
+                message.setToUserUuid(this.uuid);
+                message.setTimeStamp(resultSet.getString(5));
+                list.add(message);
+            }
             statement.close();
             connection.close();
+            return list;
+
         } catch (SQLException e) {
             e.printStackTrace();
             if (connection != null) try {
@@ -257,15 +286,15 @@ public class User implements Persistent {
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
+            if (e.getMessage().contains(Keys.NO_SUCH_TABLE)) {
+                Table.createUsersTable();
+                Table.createMessagesPersonalTable();
+            }
+
         }
+
+        return list;
     }
-
-
-    @Override
-    public Updater getUpdater() {
-        return new Updater();
-    }
-
 
     public class Updater {
 

@@ -1,7 +1,10 @@
 package com.deskcomm.ui.controllers;
 
 import com.deskcomm.core.CurrentUser;
+import com.deskcomm.resources.images.Images;
 import com.deskcomm.support.L;
+import com.jfoenix.controls.JFXHamburger;
+import com.jfoenix.controls.JFXSpinner;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -10,7 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.json.JSONObject;
@@ -22,19 +24,23 @@ import java.sql.SQLException;
  * Created by Jay Rathod on 16-01-2017.
  */
 public class LoginController extends Controller {
-    private static final double PREF_WIDTH = 358;
-    private static final double PREF_HEIGHT = 616;
+    private static final double PREF_WIDTH = 600;
+    private static final double PREF_HEIGHT = 650;
     private static LoginController loginController;
-    final private String FXML_FILE = "../fxmls/login.fxml";
+    final private String FXML_FILE = "../../ui2/fxmls/login_new.fxml";
     @FXML
     Label labelError;
-    private String windowTitle = "Log In";
+    @FXML
+    JFXSpinner spinner;
+    private String windowTitle = "DeskComm";
     private Pane root;
     private Stage primaryStage = null;
     @FXML
     private Button btnLogin, btnSignup;
     @FXML
     private TextField textFieldEmail, textFieldPassword;
+    @FXML
+    private JFXHamburger hamburger;
 
     private LoginController() throws IOException {
         init();
@@ -48,15 +54,21 @@ public class LoginController extends Controller {
 
     @Override
     public void startControlling(Stage primaryStage) {
+
         this.primaryStage = primaryStage;
         Scene scene;
         if (root == null) init();
-        scene = new Scene(root, PREF_WIDTH, PREF_HEIGHT);
+        if (root.getScene() != null) {
+            scene = root.getScene();
+        } else {
+            scene = new Scene(root, PREF_WIDTH, PREF_HEIGHT);
+        }
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.setTitle(windowTitle);
-        primaryStage.getIcons().add(new Image(this.getClass().getResource("../../resources/images/dskcm_logo_temp.png").toString()));
+        primaryStage.getIcons().add(Images.get(Images.APP_ICON));
         if (!primaryStage.isShowing()) primaryStage.show();
+
 
     }
 
@@ -69,6 +81,7 @@ public class LoginController extends Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        root.getStylesheets().add(getClass().getResource("../stylesheets/login_controller.css").toExternalForm());
         btnSignup.setOnAction(event -> {
             try {
                 RegistrationController controller = RegistrationController.getInstance();
@@ -79,8 +92,11 @@ public class LoginController extends Controller {
         });
 
         btnLogin.setOnAction(event -> {
+            labelError.setText("");
+            if (textFieldEmail.getText().trim().length() > 0 && textFieldPassword.getText().trim().length() > 0) {
+                btnLogin.setDisable(true);
+                spinner.setVisible(true);
 
-            if ((textFieldEmail.getText() + "" + textFieldPassword.getText()).trim().length() > 0) {
                 Task<com.deskcomm.support.Response<JSONObject>> task = new Task<com.deskcomm.support.Response<JSONObject>>() {
                     @Override
                     protected com.deskcomm.support.Response<JSONObject> call() throws Exception {
@@ -89,10 +105,11 @@ public class LoginController extends Controller {
                         return currentUser.login(textFieldEmail.getText(), textFieldPassword.getText());
                     }
                 };
-
                 new Thread(task).start();
 
                 task.setOnSucceeded(event1 -> {
+                    btnLogin.setDisable(false);
+                    spinner.setVisible(false);
                     com.deskcomm.support.Response<JSONObject> response = task.getValue();
                     L.println(response.toString());
                     try {
@@ -104,13 +121,17 @@ public class LoginController extends Controller {
                         } else {
                             labelError.setText(response.getMessage());
                         }
-                    } catch (SQLException | ClassNotFoundException e) {
+                    } catch (SQLException e) {
                         e.printStackTrace();
                         labelError.setText("There was an error. Please try again");
                     }
                 });
                 task.setOnFailed(event1 -> {
-                    labelError.setText(task.getException().getMessage());
+                    btnLogin.setDisable(false);
+                    spinner.setVisible(false);
+                    if (task.getException().getMessage().contains("ConnectException")) {
+                        labelError.setText("Unable to reach server.\nServer might be offline or you may not be in the network.");
+                    } else labelError.setText(task.getException().getMessage());
                 });
             } else {
                 labelError.setText("Username/Password is empty");
