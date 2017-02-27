@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity"
+      prefHeight="670.0" prefWidth="270.0" xmlns="http://javafx.com/javafx/8.0.102">
+    <children>
+        <StackPane>
+            <children>
+                <ImageView fx:id="wall" fitHeight="148.0" fitWidth="270.0" mouseTransparent="true" pickOnBounds="true">
+                    <image>
+                        <Image url="@../../resources/images/wall.jpg"/>
+                    </image>
+                </ImageView>
+                <AnchorPane>
+                    <children>
+                        <ImageView fx:id="avatar" fitHeight="66.0" fitWidth="66.0" layoutX="182.0" layoutY="41.0"
+                                   pickOnBounds="true">
+                            <image>
+                                <Image url="@../../resources/images/logo_min.png"/>
+                            </image>
+                        </ImageView>
+                        <Label fx:id="drawerUsername" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="18.0"
+                               layoutY="107.0" prefHeight="29.0" prefWidth="234.0" text="John Doe" textAlignment="RIGHT"
+                               textFill="WHITE" AnchorPane.bottomAnchor="12.0" AnchorPane.rightAnchor="18.0">
+                            <font>
+                                <Font name="Quicksand Bold" size="18.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                </AnchorPane>
+            </children>
+        </StackPane>
+        <HBox fx:id="manageaccount" prefHeight="45.0" prefWidth="300.0" style="-fx-background-color: #ffffff;">
+            <children>
+                <MaterialDesignIconView glyphName="ACCOUNT_CIRCLE" size="29" wrappingWidth="29.0">
+                    <HBox.margin>
+                        <Insets left="24.0"/>
+                    </HBox.margin>
+                </MaterialDesignIconView>
+                <Label prefHeight="29.0" prefWidth="251.0" text="Manage Account">
+                    <HBox.margin>
+                        <Insets left="16.0"/>
+                    </HBox.margin>
+                    <font>
+                        <Font name="Roboto Bold" size="14.0"/>
+                    </font>
+                </Label>
+            </children>
+            <padding>
+                <Insets bottom="10.0" right="10.0" top="10.0"/>
+            </padding>
+        </HBox>
+        <HBox fx:id="newevent" layoutX="10.0" layoutY="158.0" prefHeight="45.0" prefWidth="300.0"
+              style="-fx-background-color: #ffffff;" styleClass="jfx-rippler">
+            <children>
+                <MaterialDesignIconView glyphName="CALENDAR_PLUS" size="29" wrappingWidth="29.0">
+                    <HBox.margin>
+                        <Insets left="24.0"/>
+                    </HBox.margin>
+                </MaterialDesignIconView>
+                <Label prefHeight="29.0" prefWidth="251.0" text="New Event">
+                    <HBox.margin>
+                        <Insets left="16.0"/>
+                    </HBox.margin>
+                    <font>
+                        <Font name="Roboto Bold" size="14.0"/>
+                    </font>
+                </Label>
+            </children>
+            <padding>
+                <Insets bottom="10.0" right="10.0" top="10.0"/>
+            </padding>
+        </HBox>
+        <HBox fx:id="settings" layoutX="10.0" layoutY="210.0" prefHeight="45.0" prefWidth="300.0"
+              style="-fx-background-color: #ffffff;">
+            <children>
+                <MaterialDesignIconView glyphName="SETTINGS" size="29" wrappingWidth="29.0">
+                    <HBox.margin>
+                        <Insets left="24.0"/>
+                    </HBox.margin>
+                </MaterialDesignIconView>
+                <Label prefHeight="29.0" prefWidth="251.0" text="Settings">
+                    <HBox.margin>
+                        <Insets left="16.0"/>
+                    </HBox.margin>
+                    <font>
+                        <Font name="Roboto Bold" size="14.0"/>
+                    </font>
+                </Label>
+            </children>
+            <padding>
+                <Insets bottom="10.0" right="10.0" top="10.0"/>
+            </padding>
+        </HBox>
+    </children>
+</VBox>

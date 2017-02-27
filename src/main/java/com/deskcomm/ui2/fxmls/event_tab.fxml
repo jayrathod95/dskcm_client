@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXHamburger?>
+<?import com.jfoenix.controls.JFXToolbar?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="690.0" prefWidth="600.0" stylesheets="@account.css"
+            xmlns="http://javafx.com/javafx/8.0.102">
+    <children>
+        <JFXToolbar prefHeight="52.0" prefWidth="600.0" style="-fx-background-color: #2196f3;">
+            <center>
+                <Label prefHeight="45.0" prefWidth="544.0" text="Deskcomm" textFill="#f8f8f8"
+                       BorderPane.alignment="CENTER">
+                    <font>
+                        <Font name="Roboto Bold" size="18.0"/>
+                    </font>
+                    <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+                    </padding>
+                </Label>
+            </center>
+            <left>
+                <JFXHamburger fx:id="hamburger" prefHeight="49.0" prefWidth="56.0" BorderPane.alignment="CENTER"/>
+            </left>
+            <top>
+                <HBox alignment="TOP_RIGHT" prefHeight="20.0" prefWidth="600.0" style="-fx-background-color: #1565C0;"
+                      BorderPane.alignment="CENTER">
+                    <children>
+                        <MaterialDesignIconView fill="WHITE" glyphName="ALERT_CIRCLE" rotate="180.0" size="17"
+                                                wrappingWidth="18.0">
+                            <HBox.margin>
+                                <Insets bottom="1.0" left="1.0" right="5.0" top="1.0"/>
+                            </HBox.margin>
+                        </MaterialDesignIconView>
+                        <MaterialDesignIconView fill="WHITE" glyphName="MINUS" lineSpacing="1.0" size="18.0"
+                                                wrappingWidth="16.0">
+                            <HBox.margin>
+                                <Insets bottom="1.0" left="1.0" right="8.0" top="1.0"/>
+                            </HBox.margin>
+                        </MaterialDesignIconView>
+                        <MaterialDesignIconView fill="WHITE" glyphName="CLOSE" lineSpacing="1.0" size="18.0"
+                                                wrappingWidth="16.0">
+                            <HBox.margin>
+                                <Insets right="5.0"/>
+                            </HBox.margin>
+                        </MaterialDesignIconView>
+                    </children>
+                    <padding>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                    </padding>
+                </HBox>
+            </top>
+        </JFXToolbar>
+        <AnchorPane layoutX="31.0" layoutY="102.0" prefHeight="166.0" prefWidth="538.0"
+                    style="-fx-background-color: white;">
+            <children>
+                <ImageView fitHeight="132.0" fitWidth="134.0" layoutX="14.0" layoutY="16.0" pickOnBounds="true"
+                           preserveRatio="true">
+                    <image>
+                        <Image url="@../../../../../pr/dskcm_client/src/main/java/com/deskcomm/resources/images/success.png"/>
+                    </image>
+                </ImageView>
+                <VBox layoutX="151.0" layoutY="8.0" prefHeight="153.0" prefWidth="386.0">
+                    <children>
+                        <Label prefHeight="55.0" prefWidth="386.0" text="Event Name">
+                            <VBox.margin>
+                                <Insets left="10.0"/>
+                            </VBox.margin>
+                            <font>
+                                <Font name="System Bold" size="20.0"/>
+                            </font>
+                        </Label>
+                        <Label alignment="TOP_LEFT" prefHeight="81.0" prefWidth="386.0" text="Description: ">
+                            <VBox.margin>
+                                <Insets left="10.0"/>
+                            </VBox.margin>
+                            <font>
+                                <Font size="14.0"/>
+                            </font>
+                        </Label>
+                        <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="410.0"
+                               text="Date and Time">
+                            <padding>
+                                <Insets right="10.0"/>
+                            </padding>
+                        </Label>
+                    </children>
+                </VBox>
+            </children>
+            <effect>
+                <DropShadow color="#00000085" spread="0.13"/>
+            </effect>
+        </AnchorPane>
+    </children>
+</AnchorPane>

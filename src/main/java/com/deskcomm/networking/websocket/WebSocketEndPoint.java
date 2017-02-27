@@ -5,12 +5,12 @@ import com.deskcomm.core.User;
 import com.deskcomm.core.bookkeeping.UsersUpdater;
 import com.deskcomm.core.messages.InboundPersonalMessage;
 import com.deskcomm.support.Keys;
-import com.deskcomm.ui.controllers.HomeController;
-import com.deskcomm.ui.rows.PersonalThreadRow;
+import com.deskcomm.ui2.controllers.HomeController;
+import com.deskcomm.ui2.controllers.UserThreadController;
+import com.deskcomm.ui2.core.UserThreadFactory;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
 import org.json.JSONObject;
 
 import javax.websocket.*;
@@ -46,7 +46,7 @@ public class WebSocketEndPoint {
         WebSocketEndPoint.session = session;
         System.out.println("onOpen: " + session.getId());
         Platform.runLater(() -> {
-            HomeController.getInstance().getLabelFooterStatus().setText("Online");
+            // HomeController.getInstance().getLabelFooterStatus().setText("Online");
         });
         sendHandShakeMessage();
         // session.getBasicRemote().sendText("New User Connected: " + CurrentUser.getInstance().getFullName());
@@ -80,8 +80,21 @@ public class WebSocketEndPoint {
                 handleHandShakeResponse(webSocketMessage.getData());
                 break;
             case "bookkeeping/users":
-                JSONObject data = webSocketMessage.getData();
-                UsersUpdater.getInstance().updateAllUsers(data.getJSONArray("users"));
+                //save to database
+                Task<Boolean> task = new Task<Boolean>() {
+                    @Override
+                    protected Boolean call() throws Exception {
+                        JSONObject data = webSocketMessage.getData();
+                        return UsersUpdater.getInstance().updateAllUsers(data.getJSONArray("users"));
+                    }
+                };
+                new Thread(task).start();
+                task.setOnSucceeded(event -> {
+                    //inform ui component
+                    Platform.runLater(() -> {
+                        com.deskcomm.ui2.controllers.HomeController.getInstance().updateUsersList();
+                    });
+                });
                 break;
         }
     }
@@ -104,7 +117,7 @@ public class WebSocketEndPoint {
         Logger.getLogger("").log(Level.INFO, "onclose called");
         //    connectToWebSocket();
         Platform.runLater(() -> {
-            HomeController.getInstance().getLabelFooterStatus().setText("Offline");
+            //HomeController.getInstance().getLabelFooterStatus().setText("Offline");
         });
     }
 
@@ -125,6 +138,7 @@ public class WebSocketEndPoint {
 
 
     private void updateUserInterface(InboundPersonalMessage personalMessage) {
+        /*
         PersonalThreadRow row = new PersonalThreadRow(personalMessage.getId(), new User(personalMessage.getFromUserUuid()), personalMessage.getBody(), personalMessage.getTimestamp());
         AnchorPane anc = row.create();
         if (anc != null)
@@ -133,6 +147,11 @@ public class WebSocketEndPoint {
                 userThreadsObservableList.removeIf(next -> next.getUserData().equals(anc.getUserData()));
                 HomeController.getInstance().getUserThreadsObservableList().add(0, anc);
             });
+            */
+        Platform.runLater(() -> {
+            UserThreadController userThreadController = UserThreadFactory.getUserThreadController(new User(personalMessage.getFromUserUuid()));
+            userThreadController.refresh();
+        });
     }
 
 

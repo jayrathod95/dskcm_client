@@ -64,7 +64,7 @@ public class User implements Persistent {
         try {
             ArrayList<User> arrayList = new ArrayList<>();
             Connection connection = DbConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT uuid,fname,lname,email,mobile,img_url,gender FROM users");
+            PreparedStatement statement = connection.prepareStatement("SELECT uuid,fname,lname,email,mobile,img_url,gender FROM users ");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 User user = new User();
@@ -79,11 +79,10 @@ public class User implements Persistent {
             }
             return arrayList;
         } catch (SQLException e) {
-            e.printStackTrace();
             if (e.getMessage().equals(Keys.NO_SUCH_TABLE)) {
                 Table.createUsersTable();
                 return getAllUsers();
-            }
+            } else e.printStackTrace();
             return null;
         }
     }
@@ -106,11 +105,13 @@ public class User implements Persistent {
             connection.close();
             return updateCount > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
             if (e.getMessage().contains(Keys.NO_SUCH_TABLE)) {
                 Table.createUsersTable();
                 return insertToTable();
-            } else throw e;
+            } else {
+                e.printStackTrace();
+                throw e;
+            }
         }
     }
 
@@ -253,18 +254,24 @@ public class User implements Persistent {
         return new Updater();
     }
 
+
     public List<LocalPersonalMessage> getConversation(int limit) {
+        return getConversation(0, limit);
+    }
+
+    public List<LocalPersonalMessage> getConversation(int skip, int limit) {
 
         List<LocalPersonalMessage> list = new ArrayList<>();
         Connection connection = null;
         try {
             connection = DbConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT _uuid,data,_to,_from,server_timestamp FROM messages_personal WHERE (_from=? AND _to=?) OR (_from=? AND _to=?)  ORDER BY server_timestamp DESC LIMIT ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT _uuid,data,_to,_from,server_timestamp FROM messages_personal WHERE (_from=? AND _to=?) OR (_from=? AND _to=?)  ORDER BY server_timestamp ASC LIMIT ?,?");
             statement.setString(1, uuid);
             statement.setString(2, CurrentUser.getInstance().getUuid());
             statement.setString(3, CurrentUser.getInstance().getUuid());
             statement.setString(4, uuid);
-            statement.setInt(5, limit);
+            statement.setInt(5, skip);
+            statement.setInt(6, limit);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 LocalPersonalMessage message = new LocalPersonalMessage(resultSet.getString(1));

@@ -43,6 +43,7 @@ public interface Table {
             statement.execute();
             statement.close();
             connection.close();
+            System.out.println("Created users Table");
         } catch (SQLException e) {
             e.printStackTrace();
             if (connection != null) try {

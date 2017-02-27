@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
-<HBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-      minWidth="-Infinity" prefHeight="60.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/8.0.102">
+<HBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="53.0"
+      xmlns="http://javafx.com/javafx/8.0.102">
     <children>
-        <ImageView fx:id="imageView" fitHeight="46.0" fitWidth="46.0" pickOnBounds="true" HBox.hgrow="ALWAYS">
-            <image>
-                <Image url="@../../fxmls/avatar_f.png"/>
-            </image>
+        <ImageView fx:id="imageView" cache="true" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true"
+                   HBox.hgrow="ALWAYS">
+            <HBox.margin>
+                <Insets left="16.0"/>
+            </HBox.margin>
         </ImageView>
-        <Label fx:id="labelUserName" maxHeight="49.0" minHeight="49.0" prefHeight="49.0" text="Jay Rathod">
+        <Label fx:id="labelUserName" graphicTextGap="0.0" maxHeight="41.0" minHeight="41.0" prefHeight="41.0"
+               text="Jay Rathod">
             <font>
-                <Font name="System Bold" size="16.0"/>
+                <Font name="Quicksand Medium" size="17.0"/>
             </font>
             <HBox.margin>
-                <Insets left="10.0"/>
+                <Insets left="24.0"/>
             </HBox.margin>
-            <padding>
-                <Insets bottom="3.0" left="10.0"/>
-            </padding>
         </Label>
     </children>
     <padding>
-        <Insets bottom="7.0" left="20.0" right="7.0" top="7.0"/>
+        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
     </padding>
 </HBox>

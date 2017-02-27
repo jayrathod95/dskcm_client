@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -19,10 +20,13 @@ import java.util.UUID;
  */
 public class OutboundPersonalMessage extends Message implements Sendable, Persistent {
     private String toUserUuid;
+    private Date submittedOn;
 
     public OutboundPersonalMessage(String toUserUuid, String body) {
         super(UUID.randomUUID().toString(), body);
         this.toUserUuid = toUserUuid;
+
+
     }
 
 
@@ -81,5 +85,9 @@ public class OutboundPersonalMessage extends Message implements Sendable, Persis
 
     public String getToUserUuid() {
         return toUserUuid;
+    }
+
+    public Date getSubmittedOn() {
+        return submittedOn;
     }
 }

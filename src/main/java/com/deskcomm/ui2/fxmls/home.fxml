@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="690.0" prefWidth="600.0"
+           xmlns="http://javafx.com/javafx/8.0.102">
+    <children>
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                    prefHeight="690.0" prefWidth="600.0">
+            <children>
+                <JFXToolbar prefHeight="52.0" prefWidth="600.0" style="-fx-background-color: #2196f3;">
+                    <center>
+                        <Label prefHeight="45.0" prefWidth="544.0" styleClass="toolbar-label" text="Deskcomm"
+                               textFill="#f8f8f8" BorderPane.alignment="CENTER">
+                            <padding>
+                                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+                            </padding>
+                        </Label>
+                    </center>
+                    <left>
+                        <JFXHamburger fx:id="hamburger" prefHeight="49.0" prefWidth="56.0"
+                                      BorderPane.alignment="CENTER"/>
+                    </left>
+                    <top>
+                        <HBox alignment="TOP_RIGHT" prefHeight="20.0" prefWidth="600.0"
+                              style="-fx-background-color: #1565C0;" BorderPane.alignment="CENTER">
+                            <children>
+                                <MaterialDesignIconView fill="WHITE" glyphName="ALERT_CIRCLE" rotate="180.0" size="17"
+                                                        wrappingWidth="18.0">
+                                    <HBox.margin>
+                                        <Insets bottom="1.0" left="1.0" right="5.0" top="1.0"/>
+                                    </HBox.margin>
+                                </MaterialDesignIconView>
+                                <MaterialDesignIconView fill="WHITE" glyphName="MINUS" lineSpacing="1.0" size="18.0"
+                                                        wrappingWidth="16.0">
+                                    <HBox.margin>
+                                        <Insets bottom="1.0" left="1.0" right="8.0" top="1.0"/>
+                                    </HBox.margin>
+                                </MaterialDesignIconView>
+                                <MaterialDesignIconView fill="WHITE" glyphName="CLOSE" lineSpacing="1.0" size="18.0"
+                                                        wrappingWidth="16.0">
+                                    <HBox.margin>
+                                        <Insets right="5.0"/>
+                                    </HBox.margin>
+                                </MaterialDesignIconView>
+                            </children>
+                            <padding>
+                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                            </padding>
+                        </HBox>
+                    </top>
+                </JFXToolbar>
+                <JFXTabPane fx:id="tabpane" layoutY="72.0" prefHeight="602.0" prefWidth="600.0"
+                            tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                        <Tab fx:id="tab1" text="Users">
+
+                            <content>
+                                <AnchorPane fx:id="anchorpanetab1" minHeight="0.0" minWidth="0.0" prefHeight="600.0"
+                                            prefWidth="600.0">
+                                    <children>
+                                        <JFXListView fx:id="userListView" cellVerticalMargin="0.0" layoutY="6.0"
+                                                     prefHeight="559.0" prefWidth="600.0"/>
+                                    </children>
+                                    <padding>
+                                        <Insets top="10.0"/>
+                                    </padding>
+                                </AnchorPane>
+                            </content>
+                        </Tab>
+                        <Tab fx:id="tab2" text="Chats">
+                            <content>
+                                <AnchorPane fx:id="anchorpanetab2" minHeight="0.0" minWidth="0.0" prefHeight="180.0"
+                                            prefWidth="200.0">
+                                    <children>
+                                        <JFXListView fx:id="threadListView" layoutY="8.0" prefHeight="574.0"
+                                                     prefWidth="600.0"/>
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                        </Tab>
+                        <Tab fx:id="tab3" text="Events">
+                            <content>
+                                <AnchorPane fx:id="anchorpaneta3" minHeight="0.0" minWidth="0.0" prefHeight="180.0"
+                                            prefWidth="200.0">
+                                    <children>
+                                        <Label text="Label3"/>
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                        </Tab>
+                    </tabs>
+                </JFXTabPane>
+                <JFXDrawer fx:id="drawer" defaultDrawerSize="270.0" layoutY="76.0" overLayVisible="false"
+                           prefHeight="614.0" prefWidth="0.0"/>
+
+            </children>
+        </AnchorPane>
+    </children>
+</StackPane>

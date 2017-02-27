@@ -1,4 +1,4 @@
-package com.deskcomm.ui.controllers;
+package com.deskcomm.ui2.controllers;
 
 import com.deskcomm.core.CurrentUser;
 import com.deskcomm.resources.images.Images;
@@ -23,11 +23,12 @@ import java.sql.SQLException;
 /**
  * Created by Jay Rathod on 16-01-2017.
  */
+@SuppressWarnings("Duplicates")
 public class LoginController extends Controller {
     private static final double PREF_WIDTH = 600;
     private static final double PREF_HEIGHT = 650;
     private static LoginController loginController;
-    final private String FXML_FILE = "../../ui2/fxmls/login.fxml";
+    final private String FXML_FILE = "../fxmls/login.fxml";
     @FXML
     Label labelError;
     @FXML
@@ -115,8 +116,11 @@ public class LoginController extends Controller {
                     try {
                         if (response.isResult() && CurrentUser.getInstance().save(response.getData())) {
                             HomeController controller = HomeController.getInstance();
-                            //primaryStage.close();
-                            controller.startControlling(primaryStage);
+                            try {
+                                controller.startControlling(primaryStage);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             Platform.runLater(() -> root = null);
                         } else {
                             labelError.setText(response.getMessage());

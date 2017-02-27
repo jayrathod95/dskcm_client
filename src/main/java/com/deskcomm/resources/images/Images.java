@@ -6,6 +6,8 @@ import javafx.scene.image.Image;
  * Created by jay_rathod on 21-02-2017.
  */
 public class Images {
+    public static final String AVATAR_MALE = "avatar_m.png";
+    public static final String AVATAR_FEMALE = "avatar_f.png";
     public static String ERROR = "error.png";
     public static String SUCCESS = "success.png";
     public static String APP_ICON = "logo_min.png";

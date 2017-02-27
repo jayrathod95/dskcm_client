@@ -8,7 +8,7 @@ import java.sql.SQLException;
  * Created by Jay Rathod on 15-01-2017.
  */
 public class DbConnection {
-    public static final String DATABASE_NAME = "test2.db";
+    public static final String DATABASE_NAME = "dm.db";
     final static public String JDBC_SQLITE_URL = "jdbc:sqlite:" + DATABASE_NAME;
 
     private DbConnection() {

@@ -3,7 +3,6 @@ package com.deskcomm.ui.controllers;
 import com.deskcomm.core.CurrentUser;
 import com.deskcomm.core.User;
 import com.deskcomm.db.DbConnection;
-import com.deskcomm.networking.websocket.WebSocketEndPoint;
 import com.deskcomm.support.L;
 import com.deskcomm.ui.rows.UserListRow;
 import javafx.collections.FXCollections;
@@ -25,7 +24,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import javax.inject.Singleton;
-import javax.websocket.DeploymentException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -52,7 +50,7 @@ public class HomeController extends Controller implements EventHandler<MouseEven
     @FXML
     private ListView<VBox> listViewUsers;
     @FXML
-    private Label labelUserNameList, labelFooterUserName, labelFooterStatus;
+    private Label labelUserNameList, labelFooterUserName, labelFooterStatus, drawerUsername;
     @FXML
     private ScrollPane scrollPaneUsersList;
     @FXML
@@ -118,13 +116,6 @@ public class HomeController extends Controller implements EventHandler<MouseEven
         startControllingAccountTab(tabPane.getTabs().get(3));
         startControllingMoreTab(tabPane.getTabs().get(4));
 
-        try {
-            WebSocketEndPoint.connectToWebSocket();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (DeploymentException e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -138,7 +129,7 @@ public class HomeController extends Controller implements EventHandler<MouseEven
 
         if (users != null)
             users.forEach(user -> {
-                UserListRow row = new UserListRow(user);
+                UserListRow row = new UserListRow(user, primaryStage);
                 HBox pane = row.create();
                 if (pane != null) usersObservableList.add(pane);
             });
@@ -248,6 +239,7 @@ public class HomeController extends Controller implements EventHandler<MouseEven
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         buttonCreateGroup.setOnAction(event -> {
             GroupCreatorController creatorController = GroupCreatorController.getInstance();
