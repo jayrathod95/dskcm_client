@@ -38,6 +38,7 @@ public class OutboundWebsocketMessage {
     }
 
     public void send() {
+
         WebSocketEndPoint.sendMessage(this.toString());
     }
 

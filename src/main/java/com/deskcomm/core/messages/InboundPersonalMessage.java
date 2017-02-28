@@ -100,4 +100,29 @@ public class InboundPersonalMessage extends Message implements Persistent {
         return timestamp;
     }
 
+    @SuppressWarnings("Duplicates")
+    public boolean insertToTableAsRead() {
+        try {
+            Connection connection = DbConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO messages_personal (_uuid, data,_to,_from,read, server_timestamp, created) VALUES (?, ?,?, ?,?,?, CURRENT_TIMESTAMP);");
+            statement.setString(1, id);
+            statement.setString(2, body);
+            statement.setString(3, CurrentUser.getInstance().getUuid());
+            statement.setString(4, fromUserUuid);
+            statement.setInt(5, 1);
+            statement.setString(6, timestamp);
+            int i = statement.executeUpdate();
+            statement.close();
+            connection.close();
+            return i > 0;
+        } catch (SQLException e) {
+            // e.printStackTrace();
+            if (e.getMessage().contains(Keys.NO_SUCH_TABLE)) {
+                System.out.println("Creating messages_personal Table");
+                Table.createMessagesPersonalTable();
+                return insertToTable();
+            } else e.printStackTrace();
+        }
+        return false;
+    }
 }

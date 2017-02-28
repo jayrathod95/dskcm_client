@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import de.jensd.fx.glyphs.materialdesignicons.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../stylesheets/user_thread.css"
+      xmlns="http://javafx.com/javafx/8.0.102">
+    <children>
+        <JFXToolbar prefHeight="52.0" prefWidth="600.0" style="-fx-background-color: #2196f3;">
+            <center>
+                <Label fx:id="title" prefHeight="45.0" prefWidth="544.0" text="John Doe" textFill="#f8f8f8"
+                       BorderPane.alignment="CENTER">
+                    <font>
+                        <Font name="Roboto Bold" size="18.0"/>
+                    </font>
+                    <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+                    </padding>
+                </Label>
+            </center>
+            <left>
+                <JFXHamburger fx:id="hamburger" prefHeight="49.0" prefWidth="56.0" BorderPane.alignment="CENTER"/>
+            </left>
+            <top>
+                <HBox alignment="TOP_RIGHT" prefHeight="20.0" prefWidth="600.0" style="-fx-background-color: #1565C0;"
+                      BorderPane.alignment="CENTER">
+                    <children>
+                        <MaterialDesignIconView fill="WHITE" glyphName="ALERT_CIRCLE" rotate="180.0" size="17"
+                                                wrappingWidth="18.0">
+                            <HBox.margin>
+                                <Insets bottom="1.0" left="1.0" right="5.0" top="1.0"/>
+                            </HBox.margin>
+                        </MaterialDesignIconView>
+                        <MaterialDesignIconView fill="WHITE" glyphName="MINUS" lineSpacing="1.0" size="18.0"
+                                                wrappingWidth="16.0">
+                            <HBox.margin>
+                                <Insets bottom="1.0" left="1.0" right="8.0" top="1.0"/>
+                            </HBox.margin>
+                        </MaterialDesignIconView>
+                        <MaterialDesignIconView fill="WHITE" glyphName="CLOSE" lineSpacing="1.0" size="18.0"
+                                                wrappingWidth="16.0">
+                            <HBox.margin>
+                                <Insets right="5.0"/>
+                            </HBox.margin>
+                        </MaterialDesignIconView>
+                    </children>
+                    <padding>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                    </padding>
+                </HBox>
+            </top>
+            <right>
+                <JFXButton contentDisplay="CENTER" graphicTextGap="0.0" ripplerFill="WHITE" text=" "
+                           textAlignment="CENTER" textFill="TRANSPARENT" wrapText="true" BorderPane.alignment="CENTER">
+                    <graphic>
+                        <MaterialDesignIconView fill="WHITE" glyphName="DOTS_VERTICAL" size="30.0"/>
+                    </graphic>
+                </JFXButton>
+            </right>
+        </JFXToolbar>
+        <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" hmax="0.0" prefHeight="552.0" prefWidth="600.0" vmin="0.0">
+            <content>
+                <VBox fx:id="vBoxMessagesContainer" prefWidth="600.0"/>
+            </content>
+            <padding>
+                <Insets bottom="5.0"/>
+            </padding>
+        </ScrollPane>
+        <HBox>
+            <children>
+                <JFXTextField fx:id="messagefield" maxWidth="496.0" minWidth="225.0" prefHeight="40.0" prefWidth="489.0"
+                              promptText="Type your message here..." unFocusColor="#545050">
+                    <font>
+                        <Font size="15.0"/>
+                    </font>
+                </JFXTextField>
+                <JFXButton fx:id="sendbtn" buttonType="RAISED" contentDisplay="CENTER" defaultButton="true"
+                           prefHeight="35.0" prefWidth="73.0" ripplerFill="#2f8a50" text=" " textAlignment="CENTER"
+                           textFill="#46f887">
+                    <graphic>
+                        <MaterialDesignIconView fill="WHITE" glyphName="SEND" size="27.0" text=""
+                                                textAlignment="CENTER" textOrigin="CENTER"
+                                                wrappingWidth="39.66668701171875"/>
+                    </graphic>
+                </JFXButton>
+            </children>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+        </HBox>
+    </children>
+</VBox>

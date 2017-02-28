@@ -1,0 +1,40 @@
+.shadow {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
+}
+
+#sendbtn {
+    -fx-background-color: #0fd62d;
+}
+
+#three_dots {
+    -fx-padding: 0, 0, 0, 10px;
+}
+
+.jfx-hamburger StackPane {
+    -fx-pref-width: 18px;
+    -fx-pref-height: 3px;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 0px;
+}
+
+.msg-in {
+    -fx-border-image-slice: 14 9 12 28 fill;
+    -fx-border-image-width: 15px 8px 5px 22px;
+    -fx-border-image-insets: 8px 0px 0px 0px;
+    -fx-border-image-repeat: stretch stretch;
+    -fx-border-image-source: url("grey_bubble.9.png");
+}
+
+ScrollPane {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: #bbbbbb;
+
+}
+
+.msg-out {
+    -fx-border-image-slice: 12 31 11 10 fill;
+    -fx-border-image-width: 10px 32px 5px 10px;
+    -fx-border-image-insets: 8px 0px 0px 0px;
+    -fx-border-image-repeat: stretch stretch;
+    -fx-border-image-source: url("purple_bubble.9.png");
+}

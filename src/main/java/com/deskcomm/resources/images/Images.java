@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 public class Images {
     public static final String AVATAR_MALE = "avatar_m.png";
     public static final String AVATAR_FEMALE = "avatar_f.png";
+    public static final String WALL1 = "wall1.jpg";
     public static String ERROR = "error.png";
     public static String SUCCESS = "success.png";
     public static String APP_ICON = "logo_min.png";

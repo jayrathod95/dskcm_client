@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
 
 /**
@@ -28,7 +29,7 @@ public class LoginController extends Controller {
     private static final double PREF_WIDTH = 600;
     private static final double PREF_HEIGHT = 650;
     private static LoginController loginController;
-    final private String FXML_FILE = "../fxmls/login.fxml";
+    final private String FXML_FILE = "login.fxml";
     @FXML
     Label labelError;
     @FXML
@@ -45,6 +46,7 @@ public class LoginController extends Controller {
 
     private LoginController() throws IOException {
         init();
+
 
     }
 
@@ -75,14 +77,18 @@ public class LoginController extends Controller {
 
 
     private void init() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_FILE));
+
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("fxmls/login.fxml"));
         loader.setController(this);
         try {
             root = loader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        root.getStylesheets().add(getClass().getResource("../stylesheets/login_controller.css").toExternalForm());
+        URL url = getClass().getResource("stylesheets/login_controller.css");
+        String s = url.toExternalForm();
+        root.getStylesheets().add(s);
         btnSignup.setOnAction(event -> {
             try {
                 RegistrationController controller = RegistrationController.getInstance();
@@ -135,7 +141,10 @@ public class LoginController extends Controller {
                     spinner.setVisible(false);
                     if (task.getException().getMessage().contains("ConnectException")) {
                         labelError.setText("Unable to reach server.\nServer might be offline or you may not be in the network.");
-                    } else labelError.setText(task.getException().getMessage());
+                    } else {
+                        task.getException().printStackTrace();
+                        labelError.setText(task.getException().getMessage());
+                    }
                 });
             } else {
                 labelError.setText("Username/Password is empty");

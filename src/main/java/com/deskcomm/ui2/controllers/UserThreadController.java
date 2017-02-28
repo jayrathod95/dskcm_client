@@ -50,6 +50,9 @@ public class UserThreadController extends Controller {
         user.fetchFromDb();
     }
 
+    public VBox getvBoxMessagesContainer() {
+        return vBoxMessagesContainer;
+    }
 
     @Override
     public void startControlling(Stage primaryStage) throws IOException {
@@ -59,7 +62,7 @@ public class UserThreadController extends Controller {
     }
 
     private void init() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxmls/user_thread.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("fxmls/user_thread.fxml"));
         loader.setController(this);
         root = loader.load();
         Scene scene;
@@ -68,6 +71,7 @@ public class UserThreadController extends Controller {
         } else {
             scene = new Scene(root, HomeController.WIDTH, HomeController.HEIGHT);
         }
+
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
@@ -93,9 +97,9 @@ public class UserThreadController extends Controller {
             }
         });
         hamburger.setOnMouseClicked(event -> {
-            System.out.println("hamburger clicked");
             try {
                 HomeController.getInstance().startControlling(primaryStage);
+                HomeController.getInstance().updateThreadListAsync();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -109,11 +113,11 @@ public class UserThreadController extends Controller {
             if (message.getFromUserUuid().equals(CurrentUser.getInstance().getUuid())) {
                 MessageBoxOut messageBoxOut = new MessageBoxOut(message);
                 //messageBoxOut.setTime();
-                vBoxMessagesContainer.getChildren().add(messageBoxOut);
+                vBoxMessagesContainer.getChildren().add(0, messageBoxOut);
             } else {
                 MessageBoxIn messageBoxIn = new MessageBoxIn(message);
                 //messageBoxIn.setTime();
-                vBoxMessagesContainer.getChildren().add(messageBoxIn);
+                vBoxMessagesContainer.getChildren().add(0, messageBoxIn);
             }
         });
     }
@@ -125,6 +129,10 @@ public class UserThreadController extends Controller {
 
     public User getUser() {
         return user;
+    }
+
+    public void addNewMessage(LocalPersonalMessage personalMessage) {
+        vBoxMessagesContainer.getChildren().add(vBoxMessagesContainer.getChildren().size(), new MessageBoxIn(personalMessage));
     }
 
 
@@ -140,7 +148,7 @@ public class UserThreadController extends Controller {
             this.setOnMouseClicked(this);
             this.message = message;
             try {
-                loader = new FXMLLoader(getClass().getResource("../fxmls/row_message_in.fxml"));
+                loader = new FXMLLoader(getClass().getResource("fxmls/row_message_in.fxml"));
                 loader.setController(this);
                 VBox root = loader.load();
                 this.getChildren().add(root);
@@ -178,7 +186,7 @@ public class UserThreadController extends Controller {
             this.setOnMouseClicked(this);
             this.message = message;
             try {
-                loader = new FXMLLoader(getClass().getResource("../fxmls/row_message_out.fxml"));
+                loader = new FXMLLoader(getClass().getResource("fxmls/row_message_out.fxml"));
                 loader.setController(this);
                 VBox root = loader.load();
                 this.getChildren().add(root);

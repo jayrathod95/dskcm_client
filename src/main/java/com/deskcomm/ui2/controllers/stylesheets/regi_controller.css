@@ -1,0 +1,13 @@
+.jfx-snackbar-content {
+    -fx-background-color: #4c4c4c;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
+}
+
+.jfx-snackbar-toast {
+    -fx-text-fill: white;
+}
+
+.jfx-snackbar-action {
+    -fx-background-color: #d8bb33;
+    -fx-text-fill: white;
+}

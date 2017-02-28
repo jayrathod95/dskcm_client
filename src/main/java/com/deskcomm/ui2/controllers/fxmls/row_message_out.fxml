@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_RIGHT" maxWidth="360.0" prefWidth="360.0" styleClass="msg-out"
+      stylesheets="@../stylesheets/user_thread.css" xmlns="http://javafx.com/javafx/8.0.102">
+    <children>
+        <TextFlow prefHeight="122.0" prefWidth="327.0">
+            <children>
+                <Text fx:id="messagebody" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0"
+                      text="Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka Ok oka "
+                      wrappingWidth="208.2578125">
+                    <font>
+                        <Font name="Roboto" size="13.0"/>
+                    </font>
+                </Text>
+            </children>
+            <opaqueInsets>
+                <Insets/>
+            </opaqueInsets>
+        </TextFlow>
+        <Label fx:id="time" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="19.0" prefWidth="119.0"
+               text="29 minutes ago" textFill="WHITE">
+            <padding>
+                <Insets bottom="2.0" right="2.0"/>
+            </padding>
+            <font>
+                <Font name="Roboto" size="10.0"/>
+            </font>
+        </Label>
+    </children>
+</VBox>

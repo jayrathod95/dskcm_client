@@ -1,0 +1,5 @@
+.bordered {
+    -fx-border-style: solid;
+    -fx-border-color: RGB(162, 162, 162);
+    -fx-border-width: 0px 0px 1px 0px;
+}

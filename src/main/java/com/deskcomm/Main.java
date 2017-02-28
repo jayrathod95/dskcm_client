@@ -30,6 +30,7 @@ public class Main extends Application {
     @Override
     public void start(final Stage primaryStage) {
 
+
         try {
             if (CurrentUser.getInstance().isLoggedIn()) {
                 L.println("User Is Logged In");
@@ -42,6 +43,7 @@ public class Main extends Application {
             }
         } catch (IOException e) {
             e.printStackTrace();
+
         }
     }
 

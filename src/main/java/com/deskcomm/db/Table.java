@@ -9,6 +9,7 @@ import java.sql.SQLException;
  */
 public interface Table {
     static void createMessagesPersonalTable() {
+        System.out.println("Creating messages_personal Table");
         Connection connection = null;
         PreparedStatement statement;
         try {
@@ -18,6 +19,7 @@ public interface Table {
                     "data TEXT NOT NULL," +
                     " _to TEXT NOT NULL ," +
                     "_from TEXT NOT NULL ," +
+                    "read INTEGER NOT NULL DEFAULT 0," +
                     "server_timestamp TIMESTAMP NOT NULL ," +
                     "created TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
             statement.execute();

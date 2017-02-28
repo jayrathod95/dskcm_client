@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity" prefWidth="160.0" stylesheets="@../stylesheets/menu_home.css"
+      xmlns="http://javafx.com/javafx/8.0.102">
+    <children>
+        <Label fx:id="refresh" prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: white;"
+               styleClass="bordered" stylesheets="@../stylesheets/menu_home.css" text="Refresh">
+            <font>
+                <Font name="Roboto" size="13.0"/>
+            </font>
+            <padding>
+                <Insets bottom="8.0" left="12.0" right="8.0" top="8.0"/>
+            </padding>
+        </Label>
+    </children>
+</VBox>

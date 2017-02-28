@@ -1,0 +1,16 @@
+.bordered {
+    -fx-border-style: solid;
+    -fx-border-color: RGB(162, 162, 162);
+    -fx-border-width: 0 0 1 0
+}
+
+.jfx-hamburger StackPane {
+    -fx-pref-width: 19px;
+    -fx-pref-height: 3px;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 0px;
+}
+
+.jfx-rippler {
+    -fx-background-color: #9E9E9E;
+}

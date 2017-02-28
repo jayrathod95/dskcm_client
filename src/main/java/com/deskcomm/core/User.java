@@ -265,7 +265,7 @@ public class User implements Persistent {
         Connection connection = null;
         try {
             connection = DbConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT _uuid,data,_to,_from,server_timestamp FROM messages_personal WHERE (_from=? AND _to=?) OR (_from=? AND _to=?)  ORDER BY server_timestamp ASC LIMIT ?,?");
+            PreparedStatement statement = connection.prepareStatement("SELECT _uuid,data,_to,_from,server_timestamp FROM messages_personal WHERE (_from=? AND _to=?) OR (_from=? AND _to=?)  ORDER BY server_timestamp DESC LIMIT ?,?");
             statement.setString(1, uuid);
             statement.setString(2, CurrentUser.getInstance().getUuid());
             statement.setString(3, CurrentUser.getInstance().getUuid());

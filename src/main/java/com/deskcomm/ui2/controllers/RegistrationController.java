@@ -37,7 +37,7 @@ public class RegistrationController extends Controller implements EventHandler<A
     private static final double PREF_WIDTH = 600;
     private static final double PREF_HEIGHT = 650;
     private static RegistrationController registrationController;
-    final private String FXML_FILE = "../../ui2/fxmls/registration.fxml";
+    final private String FXML_FILE = "fxmls/registration.fxml";
     private String windowTitle = "Sign Up";
     private AnchorPane root;
 
@@ -78,7 +78,7 @@ public class RegistrationController extends Controller implements EventHandler<A
         FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_FILE));
         loader.setController(this);
         root = loader.load();
-        root.getStylesheets().add(getClass().getResource("../stylesheets/regi_controller.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource("stylesheets/regi_controller.css").toExternalForm());
         root.setOnKeyPressed(this::keyEventHandler);
 
         this.btnSignup.setOnAction(this::signUpButtonClicked);
