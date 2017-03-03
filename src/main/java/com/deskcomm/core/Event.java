@@ -1,13 +1,13 @@
 package com.deskcomm.core;
 
 import com.deskcomm.db.DbConnection;
+import com.deskcomm.networking.websocket.OutboundWebsocketMessage;
+import com.deskcomm.support.Keys;
 import org.json.JSONObject;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.text.ParseException;
+import java.util.List;
 import java.util.UUID;
 
 import static com.deskcomm.support.Keys.*;
@@ -26,18 +26,23 @@ public class Event implements Persistent {
     private String serverTimeStamp;
     private String clientTimeStamp;
 
+    private int interestedUsersCount;
+    private List<String> interestedUsers;
+    private User createdBy;
+    private boolean interested;
+
     /*
-    public Event(@NotNull String uuid, @NotNull String eventName, @NotNull String eventTimeStamp, @NotNull String description, @NotNull String venue, @NotNull String serverTimeStamp, @Nullable String eventIconUrl, User... organisers) {
-        this.uuid = uuid;
-        this.eventName = eventName;
-        this.eventTimeStamp = eventTimeStamp;
-        this.description = description;
-        this.eventIconUrl = eventIconUrl;
-        this.organisers = organisers;
-        this.venue = venue;
-        this.serverTimeStamp = serverTimeStamp;
-    }
-*/
+        public Event(@NotNull String uuid, @NotNull String eventName, @NotNull String eventTimeStamp, @NotNull String description, @NotNull String venue, @NotNull String serverTimeStamp, @Nullable String eventIconUrl, User... organisers) {
+            this.uuid = uuid;
+            this.eventName = eventName;
+            this.eventTimeStamp = eventTimeStamp;
+            this.description = description;
+            this.eventIconUrl = eventIconUrl;
+            this.organisers = organisers;
+            this.venue = venue;
+            this.serverTimeStamp = serverTimeStamp;
+        }
+    */
     public Event(String uuid) {
         this.uuid = uuid;
     }
@@ -51,11 +56,15 @@ public class Event implements Persistent {
         this.starts = jsonObject.getString(EVENT_STARTS);
         this.ends = jsonObject.getString(EVENT_ENDS);
         this.description = jsonObject.getString(EVENT_DESC);
+        this.createdBy = new User(jsonObject.getString(EVENT_CREATED_BY));
         if (jsonObject.has(EVENT_IMAGE_URL))
             this.imageUrl = jsonObject.getString(EVENT_IMAGE_URL);
         this.venue = jsonObject.getString(EVENT_VENUE);
         if (jsonObject.has(SERVER_TIMESTAMP))
             this.serverTimeStamp = jsonObject.getString(SERVER_TIMESTAMP);
+        if (jsonObject.has(Keys.INTERESTED_USERS_COUNT))
+            this.interestedUsersCount = jsonObject.getInt(Keys.INTERESTED_USERS_COUNT);
+
     }
 
     public Event(String uuid, String title, String starts, String ends, String venue, String description, String imageUrl) {
@@ -69,12 +78,16 @@ public class Event implements Persistent {
         this.imageUrl = imageUrl;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     @Override
     public boolean insertToTable() throws ClassNotFoundException, SQLException {
         try {
             Connection connection = DbConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO events(_uuid,title,starts,ends,venue,description,image_url,server_timestamp)\n" +
-                    "VALUES(?,?,?,?,?,?,?,?) ");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO events(_uuid,title,starts,ends,venue,description,image_url,server_timestamp,interested_users_count,created_by)\n" +
+                    "VALUES(?,?,?,?,?,?,?,?,?,?) ");
             statement.setString(1, uuid);
             statement.setString(2, title);
             statement.setString(3, starts);
@@ -83,6 +96,8 @@ public class Event implements Persistent {
             statement.setString(6, description);
             statement.setString(7, imageUrl);
             statement.setString(8, serverTimeStamp);
+            statement.setInt(9, interestedUsersCount);
+            statement.setString(10, createdBy.getUuid());
             statement.executeUpdate();
             int updateCount = statement.getUpdateCount();
             statement.close();
@@ -92,6 +107,8 @@ public class Event implements Persistent {
             if (e.getMessage().contains(NO_SUCH_TABLE)) {
                 createTable();
                 return insertToTable();
+            } else if (e.getMessage().contains("UNIQUE constraint failed")) {
+                return this.getUpdater().updateAllAttributes();
             } else throw e;
         }
     }
@@ -103,7 +120,18 @@ public class Event implements Persistent {
         try {
             connection = DbConnection.getConnection();
             statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS events(\n" +
-                    "  uuid TEXT CONSTRAINT events_pk PRIMARY KEY ,name TEXT NOT NULL,description TEXT NOT NULL,icon_url TEXT,venue TEXT NOT NULL ,event_time_stamp TIMESTAMP NOT NULL ,server_timestamp TIMESTAMP NOT NULL ,created DEFAULT CURRENT_TIMESTAMP\n" +
+                    "  _uuid TEXT CONSTRAINT events_pk PRIMARY KEY ," +
+                    "title TEXT NOT NULL," +
+                    "starts TIMESTAMP NOT NULL ," +
+                    "ends TIMESTAMP NOT NULL ," +
+                    "venue TEXT NOT NULL ," +
+                    "description TEXT NOT NULL," +
+                    "image_url TEXT," +
+                    "interested INT DEFAULT 0, " +
+                    "created_by TEXT NOT NULL , " +
+                    "interested_users_count INT DEFAULT 0," +
+                    "server_timestamp TIMESTAMP NOT NULL ," +
+                    "created DEFAULT CURRENT_TIMESTAMP\n" +
                     ")");
             boolean i = statement.execute();
             statement.close();
@@ -177,6 +205,51 @@ public class Event implements Persistent {
     @Override
     public String toString() {
         return toJSON().toString();
+    }
+
+    public int getInterestedUsersCount() {
+        return interestedUsersCount;
+    }
+
+    public String getStarts() {
+        return starts;
+    }
+
+    public String getEnds() {
+        return ends;
+    }
+
+    public User getCreatedBy() {
+        createdBy.fetchFromDb();
+        return createdBy;
+    }
+
+    public boolean interested() {
+        interested = false;
+        try {
+            Connection connection = DbConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT interested FROM events WHERE _uuid=?");
+            statement.setString(1, uuid);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            interested = resultSet.getInt(1) == 1;
+            resultSet.close();
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return interested;
+    }
+
+    public void setInterested(boolean b) {
+        if (b) {
+            OutboundWebsocketMessage websocketMessage = new OutboundWebsocketMessage("event/interest/1", new JSONObject().put(EVENT_ID, uuid), true);
+            websocketMessage.send();
+        } else {
+            OutboundWebsocketMessage websocketMessage = new OutboundWebsocketMessage("event/interest/0", new JSONObject().put(EVENT_ID, uuid), true);
+            websocketMessage.send();
+        }
     }
 
     public static class Builder {
@@ -271,6 +344,45 @@ public class Event implements Persistent {
         public boolean updateOrganisers(String... userUuids) {
             return false;
         }
+
+        public boolean updateAllAttributes() {
+            try {
+                Connection connection = DbConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement("UPDATE events SET title=?,starts=?,ends=?,venue=?,description=?,image_url=?,created_by=?,interested_users_count=?,server_timestamp=? WHERE _uuid=?");
+                statement.setString(1, title);
+                statement.setString(2, starts);
+                statement.setString(3, ends);
+                statement.setString(4, venue);
+                statement.setString(5, description);
+                statement.setString(6, imageUrl);
+                statement.setString(7, createdBy.getUuid());
+                statement.setInt(8, interestedUsersCount);
+                statement.setString(9, serverTimeStamp);
+                statement.setString(10, uuid);
+                int i = statement.executeUpdate();
+                statement.close();
+                connection.close();
+                return i > 0;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+/*      statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS events(\n" +
+                "  _uuid TEXT CONSTRAINT events_pk PRIMARY KEY ," +
+                "title TEXT NOT NULL," +
+                "starts TIMESTAMP NOT NULL ," +
+                "ends TIMESTAMP NOT NULL ," +
+                "venue TEXT NOT NULL ," +
+                "description TEXT NOT NULL," +
+                "image_url TEXT," +
+                "interested INT DEFAULT 0, " +
+                "created_by TEXT NOT NULL , " +
+                "interested_users_count INT DEFAULT 0," +
+                "server_timestamp TIMESTAMP NOT NULL ," +
+                "created DEFAULT CURRENT_TIMESTAMP\n" +
+                ")");
+*/
 
     }
 }

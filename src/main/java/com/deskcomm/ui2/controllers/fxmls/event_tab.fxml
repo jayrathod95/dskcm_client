@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="690.0" prefWidth="600.0" stylesheets="@account.css"
+            minWidth="-Infinity" prefHeight="690.0" prefWidth="600.0" stylesheets="@../stylesheets/account.css"
             xmlns="http://javafx.com/javafx/8.0.102">
     <children>
         <JFXToolbar prefHeight="52.0" prefWidth="600.0" style="-fx-background-color: #2196f3;">

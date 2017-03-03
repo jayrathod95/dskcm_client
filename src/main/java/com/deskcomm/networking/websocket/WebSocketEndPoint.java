@@ -1,24 +1,33 @@
 package com.deskcomm.networking.websocket;
 
+import com.deskcomm.Main;
 import com.deskcomm.core.CurrentUser;
+import com.deskcomm.core.Event;
 import com.deskcomm.core.User;
 import com.deskcomm.core.bookkeeping.UsersUpdater;
 import com.deskcomm.core.messages.InboundPersonalMessage;
 import com.deskcomm.core.messages.LocalPersonalMessage;
 import com.deskcomm.networking.URLManager;
 import com.deskcomm.support.Keys;
+import com.deskcomm.ui2.controllers.EventRow;
 import com.deskcomm.ui2.controllers.HomeController;
 import com.deskcomm.ui2.controllers.UserThreadController;
 import com.deskcomm.ui2.core.UserThreadFactory;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.scene.image.Image;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.websocket.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,7 +71,7 @@ public class WebSocketEndPoint {
     }
 
     @OnMessage
-    public void onMessage(String rawMessage, Session session) {
+    public void onMessage(String rawMessage, Session session) throws ParseException, SQLException, ClassNotFoundException {
 
         InboundWebsocketMessage webSocketMessage = new InboundWebsocketMessage(rawMessage);
 
@@ -70,6 +79,7 @@ public class WebSocketEndPoint {
             case "message/personal":
                 System.out.println(webSocketMessage.getData());
                 InboundPersonalMessage personalMessage = new InboundPersonalMessage(webSocketMessage.getData());
+                personalMessage.setUnread(true);
                 // boolean b = personalMessage.insertToTable();
                 updateUserInterface(personalMessage);
                 // if (b) sendAcknowledgement(personalMessage.getId());
@@ -77,33 +87,81 @@ public class WebSocketEndPoint {
             case "message/group":
 
                 break;
-            case "event":
+            case "event/get/all":
+                processEventsArray(webSocketMessage.getData());
+                break;
+            case "event/new":
+                Event event = new Event(webSocketMessage.getData());
+                event.insertToTable();
+                HomeController.getInstance().getEventsMap().put(event.getUuid(), new EventRow(event));
                 break;
             case "response/" + Keys.HANDSHAKE_REQ:
                 handleHandShakeResponse(webSocketMessage.getData());
                 break;
             case "bookkeeping/users":
-                //save to database
-                Task<Boolean> task = new Task<Boolean>() {
-                    @Override
-                    protected Boolean call() throws Exception {
-                        JSONObject data = webSocketMessage.getData();
-                        return UsersUpdater.getInstance().updateAllUsers(data.getJSONArray("users"));
-                    }
-                };
-                new Thread(task).start();
-                task.setOnSucceeded(event -> {
-                    //inform ui component
-                    Platform.runLater(() -> {
-                        com.deskcomm.ui2.controllers.HomeController.getInstance().updateUsersListAsync();
+                Platform.runLater(() -> {
+                    Task<Boolean> task = new Task<Boolean>() {
+                        @Override
+                        protected Boolean call() throws Exception {
+                            JSONObject data = webSocketMessage.getData();
+                            return UsersUpdater.getInstance().updateAllUsers(data.getJSONArray("users"));
+                        }
+                    };
+                    new Thread(task).start();
+                    task.setOnSucceeded((WorkerStateEvent event1) -> {
+                        Platform.runLater(() -> {
+                            com.deskcomm.ui2.controllers.HomeController.getInstance().updateUsersListAsync();
+                        });
                     });
                 });
+                break;
+            case "users/online":
+                handleOnlineUsersArray(webSocketMessage.getData().getJSONArray("data"));
+                break;
+            case "int_users_count":
+                Platform.runLater(() -> HomeController.getInstance().getEventsMap().get(webSocketMessage.getData().getString(Keys.EVENT_ID)).getInt_users().setText(webSocketMessage.getData().getInt(Keys.INTERESTED_USERS_COUNT) + ""));
                 break;
         }
     }
 
-    private void sendAcknowledgement(String id) {
-        OutboundWebsocketMessage websocketMessage = new OutboundWebsocketMessage("message/personal/received", new JSONObject().put("id", id), false);
+    private void processEventsArray(JSONObject data) throws ParseException, SQLException, ClassNotFoundException {
+        JSONArray array = data.getJSONArray("data");
+        for (int i = 0; i < array.length(); i++) {
+            Event event = new Event(array.getJSONObject(i));
+            event.insertToTable();
+
+            HomeController.getInstance().getEventsMap().put(event.getUuid(), new EventRow(event));
+        }
+    }
+
+    private void processEvent(JSONObject jsonObject) {
+        try {
+            Event event = new Event(jsonObject);
+            event.insertToTable();
+            HomeController.getInstance().getEventsMap().put(event.getUuid(), new EventRow(event));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private void handleOnlineUsersArray(JSONArray data) {
+        System.out.println(data.toString());
+        HomeController.getInstance().getOnlineUsers().clear();
+        List<String> list = new ArrayList<String>();
+        for (int i = 0; i < data.length(); i++) {
+            list.add(data.getString(i));
+        }
+        HomeController.getInstance().getOnlineUsers().addAll(list);
+    }
+
+    private void sendAcknowledgement(String messageId) {
+        OutboundWebsocketMessage websocketMessage = new OutboundWebsocketMessage("message/personal/received", new JSONObject().put("id", messageId), false);
         session.getAsyncRemote().sendText(websocketMessage.toString());
     }
 
@@ -146,20 +204,12 @@ public class WebSocketEndPoint {
 
 
     private void updateUserInterface(InboundPersonalMessage personalMessage) {
-        /*
-        PersonalThreadRow row = new PersonalThreadRow(personalMessage.getId(), new User(personalMessage.getFromUserUuid()), personalMessage.getBody(), personalMessage.getTimestamp());
-        AnchorPane anc = row.create();
-        if (anc != null)
-            Platform.runLater(() -> {
-                ObservableList<AnchorPane> userThreadsObservableList = HomeController.getInstance().getUserThreadsObservableList();
-                userThreadsObservableList.removeIf(next -> next.getUserData().equals(anc.getUserData()));
-                HomeController.getInstance().getUserThreadsObservableList().add(0, anc);
-            });
-            */
-        personalMessage.insertToTable();
+
         Platform.runLater(() -> {
             UserThreadController userThreadController = UserThreadFactory.getUserThreadController(new User(personalMessage.getFromUserUuid()));
-            if (userThreadController.getvBoxMessagesContainer() != null && userThreadController.getvBoxMessagesContainer().isVisible()) {
+            String idOfVisibleRoot = Main.getPrimaryStage().getScene().getRoot().getId();
+            if (idOfVisibleRoot != null && idOfVisibleRoot.equals("user_thread")) {
+                personalMessage.setUnread(false);
                 userThreadController.addNewMessage(LocalPersonalMessage.from(personalMessage));
                 Task<Boolean> task = new Task<Boolean>() {
                     @Override
@@ -172,7 +222,6 @@ public class WebSocketEndPoint {
                 });
                 new Thread(task).start();
             } else {
-                HomeController.getInstance().updateThreadListAsync();
                 Task<Boolean> task = new Task<Boolean>() {
                     @Override
                     protected Boolean call() throws Exception {
@@ -180,6 +229,7 @@ public class WebSocketEndPoint {
                     }
                 };
                 task.setOnSucceeded(event -> {
+                    Platform.runLater(() -> HomeController.getInstance().updateThreadListAsync());
                     sendAcknowledgement(personalMessage.getId());
                 });
                 new Thread(task).start();

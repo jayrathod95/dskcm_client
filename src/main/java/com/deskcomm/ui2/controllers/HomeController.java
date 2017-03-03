@@ -13,8 +13,9 @@ import com.jfoenix.controls.*;
 import com.jfoenix.transitions.hamburger.HamburgerSlideCloseTransition;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableIntegerValue;
+import javafx.collections.*;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.concurrent.WorkerStateEvent;
@@ -73,7 +74,7 @@ public class HomeController extends Controller {
 
     @SuppressWarnings("unused")
     @FXML
-    private Tab tab1;
+    private Tab users;
 
     @SuppressWarnings("unused")
     @FXML
@@ -81,11 +82,11 @@ public class HomeController extends Controller {
 
     @SuppressWarnings("unused")
     @FXML
-    private Tab tab2;
+    private Tab chats;
 
     @SuppressWarnings("unused")
     @FXML
-    private Tab tab3;
+    private Tab events;
 
 
     @SuppressWarnings("unused")
@@ -96,6 +97,9 @@ public class HomeController extends Controller {
     @FXML
     private HBox manageaccount;
     @SuppressWarnings("unused")
+
+    @FXML
+    private VBox vBoxEventsContainer;
 
     @FXML
     private HBox newevent;
@@ -114,20 +118,36 @@ public class HomeController extends Controller {
     private JFXListView<ThreadListRow> threadListView;
     private ObservableList<UserListRow> userObservableList;
     private ObservableList<ThreadListRow> threadObservableList;
+    private ObservableList<String> onlineUsers;
+    private ObservableIntegerValue observableIntegerValue;
     @FXML
     private Label drawerUsername;
     private Scene scene;
+    private Object eventsList;
+    private ObservableMap<String, EventRow> eventsMap;
+
 
     private HomeController() {
+
         FXML_FILE_MAIN = getClass().getResource("fxmls/home.fxml");
         userObservableList = FXCollections.observableArrayList();
         threadObservableList = FXCollections.observableArrayList();
-
+        observableIntegerValue = new SimpleIntegerProperty();
+        onlineUsers = FXCollections.observableArrayList();
+        eventsMap = FXCollections.observableHashMap();
     }
 
     public static HomeController getInstance() {
         if (homeController == null) homeController = new HomeController();
         return homeController;
+    }
+
+    public ObservableList<String> getOnlineUsers() {
+        return onlineUsers;
+    }
+
+    public ObservableMap<String, EventRow> getEventsMap() {
+        return eventsMap;
     }
 
     @Override
@@ -153,6 +173,7 @@ public class HomeController extends Controller {
             this.init();
             updateThreadListAsync();
         }
+        this.primaryStage.setTitle(CurrentUser.getInstance().getFullName());
     }
 
     private void init() throws IOException {
@@ -225,6 +246,31 @@ public class HomeController extends Controller {
                 e.printStackTrace();
             }
         });
+        threadObservableList.addListener((ListChangeListener<ThreadListRow>) c -> {
+            int unreadThreadRows = getUnreadThreadRowsCount();
+            if (unreadThreadRows > 0)
+                chats.setText("Chats (" + unreadThreadRows + ")");
+            else chats.setText("Chats");
+        });
+        threadObservableList.removeListener((ListChangeListener<? super ThreadListRow>) c -> {
+            int unreadThreadRows = getUnreadThreadRowsCount();
+            if (unreadThreadRows > 0)
+                chats.setText("Chats (" + unreadThreadRows + ")");
+            else chats.setText("Chats");
+        });
+        onlineUsers.addListener((ListChangeListener<String>) c -> {
+            updateUsersListAsync();
+        });
+
+        eventsMap.addListener((MapChangeListener<String, EventRow>) change -> {
+            Platform.runLater(() -> vBoxEventsContainer.getChildren().add(change.getValueAdded()));
+        });
+
+        newevent.setOnMouseClicked(event -> {
+            EventCreateDialog dialog = new EventCreateDialog(primaryStage);
+            dialog.show();
+            drawer.close();
+        });
 
 
     }
@@ -278,6 +324,7 @@ public class HomeController extends Controller {
         new Thread(task).start();
     }
 
+
     private void establishWebsocketConnection() {
         try {
             WebSocketEndPoint.connectToWebSocket();
@@ -300,7 +347,10 @@ public class HomeController extends Controller {
                 if (allUsers != null) {
                     Platform.runLater(() -> {
                         userObservableList.clear();
-                        allUsers.forEach(user -> userObservableList.add(new UserListRow(user, primaryStage)));
+                        allUsers.forEach(user -> {
+                            user.setOnline(onlineUsers.contains(user.getUuid()));
+                            userObservableList.add(new UserListRow(user, primaryStage));
+                        });
                     });
                 }
                 return true;
@@ -322,7 +372,11 @@ public class HomeController extends Controller {
                 if (allUsers != null) {
                     Platform.runLater(() -> {
                         userObservableList.clear();
-                        allUsers.forEach(user -> userObservableList.add(new UserListRow(user, primaryStage)));
+                        allUsers.forEach(user -> {
+                            System.out.println(onlineUsers.contains(user.getUuid()));
+                            user.setOnline(onlineUsers.contains(user.getUuid()));
+                            userObservableList.add(new UserListRow(user, primaryStage));
+                        });
                     });
                 }
                 return true;
@@ -372,4 +426,12 @@ public class HomeController extends Controller {
             e.printStackTrace();
         }
     }
+
+    public int getUnreadThreadRowsCount() {
+        Iterator<ThreadListRow> iterator = threadObservableList.iterator();
+        int i = 0;
+        while (iterator.hasNext()) i = iterator.next().isUnread() ? i + 1 : i;
+        return i;
+    }
+
 }

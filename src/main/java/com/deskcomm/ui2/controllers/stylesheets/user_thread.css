@@ -19,7 +19,7 @@
 
 .msg-in {
     -fx-border-image-slice: 14 9 12 28 fill;
-    -fx-border-image-width: 15px 8px 5px 22px;
+    -fx-border-image-width: 8px 4px 2px 20px;
     -fx-border-image-insets: 8px 0px 0px 0px;
     -fx-border-image-repeat: stretch stretch;
     -fx-border-image-source: url("grey_bubble.9.png");
@@ -33,7 +33,7 @@ ScrollPane {
 
 .msg-out {
     -fx-border-image-slice: 12 31 11 10 fill;
-    -fx-border-image-width: 10px 32px 5px 10px;
+    -fx-border-image-width: 8px 30px 2px 6px;
     -fx-border-image-insets: 8px 0px 0px 0px;
     -fx-border-image-repeat: stretch stretch;
     -fx-border-image-source: url("purple_bubble.9.png");

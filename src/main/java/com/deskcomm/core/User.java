@@ -28,9 +28,11 @@ public class User implements Persistent {
     String mobile;
     String imageUrl;
     String gender;
+    private boolean isOnline = false;
 
 
     public User(String uuid, String firstName, String lastName, String email, String mobile, String imageUrl, String gender) {
+
         this.gender = gender;
         this.uuid = uuid;
         this.firstName = firstName;
@@ -265,7 +267,7 @@ public class User implements Persistent {
         Connection connection = null;
         try {
             connection = DbConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT _uuid,data,_to,_from,server_timestamp FROM messages_personal WHERE (_from=? AND _to=?) OR (_from=? AND _to=?)  ORDER BY server_timestamp DESC LIMIT ?,?");
+            PreparedStatement statement = connection.prepareStatement("SELECT _uuid,data,_to,_from,READ,server_timestamp FROM messages_personal WHERE (_from=? AND _to=?) OR (_from=? AND _to=?)  ORDER BY server_timestamp DESC LIMIT ?,?");
             statement.setString(1, uuid);
             statement.setString(2, CurrentUser.getInstance().getUuid());
             statement.setString(3, CurrentUser.getInstance().getUuid());
@@ -279,7 +281,8 @@ public class User implements Persistent {
                 message.setToUserUuid(resultSet.getString(3));
                 message.setFromUserUuid(resultSet.getString(4));
                 message.setToUserUuid(this.uuid);
-                message.setTimeStamp(resultSet.getString(5));
+                message.setUnread(resultSet.getInt(5) == 0);
+                message.setTimeStamp(resultSet.getString(6));
                 list.add(message);
             }
             statement.close();
@@ -301,6 +304,29 @@ public class User implements Persistent {
         }
 
         return list;
+    }
+
+    public boolean setAllMessagesAsRead() {
+        try {
+            Connection connection = DbConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement("UPDATE messages_personal SET read=1 WHERE _from=?");
+            statement.setString(1, uuid);
+            int i = statement.executeUpdate();
+            statement.close();
+            connection.close();
+            return i > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean b) {
+        isOnline = b;
     }
 
     public class Updater {

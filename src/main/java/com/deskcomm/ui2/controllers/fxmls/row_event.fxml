@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<HBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" prefWidth="600.0"
+      xmlns="http://javafx.com/javafx/8.0.102">
+    <children>
+        <VBox fx:id="row_event" prefWidth="580.0" style="-fx-background-color: white;">
+            <children>
+                <Label fx:id="title" maxWidth="400.0" text=" ">
+                    <font>
+                        <Font name="Quicksand Medium" size="17.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="description" alignment="TOP_LEFT" prefHeight="67.0" prefWidth="570.0"
+                       text="Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. Lorem ipsum doler sit. "
+                       textFill="#8a8888" wrapText="true">
+                    <padding>
+                        <Insets bottom="10.0" top="10.0"/>
+                    </padding>
+                    <font>
+                        <Font name="Quicksand Medium" size="12.0"/>
+                    </font>
+                </Label>
+                <GridPane stylesheets="@../stylesheets/row_event.css">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="156.0" minWidth="10.0" prefWidth="91.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="204.0" minWidth="10.0" prefWidth="140.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="206.0" minWidth="10.0" prefWidth="145.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="179.0" minWidth="10.0" prefWidth="174.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <HBox alignment="CENTER" prefWidth="101.0">
+                            <children>
+                                <MaterialDesignIconView fx:id="heart" glyphName="HEART_OUTLINE" size="21"
+                                                        wrappingWidth="17.0"/>
+                                <Label fx:id="int_users" prefHeight="35.0" text="0" wrapText="true">
+                                    <font>
+                                        <Font name="Quicksand Medium" size="13.0"/>
+                                    </font>
+                                    <HBox.margin>
+                                        <Insets left="10.0"/>
+                                    </HBox.margin>
+                                    <tooltip>
+                                        <Tooltip text="interested users"/>
+                                    </tooltip>
+                                </Label>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" GridPane.columnIndex="1">
+                            <children>
+                                <MaterialDesignIconView glyphName="CALENDAR_CLOCK" size="21" wrappingWidth="17.0"/>
+                                <Label fx:id="starts">
+                                    <font>
+                                        <Font name="Quicksand Medium" size="13.0"/>
+                                    </font>
+                                    <HBox.margin>
+                                        <Insets left="10.0"/>
+                                    </HBox.margin>
+                                    <tooltip>
+                                        <Tooltip text="starts"/>
+                                    </tooltip>
+                                </Label>
+                            </children>
+                            <GridPane.margin>
+                                <Insets/>
+                            </GridPane.margin>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="148.0" layoutY="10.0" GridPane.columnIndex="2">
+                            <children>
+                                <MaterialDesignIconView glyphName="CALENDAR_CLOCK" size="21" wrappingWidth="17.0"/>
+                                <Label fx:id="ends" text=" ">
+                                    <font>
+                                        <Font name="Quicksand Medium" size="13.0"/>
+                                    </font>
+                                    <HBox.margin>
+                                        <Insets left="10.0"/>
+                                    </HBox.margin>
+                                    <tooltip>
+                                        <Tooltip text="ends"/>
+                                    </tooltip>
+                                </Label>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="286.0" layoutY="10.0" GridPane.columnIndex="3">
+                            <children>
+                                <MaterialDesignIconView glyphName="ACCOUNT_CIRCLE" size="21" wrappingWidth="17.0"/>
+                                <Label fx:id="createdBy" text=" ">
+                                    <font>
+                                        <Font name="Quicksand Medium" size="13.0"/>
+                                    </font>
+                                    <HBox.margin>
+                                        <Insets left="10.0"/>
+                                    </HBox.margin>
+                                    <tooltip>
+                                        <Tooltip text="posted by"/>
+                                    </tooltip>
+                                </Label>
+                            </children>
+                        </HBox>
+                    </children>
+                    <padding>
+                        <Insets bottom="3.0" top="3.0"/>
+                    </padding>
+                </GridPane>
+            </children>
+            <padding>
+                <Insets left="15.0" right="15.0" top="15.0"/>
+            </padding>
+            <effect>
+                <DropShadow color="#0000006c" height="11.07" radius="5.0175" width="11.0"/>
+            </effect>
+            <HBox.margin>
+                <Insets top="9.0"/>
+            </HBox.margin>
+        </VBox>
+    </children>
+</HBox>

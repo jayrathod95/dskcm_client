@@ -5,6 +5,8 @@ package com.deskcomm.support;
  */
 public class Keys {
     public static final String GROUP_CREATED_BY = "created_by";
+    public static final String INTERESTED_USERS_COUNT = "int_users";
+
 
     final public static String USER_FIRSTNAME = "fname";
     final public static String USER_LASTNAME = "lname";

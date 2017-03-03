@@ -1,8 +1,10 @@
 package com.deskcomm.ui2.controllers;
 
 import com.deskcomm.core.User;
+import com.deskcomm.core.messages.LocalPersonalMessage;
 import com.deskcomm.resources.images.Images;
 import com.deskcomm.ui2.core.UserThreadFactory;
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,6 +35,7 @@ public class ThreadListRow extends HBox implements EventHandler<MouseEvent> {
     private Label labelMessageText;
     private User user;
     private Stage stage;
+    private boolean isUnread;
 
     public ThreadListRow(User user, Stage stage) throws IOException {
         this.user = user;
@@ -44,7 +47,9 @@ public class ThreadListRow extends HBox implements EventHandler<MouseEvent> {
         labelUserName.setText(user.getFullName());
         if (user.getGender().equals("M")) imageViewAvatar.setImage(Images.get(Images.AVATAR_MALE));
         else imageViewAvatar.setImage(Images.get(Images.AVATAR_FEMALE));
-        labelMessageText.setText(user.getConversation(1).get(0).getBody());
+        LocalPersonalMessage message = user.getConversation(1).get(0);
+        labelMessageText.setText(message.getBody());
+        isUnread = message.isUnread();
         rootPane.setOnMouseClicked(this);
     }
 
@@ -56,9 +61,23 @@ public class ThreadListRow extends HBox implements EventHandler<MouseEvent> {
     public void handle(MouseEvent event) {
         try {
             UserThreadFactory.getUserThreadController(user).startControlling(stage);
-
+            new Thread(new Task<Boolean>() {
+                @Override
+                protected Boolean call() throws Exception {
+                    user.setAllMessagesAsRead();
+                    return null;
+                }
+            }).start();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isUnread() {
+        return isUnread;
+    }
+
+    public void setUnread(boolean unread) {
+        isUnread = unread;
     }
 }

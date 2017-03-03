@@ -30,7 +30,6 @@ public class PersonalThreadRow {
     ImageView imageViewAvatar;
 
     public PersonalThreadRow(String id, User fromUser, String body, String timestamp) {
-
         this.id = id;
         this.fromUser = fromUser;
         this.body = body;

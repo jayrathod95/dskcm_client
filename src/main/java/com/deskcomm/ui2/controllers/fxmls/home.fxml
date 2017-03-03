@@ -67,7 +67,7 @@
                 <JFXTabPane fx:id="tabpane" layoutY="72.0" prefHeight="602.0" prefWidth="600.0"
                             tabClosingPolicy="UNAVAILABLE">
                     <tabs>
-                        <Tab fx:id="tab1" text="Users">
+                        <Tab fx:id="users" text="Users">
 
                             <content>
                                 <AnchorPane fx:id="anchorpanetab1" minHeight="0.0" minWidth="0.0" prefHeight="600.0"
@@ -82,7 +82,7 @@
                                 </AnchorPane>
                             </content>
                         </Tab>
-                        <Tab fx:id="tab2" text="Chats">
+                        <Tab fx:id="chats" text="Chats">
                             <content>
                                 <AnchorPane fx:id="anchorpanetab2" minHeight="0.0" minWidth="0.0" prefHeight="180.0"
                                             prefWidth="200.0">
@@ -93,14 +93,14 @@
                                 </AnchorPane>
                             </content>
                         </Tab>
-                        <Tab fx:id="tab3" text="Events">
+                        <Tab fx:id="events" text="Events">
                             <content>
-                                <AnchorPane fx:id="anchorpaneta3" minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                            prefWidth="200.0">
-                                    <children>
-                                        <Label text="Label3"/>
-                                    </children>
-                                </AnchorPane>
+                                <ScrollPane>
+                                    <content>
+                                        <VBox fx:id="vBoxEventsContainer" maxWidth="600.0" minWidth="600.0"
+                                              prefWidth="600.0"/>
+                                    </content>
+                                </ScrollPane>
                             </content>
                         </Tab>
                     </tabs>

@@ -19,6 +19,7 @@ public class Main extends Application {
 
     private static final int TESTING_MODE = 2;
     static private Logger LOGGER = Logger.getLogger(Main.class.getName());
+    private static Stage primaryStage;
     @FXML
     private Button btnRegister;
 
@@ -27,19 +28,23 @@ public class Main extends Application {
         LauncherImpl.launchApplication(Main.class, MyPreloader.class, args);
     }
 
+    public static Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
     @Override
     public void start(final Stage primaryStage) {
-
+        this.primaryStage = primaryStage;
 
         try {
             if (CurrentUser.getInstance().isLoggedIn()) {
                 L.println("User Is Logged In");
                 HomeController controller = HomeController.getInstance();
-                controller.startControlling(primaryStage);
+                controller.startControlling(this.primaryStage);
             } else {
                 L.println("User NOT Logged In");
                 LoginController controller = LoginController.getInstance();
-                controller.startControlling(primaryStage);
+                controller.startControlling(this.primaryStage);
             }
         } catch (IOException e) {
             e.printStackTrace();

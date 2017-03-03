@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity" prefHeight="90.0" prefWidth="120.0" xmlns="http://javafx.com/javafx/8.0.102">
+    <children>
+        <HBox fx:id="document" prefHeight="30.0" prefWidth="160.0" style="-fx-background-color: white;">
+            <children>
+                <MaterialDesignIconView glyphName="FILE" size="20">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
+                    </HBox.margin>
+                </MaterialDesignIconView>
+                <Label prefHeight="46.0" prefWidth="120.0" text="Document">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+            </children>
+        </HBox>
+        <HBox fx:id="image" layoutX="10.0" layoutY="10.0" prefHeight="30.0" prefWidth="160.0"
+              style="-fx-background-color: white;">
+            <children>
+                <MaterialDesignIconView glyphName="IMAGE" size="20.0">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
+                    </HBox.margin>
+                </MaterialDesignIconView>
+                <Label prefHeight="60.0" prefWidth="120.0" text="Image">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+            </children>
+        </HBox>
+        <HBox fx:id="audio" layoutX="10.0" layoutY="81.0" prefHeight="30.0" prefWidth="600.0"
+              style="-fx-background-color: white;">
+            <children>
+                <FontAwesomeIconView glyphName="FILE_SOUND_ALT" size="17.0">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="13.0" right="10.0" top="5.0"/>
+                    </HBox.margin>
+                </FontAwesomeIconView>
+                <Label prefHeight="43.0" prefWidth="120.0" text="Audio">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+            </children>
+        </HBox>
+    </children>
+    <effect>
+        <DropShadow spread="0.06"/>
+    </effect>
+</VBox>

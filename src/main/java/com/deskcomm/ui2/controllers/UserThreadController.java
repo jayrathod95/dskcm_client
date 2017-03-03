@@ -9,6 +9,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +19,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -41,13 +44,23 @@ public class UserThreadController extends Controller {
     @FXML
     private JFXButton sendbtn;
     @FXML
+    private MaterialDesignIconView attach;
+    @FXML
+    private MaterialDesignIconView menu;
+    @FXML
     private Label title;
+    @FXML
+    private Circle circle;
     private Stage primaryStage;
     private User user;
 
     public UserThreadController(User user) {
         this.user = user;
         user.fetchFromDb();
+    }
+
+    public Circle getCircle() {
+        return circle;
     }
 
     public VBox getvBoxMessagesContainer() {
@@ -76,10 +89,12 @@ public class UserThreadController extends Controller {
         primaryStage.setResizable(false);
         primaryStage.show();
         title.setText(user.getFullName());
+        circle.setVisible(user.isOnline());
 
         HamburgerBackArrowBasicTransition transition = new HamburgerBackArrowBasicTransition(hamburger);
         transition.setRate(1);
         transition.play();
+
 
         //fetch messages from local database and  update ui
         refresh();
@@ -89,6 +104,7 @@ public class UserThreadController extends Controller {
         sendbtn.setOnAction(event -> {
             if (messagefield.getText().trim().length() > 0) {
                 OutboundPersonalMessage personalMessage = new OutboundPersonalMessage(user.getUuid(), messagefield.getText());
+                messagefield.setText("");
                 personalMessage.insertToTable();
                 personalMessage.send();
                 MessageBoxOut messageBoxOut = new MessageBoxOut(personalMessage);
@@ -104,6 +120,11 @@ public class UserThreadController extends Controller {
                 e.printStackTrace();
             }
         });
+
+        attach.setOnMouseClicked((MouseEvent event) -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.showOpenDialog(primaryStage);
+        });
     }
 
 
@@ -112,10 +133,12 @@ public class UserThreadController extends Controller {
         conversation.forEach(message -> {
             if (message.getFromUserUuid().equals(CurrentUser.getInstance().getUuid())) {
                 MessageBoxOut messageBoxOut = new MessageBoxOut(message);
+                // TODO: 3/1/2017  
                 //messageBoxOut.setTime();
                 vBoxMessagesContainer.getChildren().add(0, messageBoxOut);
             } else {
                 MessageBoxIn messageBoxIn = new MessageBoxIn(message);
+                // TODO: 3/1/2017  
                 //messageBoxIn.setTime();
                 vBoxMessagesContainer.getChildren().add(0, messageBoxIn);
             }
@@ -136,7 +159,7 @@ public class UserThreadController extends Controller {
     }
 
 
-    private class MessageBoxIn extends VBox implements EventHandler<MouseEvent> {
+    private class MessageBoxIn extends AnchorPane implements EventHandler<MouseEvent> {
         private Date time;
         private FXMLLoader loader;
         private Text messageBody;
@@ -152,6 +175,7 @@ public class UserThreadController extends Controller {
                 loader.setController(this);
                 VBox root = loader.load();
                 this.getChildren().add(root);
+                setLeftAnchor(root, 0.0);
                 messageBody = (Text) loader.getNamespace().get("messagebody");
                 timelbl = (Label) loader.getNamespace().get("time");
                 messageBody.setText(message.getBody());

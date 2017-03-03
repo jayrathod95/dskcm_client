@@ -16,12 +16,15 @@ import static com.deskcomm.support.Keys.*;
 public class LocalPersonalMessage extends Message {
     private String toUserUuid;
     private String fromUserUuid;
+    private boolean isUnread;
     private String timeStamp;
 
-    public LocalPersonalMessage(String id, String body, String toUserUuid, String fromUserUuid, String timeStamp) {
+    public LocalPersonalMessage(String id, String body, String toUserUuid, String fromUserUuid, Boolean isUnread, String timeStamp) {
         super(id, body);
         this.toUserUuid = toUserUuid;
         this.fromUserUuid = fromUserUuid;
+        this.isUnread = isUnread;
+
         this.timeStamp = timeStamp;
     }
 
@@ -30,11 +33,11 @@ public class LocalPersonalMessage extends Message {
     }
 
     public static LocalPersonalMessage from(OutboundPersonalMessage outboundMessage) {
-        return new LocalPersonalMessage(outboundMessage.getId(), outboundMessage.getBody(), outboundMessage.getToUserUuid(), CurrentUser.getInstance().getUuid(), new Timestamp(new java.util.Date().getTime()).toString());
+        return new LocalPersonalMessage(outboundMessage.getId(), outboundMessage.getBody(), outboundMessage.getToUserUuid(), CurrentUser.getInstance().getUuid(), false, new Timestamp(new java.util.Date().getTime()).toString());
     }
 
     public static LocalPersonalMessage from(InboundPersonalMessage inboundPersonalMessage) {
-        return new LocalPersonalMessage(inboundPersonalMessage.getId(), inboundPersonalMessage.getBody(), CurrentUser.getInstance().getUuid(), inboundPersonalMessage.getFromUserUuid(), inboundPersonalMessage.getTimestamp());
+        return new LocalPersonalMessage(inboundPersonalMessage.getId(), inboundPersonalMessage.getBody(), CurrentUser.getInstance().getUuid(), inboundPersonalMessage.getFromUserUuid(), inboundPersonalMessage.getIsUnread(), inboundPersonalMessage.getTimestamp());
     }
 
     public String getToUserUuid() {
@@ -57,14 +60,15 @@ public class LocalPersonalMessage extends Message {
         boolean b = false;
         try {
             Connection connection = DbConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT data,_from,_to,server_timestamp FROM messages_personal WHERE _uuid=?");
+            PreparedStatement statement = connection.prepareStatement("SELECT data,_from,_to,READ,server_timestamp FROM messages_personal WHERE _uuid=?");
             statement.setString(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 body = resultSet.getString(1);
                 toUserUuid = resultSet.getString(3);
                 fromUserUuid = resultSet.getString(2);
-                timeStamp = resultSet.getString(4);
+                isUnread = resultSet.getInt(4) == 0;
+                timeStamp = resultSet.getString(5);
                 b = true;
             }
             resultSet.close();
@@ -94,5 +98,13 @@ public class LocalPersonalMessage extends Message {
 
     public void setTimeStamp(String timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public boolean isUnread() {
+        return isUnread;
+    }
+
+    public void setUnread(boolean unread) {
+        isUnread = unread;
     }
 }

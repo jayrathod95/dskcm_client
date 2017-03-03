@@ -6,21 +6,31 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../stylesheets/user_thread.css"
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="user_thread" stylesheets="@../stylesheets/user_thread.css"
       xmlns="http://javafx.com/javafx/8.0.102">
     <children>
         <JFXToolbar prefHeight="52.0" prefWidth="600.0" style="-fx-background-color: #2196f3;">
             <center>
-                <Label fx:id="title" prefHeight="45.0" prefWidth="544.0" text="John Doe" textFill="#f8f8f8"
-                       BorderPane.alignment="CENTER">
-                    <font>
-                        <Font name="Roboto Bold" size="18.0"/>
-                    </font>
-                    <padding>
-                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
-                    </padding>
-                </Label>
+                <HBox BorderPane.alignment="CENTER">
+                    <children>
+                        <Label fx:id="title" prefHeight="45.0" text="John Doe" textFill="#f8f8f8">
+                            <font>
+                                <Font name="Roboto Bold" size="18.0"/>
+                            </font>
+                            <padding>
+                                <Insets bottom="15.0" left="15.0" right="5.0" top="15.0"/>
+                            </padding>
+                        </Label>
+                        <Circle fx:id="circle" fill="#11e411" radius="4.0" stroke="TRANSPARENT" strokeType="INSIDE"
+                                visible="false">
+                            <HBox.margin>
+                                <Insets top="23.0"/>
+                            </HBox.margin>
+                        </Circle>
+                    </children>
+                </HBox>
             </center>
             <left>
                 <JFXHamburger fx:id="hamburger" prefHeight="49.0" prefWidth="56.0" BorderPane.alignment="CENTER"/>
@@ -57,7 +67,21 @@
                 <JFXButton contentDisplay="CENTER" graphicTextGap="0.0" ripplerFill="WHITE" text=" "
                            textAlignment="CENTER" textFill="TRANSPARENT" wrapText="true" BorderPane.alignment="CENTER">
                     <graphic>
-                        <MaterialDesignIconView fill="WHITE" glyphName="DOTS_VERTICAL" size="30.0"/>
+                        <HBox>
+                            <children>
+                                <MaterialDesignIconView fx:id="attach" fill="WHITE" glyphName="ATTACHMENT"
+                                                        rotate="-135.0" size="27.0">
+                                    <HBox.margin>
+                                        <Insets top="1.0"/>
+                                    </HBox.margin>
+                                </MaterialDesignIconView>
+                                <MaterialDesignIconView fx:id="menu" fill="WHITE" glyphName="DOTS_VERTICAL" size="30.0">
+                                    <HBox.margin>
+                                        <Insets left="6.0"/>
+                                    </HBox.margin>
+                                </MaterialDesignIconView>
+                            </children>
+                        </HBox>
                     </graphic>
                 </JFXButton>
             </right>

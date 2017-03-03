@@ -23,6 +23,7 @@ public class InboundPersonalMessage extends Message implements Persistent {
     private String fromUserUuid;
     private String body;
     private String timestamp;
+    private boolean isUnread;
 
     public InboundPersonalMessage() {
     }
@@ -104,13 +105,12 @@ public class InboundPersonalMessage extends Message implements Persistent {
     public boolean insertToTableAsRead() {
         try {
             Connection connection = DbConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO messages_personal (_uuid, data,_to,_from,read, server_timestamp, created) VALUES (?, ?,?, ?,?,?, CURRENT_TIMESTAMP);");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO messages_personal (_uuid, data,_to,_from,read, server_timestamp, created) VALUES (?, ?,?, ?,1,?, CURRENT_TIMESTAMP);");
             statement.setString(1, id);
             statement.setString(2, body);
             statement.setString(3, CurrentUser.getInstance().getUuid());
             statement.setString(4, fromUserUuid);
-            statement.setInt(5, 1);
-            statement.setString(6, timestamp);
+            statement.setString(5, timestamp);
             int i = statement.executeUpdate();
             statement.close();
             connection.close();
@@ -124,5 +124,13 @@ public class InboundPersonalMessage extends Message implements Persistent {
             } else e.printStackTrace();
         }
         return false;
+    }
+
+    public boolean getIsUnread() {
+        return isUnread;
+    }
+
+    public void setUnread(boolean isUnread) {
+        this.isUnread = isUnread;
     }
 }

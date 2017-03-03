@@ -46,7 +46,7 @@ public class OutboundPersonalMessage extends Message implements Sendable, Persis
     public boolean insertToTable() {
         try {
             Connection connection = DbConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO messages_personal (_uuid, data,_to,_from, server_timestamp, created) VALUES (?, ?,?, ?, ?, ?);");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO messages_personal (_uuid, data,_to,_from,read, server_timestamp, created) VALUES (?, ?,?, ?,1, ?, ?);");
             statement.setString(1, id);
             statement.setString(2, body);
             statement.setString(3, toUserUuid);
